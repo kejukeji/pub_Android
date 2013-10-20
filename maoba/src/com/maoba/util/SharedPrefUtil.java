@@ -1,5 +1,6 @@
 package com.maoba.util;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -13,6 +14,7 @@ import android.preference.PreferenceManager;
 public class SharedPrefUtil {
 	
 	public static final String IS_FIRST_LOGIN = "is_first_login";//第一次进入
+	public static final String SINA_UID = "sina_uid";// 新浪微博唯一id
 	
 	public static final String WEIBO_ACCESS_TOKEN = "weibo_access_token";//新浪微博令牌
 	public static final String WEIBO_EXPIRES_IN = "weibo_expires_in";//新浪微博令牌时间
@@ -23,6 +25,7 @@ public class SharedPrefUtil {
 	public static final String QQ_OPENID = "qq_openid";
 	public static final String QQ_ACCESS_CURR_TIME = "qq_sccess_curr_time";//新浪微博授权时间
 	
+	public static final String UID = "uid";//用户id
 	/**
 	 * 判断是否是第一次进入应用
 	 * @param context
@@ -42,17 +45,49 @@ public class SharedPrefUtil {
 		e.putBoolean(IS_FIRST_LOGIN, false);
 		e.commit();
 	}
+	/**
+	 * 判断用户是否登录
+	 */
+	public static boolean isLogin(Context context){
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return (sp.getInt(UID, 0) > 0);
+	}
+	/**
+	 * 保存uid
+	 * @param context
+	 * @param uid
+	 */
+	public static void setUid(Context context, int uid){
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putInt(UID, uid);
+		e.commit();
+	}
 
 	//-----------------------------新浪微博验证信息-----------------
 	/**
+	 * 获取新浪微博openid
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static String getWeiboUid(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getString(SINA_UID, null);
+	}
+
+	/**
 	 * 设置微博绑定信息
+	 * 
 	 * @param context
 	 * @param access_token
 	 * @param expires_in
 	 */
-	public static void setWeiboInfo(Context context,String access_token,String expires_in,  String access_curr_time){
+	public static void setWeiboInfo(Context context, String sina_uid,
+			String access_token, String expires_in, String access_curr_time) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor e = sp.edit();
+		e.putString(SINA_UID, sina_uid);
 		e.putString(WEIBO_ACCESS_TOKEN, access_token);
 		e.putString(WEIBO_EXPIRES_IN, expires_in);
 		e.putString(WEIBO_ACCESS_CURR_TIME, access_curr_time);
@@ -171,4 +206,5 @@ public class SharedPrefUtil {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		return sp.getLong(CHECK_UPDATE_TIME_KEY, 5*60*1000);
 	}
+	
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
+    android:orientation="vertical" >
+
+    <!--  -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:gravity="center_horizontal"
+            android:text="@string/app_name"
+            android:textColor="#ffffff"
+            android:textSize="35sp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="40dp" >
+
+            <EditText
+                android:id="@+id/edUserName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_describe"
+                android:hint="昵称/手机号"
+                android:paddingLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/edEmail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_describe"
+                android:hint="邮箱"
+                android:paddingLeft="5dp"
+                  android:layout_marginTop="10dp"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/edPassWord"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_describe"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:paddingLeft="5dp"
+                  android:layout_marginTop="10dp"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/bg_btn_register" />
+        </LinearLayout>
+        <!-- 三方登录 -->
+
+       <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:orientation="horizontal"
+            android:paddingTop="50dp" >
+
+            <ImageView
+                android:id="@+id/ivSinaLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_btn_sina" />
+
+            <ImageView
+                android:id="@+id/ivQQLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="45dp"
+                android:src="@drawable/ic_btn_sina" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

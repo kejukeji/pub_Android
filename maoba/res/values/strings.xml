@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">猫吧</string>
+    <string name="app_name">冒冒</string>
     <string name="account_bind">帐号绑定</string>
     <string name="account_bind_success">绑定成功</string>
     <string name="unbind">解除绑定</string>
@@ -21,5 +21,9 @@
     <string name="cancel">取消</string>
     <string name="msg">提示</string>
     <string name="logout">确定退出本应用?</string>
+    
+     <string name="json_exception">json解析错误</string>
+    <string name="connect_server_exception">服务器连接失败</string>
+    <string name="no_login">请登录后再使用该功能</string>
 
 </resources>

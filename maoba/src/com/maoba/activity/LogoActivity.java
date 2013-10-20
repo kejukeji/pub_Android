@@ -33,7 +33,7 @@ public class LogoActivity extends Activity {
 		viewLogo.startAnimation(aa);
 		aa.setAnimationListener(new AnimationListener() {
 			public void onAnimationEnd(Animation arg0) {
-				startActivity(new Intent(LogoActivity.this, MainActivity.class));
+				startActivity(new Intent(LogoActivity.this, LoginActivity.class));
 				finish();
 			}
 

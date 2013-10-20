@@ -32,13 +32,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent100492496" /><!-- 100380359 100381104 222222 -->
+            </intent-filter>
+        </activity>
         <activity  android:name=".activity.AuthorizeActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
         <activity  android:name=".activity.MainActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-        
-        
+        <activity  android:name=".activity.LoginActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name=".activity.RegisterActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
 		<!-- push服务 -->
         <service android:name=".service.PullService"></service>
-        
+         <meta-data android:value="51f5c71456240b8f8b022f77" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="360" android:name="UMENG_CHANNEL"/>
     </application>
 </manifest>
