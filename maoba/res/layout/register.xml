@@ -27,38 +27,38 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="10dp"
+            android:paddingBottom="5dp"
             android:paddingTop="40dp" >
 
             <EditText
                 android:id="@+id/edUserName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_describe"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_input"
                 android:hint="昵称/手机号"
                 android:paddingLeft="5dp"
-                android:layout_marginTop="10dp"
                 android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/edEmail"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_describe"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_input"
                 android:hint="邮箱"
                 android:paddingLeft="5dp"
-                  android:layout_marginTop="10dp"
                 android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/edPassWord"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_describe"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_input"
                 android:hint="密码"
                 android:inputType="textPassword"
                 android:paddingLeft="5dp"
-                  android:layout_marginTop="10dp"
                 android:textSize="14sp" />
 
             <Button
@@ -66,31 +66,66 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/bg_btn_register" />
+                android:background="@drawable/bg_btn_red"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="注册"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="60dp"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/bg_line" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:text="其他方式登录"
+                android:textColor="#ffffff"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/bg_line" />
         </LinearLayout>
         <!-- 三方登录 -->
 
-       <LinearLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
             android:orientation="horizontal"
-            android:paddingTop="50dp" >
+            android:paddingTop="20dp" >
 
             <ImageView
                 android:id="@+id/ivSinaLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_btn_sina" />
+                android:src="@drawable/ic_sina" />
 
             <ImageView
                 android:id="@+id/ivQQLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="45dp"
-                android:src="@drawable/ic_btn_sina" />
+                android:src="@drawable/ic_qq" />
         </LinearLayout>
     </LinearLayout>
 
