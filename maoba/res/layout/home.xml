@@ -7,9 +7,9 @@
     <RelativeLayout
         android:id="@+id/rlCommon"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:background="@drawable/bg_title"
-        android:paddingTop="3dp" >
+        android:paddingTop="3dp">
 
         <Button
             android:id="@+id/btnLeftMenu"
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:background="@drawable/left_btn_menu_bg" />
 
         <LinearLayout

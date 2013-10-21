@@ -12,7 +12,7 @@
             android:id="@+id/llSettingTitle"
             android:layout_width="fill_parent"
             android:layout_height="180dp"
-            android:background="@drawable/left_menu"
+            android:background="@drawable/left_menu_bg_black"
             android:clickable="true"
             android:gravity="center_horizontal"
             android:orientation="vertical"
@@ -35,7 +35,7 @@
                 android:singleLine="true"
                 android:text="微笑"
                 android:textColor="#B4B4B4"
-                android:textSize="16sp"
+                android:textSize="@dimen/BasicTextSize"
                 android:textStyle="bold" />
 
             <TextView
@@ -46,14 +46,14 @@
                 android:singleLine="true"
                 android:text="微笑着安静是一种漠然"
                 android:textColor="#B4B4B4"
-                android:textSize="16sp"
+                android:textSize="@dimen/BasicTextSize"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@drawable/left_menu_line" />
+            android:background="@drawable/menu_line4_repeat" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -81,14 +81,14 @@
                     android:drawablePadding="20dp"
                     android:gravity="center_vertical"
                     android:text="收藏"
-                    android:textColor="#B4B4B4"
-                    android:textSize="18sp" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/TitleTextSize" />
             </LinearLayout>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/left_menu_line" />
+                android:background="@drawable/menu_line1_repeat" />
 
             <LinearLayout
                 android:id="@+id/rlInfromation"
@@ -107,14 +107,14 @@
                     android:drawablePadding="20dp"
                     android:gravity="center_vertical"
                     android:text="信息"
-                    android:textColor="#B4B4B4"
-                    android:textSize="18sp" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/TitleTextSize" />
             </LinearLayout>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/left_menu_line" />
+                android:background="@drawable/menu_line1_repeat" />
 
             <LinearLayout
                 android:id="@+id/rlSetting"
@@ -133,14 +133,14 @@
                     android:drawablePadding="20dp"
                     android:gravity="center_vertical"
                     android:text="设置"
-                    android:textColor="#B4B4B4"
-                    android:textSize="18sp" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/TitleTextSize" />
             </LinearLayout>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/left_menu_line" />
+                android:background="@drawable/menu_line1_repeat" />
         </LinearLayout>
     </LinearLayout>
 
