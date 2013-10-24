@@ -31,10 +31,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		fillView();
+		findView();
 	}
 
-	private void fillView() {
+	private void findView() {
 		// 设置界面
 		LayoutInflater inflater = LayoutInflater.from(this);
 		scrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.main, null);// 加载水平滑动控件按钮

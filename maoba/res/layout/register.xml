@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
     android:background="@drawable/bg_login"
     android:orientation="vertical" >
 
@@ -10,6 +11,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_gravity="center_vertical"
         android:orientation="vertical"
         android:paddingLeft="35dp"
         android:paddingRight="35dp" >
@@ -79,7 +81,8 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="60dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <View
                 android:layout_width="0dp"
@@ -111,7 +114,8 @@
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
             android:orientation="horizontal"
-            android:paddingTop="20dp" >
+            android:paddingTop="20dp"
+            android:visibility="gone" >
 
             <ImageView
                 android:id="@+id/ivSinaLogin"

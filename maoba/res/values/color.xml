@@ -12,5 +12,7 @@
     <color name="lightransparent">#a0000000</color>
     <color name="transparent">#00000000</color>
     <color name="navpage">#FFE1E8EB</color>
+    
+     <color name="dark_text">#333333</color>
 
 </resources>

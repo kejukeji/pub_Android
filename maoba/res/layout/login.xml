@@ -87,6 +87,17 @@
                 android:paddingBottom="10dp"
                 android:text="登录"
                 android:textSize="15sp" />
+            
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_btn_red"
+                android:padding="10dp"
+                android:paddingBottom="10dp"
+                android:text="酒吧列表"
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:layout_width="fill_parent"

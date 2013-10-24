@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.maoba.bean.MusicBean;
 
 /**
  * 数据库操作类
@@ -104,27 +103,27 @@ public class DataBaseAdapter {
 				MusicColumns.DATA+" text "+
 			");";
 	
-	/**
-	 * 批量插入频道信息
-	 * @param scbList
-	 */
-	public synchronized void bantchMusic(List<MusicBean> musicList) {
-		SQLiteDatabase localDb = db;
-		try {
-			localDb.beginTransaction();
-			localDb.delete(TABLE_NAME_MUSIC, null, null);
-			for (MusicBean music:musicList) {
-				String sql = "insert into "+TABLE_NAME_MUSIC+" ("
-						+MusicColumns.TITLE+","
-						+MusicColumns.DURATION+","
-						+MusicColumns.DATA+","
-						+") values(?,?,?)";
-				localDb.execSQL(sql,new Object[]{music.getTitle(),music.getDuration(),music.getData()});
-			}
-			localDb.setTransactionSuccessful();
-		}finally{
-			localDb.endTransaction();
-		}
-	}
+//	/**
+//	 * 批量插入频道信息
+//	 * @param scbList
+//	 */
+//	public synchronized void bantchMusic(List<MusicBean> musicList) {
+//		SQLiteDatabase localDb = db;
+//		try {
+//			localDb.beginTransaction();
+//			localDb.delete(TABLE_NAME_MUSIC, null, null);
+//			for (MusicBean music:musicList) {
+//				String sql = "insert into "+TABLE_NAME_MUSIC+" ("
+//						+MusicColumns.TITLE+","
+//						+MusicColumns.DURATION+","
+//						+MusicColumns.DATA+","
+//						+") values(?,?,?)";
+//				localDb.execSQL(sql,new Object[]{music.getTitle(),music.getDuration(),music.getData()});
+//			}
+//			localDb.setTransactionSuccessful();
+//		}finally{
+//			localDb.endTransaction();
+//		}
+//	}
 	
 }

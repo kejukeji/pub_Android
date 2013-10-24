@@ -1,8 +1,17 @@
 package com.maoba.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
+
+import com.maoba.Constants;
 import com.maoba.SystemException;
+import com.maoba.bean.BarBean;
+import com.maoba.bean.ResponseBean;
 import com.maoba.internet.HttpClient;
 import com.maoba.internet.PostParameter;
 
@@ -17,7 +26,7 @@ public class BusinessHelper {
 	 * 网络访问路径
 	 */
 
-	public static final String BASE_URL = "http://www.maobake.com/restful/";
+	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
 	HttpClient httpClient = new HttpClient();
 
 	/**
@@ -37,7 +46,7 @@ public class BusinessHelper {
 				new PostParameter[] { new PostParameter("login_type", flagLoginWay),
 						new PostParameter("nick_name", userName), new PostParameter("login_name", eMail),
 						new PostParameter("password", passWord) }).asJSONObject();
-	  
+
 	}
 
 	/**
@@ -70,6 +79,92 @@ public class BusinessHelper {
 				.post(BASE_URL + "user/login",
 						new PostParameter[] { new PostParameter("login_type", loginWay),
 								new PostParameter("open_id", openUid) }).asJSONObject();
+	}
+
+	/**
+	 * 第三方登陆检查接口
+	 * 
+	 * @param loginWay
+	 * @param openUid
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject check(int loginWay, String openUid) throws SystemException {
+		return httpClient
+				.post(BASE_URL + "user/check",
+						new PostParameter[] { new PostParameter("login_type", loginWay),
+								new PostParameter("open_id", openUid) }).asJSONObject();
+	}
+
+	/**
+	 * 获取酒吧列表接口
+	 * 
+	 * @param bar_id
+	 *            酒吧的id
+	 * @param pageIndex
+	 *            页数
+	 * @return
+	 * @throws SystemException
+	 */
+
+	public ResponseBean<BarBean> getBarList(int bar_id, int pageIndex) throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		if (bar_id > 0) {
+			p.add(new PostParameter("type_id", bar_id));
+		}
+		p.add(new PostParameter("page", pageIndex));
+		ResponseBean<BarBean> response;
+		try {
+			JSONObject obj;
+			obj = httpClient.get(BASE_URL + "pub/list/detail", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<BarBean>(obj);
+				List<BarBean> list = null;
+				List<BarBean> list1 = null;
+				if (!TextUtils.isEmpty(obj.getString("pub_list"))) {
+					list = BarBean.constractList(obj.getJSONArray("pub_list"));
+					list1 = BarBean.constractList(obj.getJSONArray("hot_list"));
+				} else {
+					list = new ArrayList<BarBean>();
+					list1 = new ArrayList<BarBean>();
+				}
+				response.setObjList(list);
+
+				response.setObjList1(list1);
+			} else {
+				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e) {
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
+		}
+		return response;
+
+	}
+
+	/**
+	 * 获取酒吧详情接口
+	 * 
+	 * @param bar_id
+	 *            酒吧的id
+	 * @param uid
+	 *            用户的id
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject getBarDetail(int id, int uid) throws SystemException {
+		List<PostParameter> list = new ArrayList<PostParameter>();
+		list.add(new PostParameter("pub_id", id));
+		if (uid > 0) {
+			list.add(new PostParameter("user_id", uid));
+		} else {
+			list.add(new PostParameter("user_id", ""));
+		}
+		JSONObject obj = httpClient.get(BASE_URL + "pub/detail", list.toArray(new PostParameter[list.size()]))
+				.asJSONObject();
+		return obj;
 	}
 
 }

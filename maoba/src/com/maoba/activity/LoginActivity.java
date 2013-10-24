@@ -21,7 +21,9 @@ import android.widget.TextView;
 import com.maoba.Constants;
 import com.maoba.R;
 import com.maoba.SystemException;
+import com.maoba.activity.bar.BarListActivity;
 import com.maoba.activity.base.BaseActivity;
+import com.maoba.activity.personalnfo.PersonalInfoActivity;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
@@ -48,17 +50,19 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	private static final String SCOPE = "all";
 
+	private Button btn;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		MobclickAgent.onError(this);
 		MobclickAgent.onEvent(this, "login");
-		fillView();
+		findView();
 		fillData();
 	}
 
-	private void fillView() {
+	private void findView() {
 		mTencent = Tencent.createInstance(Constants.TENCENT_APP_ID, this.getApplicationContext());
 
 		edUserName = (EditText) this.findViewById(R.id.edUserName);
@@ -78,6 +82,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 		ivQQLogin = (ImageView) this.findViewById(R.id.ivQQLogin);
 		ivQQLogin.setOnClickListener(this);
+
+		btn = (Button) this.findViewById(R.id.btn);
+		btn.setOnClickListener(this);
 	}
 
 	private void fillData() {
@@ -107,7 +114,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				String openUid = SharedPrefUtil.getWeiboUid(this);
 				if (NetUtil.checkNet(this)) {
 					logintype = Constants.LOGIN_SINA;// 表示新浪微博登陆
-					new LoginTask(logintype, openUid, true).execute();
+					new CheckTask(logintype, openUid).execute();
+
 				} else {
 					showShortToast(R.string.NoSignalException);
 				}
@@ -125,15 +133,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.ivQQLogin:
 			if (SharedPrefUtil.checkQQBind(this)) {
-				String uid = SharedPrefUtil.getQQOpenid(this);
+				String openUid = SharedPrefUtil.getQQOpenid(this);
 				if (NetUtil.checkNet(this)) {
 					logintype = Constants.LOGIN_QQ;
-					new LoginTask(logintype, uid, true).execute();
+					new CheckTask(logintype, openUid).execute();
+					
 				} else {
 					showShortToast(R.string.NoSignalException);
 				}
 			} else {
-				logintype = 2;
+				logintype = Constants.LOGIN_QQ;
 				IUiListener listener = new BaseUiListener(logintype);
 				mTencent.login(this, SCOPE, listener);
 			}
@@ -141,6 +150,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		case R.id.tvRegisterMaoMao:
 			openActivity(RegisterActivity.class);
 			break;
+
+		case R.id.btn:
+			openActivity(BarListActivity.class);
 		default:
 			break;
 		}
@@ -200,6 +212,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			try {
 				if (isThirdLogin) {
 					return new BusinessHelper().thirdLogin(logintype, openid);
+
 				} else {
 					return new BusinessHelper().login(logintype, userName, passWord);
 				}
@@ -240,11 +253,66 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 	}
 
+	/**
+	 * 检查接口
+	 * 
+	 * @author Zhouyong
+	 */
+
+	public class CheckTask extends AsyncTask<Void, Void, JSONObject> {
+		private int logintype;
+		private String openUid;
+
+		/**
+		 * @param logintype
+		 * @param openUid
+		 */
+		public CheckTask(int logintype, String openUid) {
+			this.logintype = logintype;
+			this.openUid = openUid;
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			try {
+				return new BusinessHelper().check(logintype, openUid);
+			} catch (SystemException e) {
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			if (pd != null) {
+				pd.dismiss();
+			}
+			if (result != null) {
+				try {
+					int status = result.getInt("status");
+					if (status == Constants.REQUEST_FAILD) {
+						// Bundle b = new Bundle();
+						// b.putInt("logintype", logintype);
+						// b.putString("openUid", openUid);
+						// openActivity(PersonalInfoActivity.class, b);
+					} else {
+						new LoginTask(logintype, openUid, true).execute();
+					}
+				} catch (JSONException e) {
+					showShortToast(R.string.json_exception);
+				}
+			} else {
+				showShortToast(R.string.connect_server_exception);
+			}
+		}
+
+	}
+
 	private class BaseUiListener implements IUiListener {
 		private int logintype;
 
 		/**
-		 * @param logintype 
+		 * @param logintype
 		 */
 		public BaseUiListener(int logintype) {
 			super();

@@ -52,12 +52,12 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.register);
 		MobclickAgent.onError(this);
 		MobclickAgent.onEvent(this, "register");
-		fillView();
+		findView();
 
 		((CommonApplication) getApplication()).addActivity(this);
 	}
 
-	private void fillView() {
+	private void findView() {
 		mTencent = Tencent.createInstance(Constants.TENCENT_APP_ID, this.getApplicationContext());
 
 		edUserName = (EditText) this.findViewById(R.id.edUserName);
@@ -101,7 +101,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 				showShortToast(R.string.NoSignalException);
 			}
 			break;
-		case R.id.ivSinaLogin:
+		case R.id.ivSinaLogin:// 已不再用
 			if (SharedPrefUtil.checkWeiboBind(RegisterActivity.this)) {
 				String openUid = SharedPrefUtil.getWeiboUid(this);
 				if (NetUtil.checkNet(this)) {
@@ -122,7 +122,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 
 			}
 			break;
-		case R.id.ivQQLogin:
+		case R.id.ivQQLogin:// 已不再用
 			if (SharedPrefUtil.checkQQBind(this)) {
 				String uid = SharedPrefUtil.getQQOpenid(this);
 				if (NetUtil.checkNet(this)) {

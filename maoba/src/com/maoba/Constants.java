@@ -22,6 +22,17 @@ public class Constants {
 	public static final int LOGIN_COMMON = 0;
 	public static final int LOGIN_SINA = 1;
 	public static final int LOGIN_QQ = 2;
+	/**
+	 * intent code
+	 */
+	public static final String EXTRA_DATA = "extra_data";// 跳转绑定的数据；
+
+	/**
+	 * 分页数据
+	 */
+	public static final int PAGE_SIZE = 10;
+	public static final String NO_DATA = "1";
+	public static final String LOAD_ALL = "2";
 
 	/**
 	 * 微博绑定类型，点击账号绑定和新浪微博
@@ -35,7 +46,6 @@ public class Constants {
 	 */
 	public static final int REQUEST_CODE_BIND_WEIBO = 11;
 	public static final int REQUEST_CODE_BIND_RENREN = 12;
-
 
 	/**
 	 * 新浪微博配置
@@ -61,10 +71,10 @@ public class Constants {
 																					// key
 	public static final String RENREN_SECRET_KEY = "a113d3aa3cde431eb499f6fc37ff1e30";// secret
 																						// key
-	
+
 	/**
 	 * activity RequestCode
 	 */
 	public static final int REQUEST_CODE_REGISTER = 1;
-	
+
 }
