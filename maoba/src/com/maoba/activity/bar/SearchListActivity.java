@@ -7,30 +7,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.maoba.AsyncImageLoader;
-import com.maoba.AsyncImageLoader.ImageCallback;
 import com.maoba.CommonApplication;
 import com.maoba.Constants;
 import com.maoba.R;
+import com.maoba.AsyncImageLoader.ImageCallback;
 import com.maoba.SystemException;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.bean.BarBean;
@@ -38,24 +37,21 @@ import com.maoba.bean.ResponseBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.StringUtil;
+import com.umeng.analytics.MobclickAgent;
 
 /**
- * 酒吧列表
  * 
  * @author zhouyong
- * @data 创建时间：2013-10-21 下午10:47:28
+ * @data 创建时间：2013-10-25 下午9:22:21
  */
-public class BarListActivity extends BaseActivity implements OnClickListener {
+public class SearchListActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
 	private TextView tvRight;
 	private ImageButton ibRight;
 
-	private ListView lvBarList;
+	private ListView lvSearchBarList;
 	private Adapter adapter;
-	private ArrayList<BarBean> barList;
-	private List<BarBean> hotList = new ArrayList<BarBean>();// 热门推荐酒吧
-
-	private LinearLayout viewMenuList;
+	private ArrayList<BarBean> searchBarList;
 
 	private int pageIndex = 1;
 
@@ -72,10 +68,16 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private ProgressDialog pd;
 	private CommonApplication app;
 
+	private String content;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.bar_list);
+		setContentView(R.layout.search_list);
+		MobclickAgent.onError(this);
+		Intent intent = this.getIntent();
+		content = intent.getExtras().getString(Constants.EXTRA_DATA);
+		MobclickAgent.onEvent(this, "search_list");
 
 		findView();
 		fillData();
@@ -87,15 +89,12 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		tvRight = (TextView) this.findViewById(R.id.tvRight);
 		ibRight = (ImageButton) this.findViewById(R.id.ibRight);
-		lvBarList = (ListView) this.findViewById(R.id.lvBarList);
+		lvSearchBarList = (ListView) this.findViewById(R.id.lvSearchBarList);
 
 		// 加载更多footer
 		vFooter = getLayoutInflater().inflate(R.layout.footer, null);
 		pbFooter = (ProgressBar) vFooter.findViewById(R.id.progressBar);
 		tvFooterMore = (TextView) vFooter.findViewById(R.id.tvMore);
-
-		// 今日推荐
-		viewMenuList = (LinearLayout) this.findViewById(R.id.viewMenuList);
 
 	}
 
@@ -104,21 +103,21 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		ibLeft.setBackgroundResource(R.drawable.ic_btn_left);
 
 		ibRight.setVisibility(View.GONE);// 隐藏并且不占用布局的空间
-		tvRight.setOnClickListener(this);
-		tvRight.setText("搜索");
+		// tvRight.setOnClickListener(this);
+		// tvRight.setText("搜索");
 
-		barList = new ArrayList<BarBean>();
+		searchBarList = new ArrayList<BarBean>();
 		adapter = new Adapter();
-		lvBarList.addFooterView(vFooter);
-		lvBarList.setAdapter(adapter);
-		lvBarList.setDividerHeight(0);
-		lvBarList.setOnScrollListener(LoadListener);
-		lvBarList.setOnItemClickListener(itemListener);
-		lvBarList.setDivider(null);
-		lvBarList.setFooterDividersEnabled(false);
+		lvSearchBarList.addFooterView(vFooter);
+		lvSearchBarList.setAdapter(adapter);
+		lvSearchBarList.setDividerHeight(0);
+		lvSearchBarList.setOnScrollListener(LoadListener);
+		lvSearchBarList.setOnItemClickListener(itemListener);
+		lvSearchBarList.setDivider(null);
+		lvSearchBarList.setFooterDividersEnabled(false);
 
-		if (NetUtil.checkNet(BarListActivity.this)) {
-			new GetBarListTask().execute();
+		if (NetUtil.checkNet(SearchListActivity.this)) {
+			new GetSearchBarListTask().execute();
 
 		} else {
 			showShortToast(R.string.NoSignalException);
@@ -131,8 +130,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		case R.id.ibLeft:
 			finish();
 			break;
-		case R.id.tvRight:
-			openActivity(SearchActivity.class);
 		default:
 			break;
 		}
@@ -146,15 +143,16 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-			if (arg2 >= barList.size()) {
+			if (arg2 >= searchBarList.size()) {
 				return;
 			}
-			BarBean bean = barList.get(arg2);
+			BarBean bean = searchBarList.get(arg2);
 			Bundle b = new Bundle();
 			b.putSerializable(Constants.EXTRA_DATA, bean);
 			openActivity(BarDetailActivity.class, b);
 		}
 	};
+
 	/**
 	 * 滚动监听器
 	 */
@@ -172,9 +170,9 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
 			// 滚动到最后，默认加载下一页
 			if (scrollState == OnScrollListener.SCROLL_STATE_IDLE && isLoadMore) {
-				if (NetUtil.checkNet(BarListActivity.this)) {
+				if (NetUtil.checkNet(SearchListActivity.this)) {
 					if (!isLoad && !isComplete) {
-						new GetBarListTask().execute();
+						new GetSearchBarListTask().execute();
 					}
 				} else {
 					showShortToast(R.string.NoSignalException);
@@ -186,10 +184,10 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	};
 
 	/**
-	 * 获取酒吧列表
+	 * 获取搜索酒吧列表
 	 * 
 	 */
-	public class GetBarListTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
+	public class GetSearchBarListTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -199,7 +197,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				tvFooterMore.setText(R.string.loading);
 			} else {
 				if (pd == null) {
-					pd = new ProgressDialog(BarListActivity.this);
+					pd = new ProgressDialog(SearchListActivity.this);
 				}
 				pd.setMessage(getString(R.string.loading));
 				pd.show();
@@ -207,10 +205,11 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		}
 
 		@Override
-		protected ResponseBean<BarBean> doInBackground(Void... params) {
+		protected ResponseBean<BarBean> doInBackground(Void... arg0) {
 			try {
-				return new BusinessHelper().getBarList(3, pageIndex);
+				return new BusinessHelper().getSearchBarList(content, pageIndex);
 			} catch (SystemException e) {
+				e.printStackTrace();
 			}
 			return null;
 		}
@@ -223,18 +222,18 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			}
 			pbFooter.setVisibility(View.GONE);
 			if (isFilter) {
-				barList.clear();
+				searchBarList.clear();
 			}
 			if (result.getStatus() != Constants.REQUEST_FAILD) {
 				// 这里获取到十条数据
 				List<BarBean> tempList = result.getObjList();
-				if (pageIndex == 1) {
-					hotList.addAll(result.getObjList1());
-					fillRecommendList(result.getObjList1());
+				if (tempList.size() <= 0) {
+                   showShortToast("没有你要查询的酒吧,请重新查询");
+                  return;
 				}
 				boolean isLastPage = false;
 				if (tempList.size() > 0) {
-					barList.addAll(tempList);
+					searchBarList.addAll(tempList);
 					adapter.notifyDataSetChanged(); // 通知更新
 					pageIndex++;
 				} else {
@@ -270,61 +269,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
-	 * 填充今日推荐数据
-	 * 
-	 * @param list
-	 * 
-	 */
-	private void fillRecommendList(final List<BarBean> hotlist) {
-		if (hotlist == null) {
-			return;
-		}
-		for (int i = 0; i < hotlist.size(); i++) {
-			final BarBean bean = hotlist.get(i);
-			LinearLayout.LayoutParams paramItem = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT);
-			paramItem.rightMargin = 10;
-			final View view = getLayoutInflater().inflate(R.layout.today_commened_item, null);
-			view.setLayoutParams(paramItem);
-			ImageView ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
-
-			String picUrl = bean.getRecommendImageUrl();
-			ivPhoto.setTag(picUrl);
-			if (!TextUtils.isEmpty(picUrl)) {
-				Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(picUrl, new ImageCallback() {
-
-					@Override
-					public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-						ImageView image = (ImageView) viewMenuList.findViewWithTag(imageUrl);
-						if (image != null) {
-							if (imageDrawable != null) {
-								image.setImageDrawable(imageDrawable);
-							} else {
-								image.setImageResource(R.drawable.ic_default);
-							}
-						}
-					}
-				});
-				if (cacheDrawble != null) {
-					ivPhoto.setImageDrawable(cacheDrawble);
-				} else {
-					ivPhoto.setImageResource(R.drawable.ic_default);
-				}
-			}
-			ivPhoto.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Bundle b = new Bundle();
-					b.putSerializable(Constants.EXTRA_DATA, bean);
-					openActivity(BarDetailActivity.class, b);
-
-				}
-			});
-			viewMenuList.addView(view);
-		}
-	}
-
-	/**
 	 * 适配器
 	 * 
 	 **/
@@ -333,12 +277,12 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public int getCount() {
-			return barList.size();
+			return searchBarList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return barList.get(position);
+			return searchBarList.get(position);
 		}
 
 		@Override
@@ -349,7 +293,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
-			BarBean bean = barList.get(position);
+			BarBean bean = searchBarList.get(position);
 			if (convertView == null) {
 				holder = new ViewHolder();
 				convertView = getLayoutInflater().inflate(R.layout.bar_item, null);
@@ -367,7 +311,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 				@Override
 				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-					ImageView image = (ImageView) lvBarList.findViewWithTag(imageUrl);
+					ImageView image = (ImageView) lvSearchBarList.findViewWithTag(imageUrl);
 					if (image != null) {
 						if (imageDrawable != null) {
 							image.setImageDrawable(imageDrawable);

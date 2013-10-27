@@ -11,8 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.maoba.helper.BusinessHelper;
-
 /**
  * 酒吧实体类
  * 
@@ -22,6 +20,7 @@ import com.maoba.helper.BusinessHelper;
 public class BarBean implements Serializable {
 
 	private static final long serialVersionUID = 4617043918315208981L;
+	public static final String BASE_URL = "http://42.121.108.142:6001/";
 	private int bar_id;
 	private String bar_Name;
 	private String bar_Address;
@@ -29,14 +28,13 @@ public class BarBean implements Serializable {
 	private String bar_Intro;
 	private String bar_Type;
 	private String recommendImageUrl;
-	
-	private String latitude;//纬度（跳转地图时，纬度放在前面）
-	private String longitude;//经度
+	private String showPhotoUrl;
+	private String hot;
+	private String barType;
 
-	/**
-	 * @param obj
-	 * @throws JSONException
-	 */
+	private String latitude;// 纬度（跳转地图时，纬度放在前面）
+	private String longitude;// 经度
+
 	/**
 	 * @param obj
 	 * @throws JSONException
@@ -45,6 +43,7 @@ public class BarBean implements Serializable {
 		if (obj.has("id")) {
 			this.bar_id = obj.getInt("id");
 		}
+
 		if (obj.has("name")) {
 			this.bar_Name = obj.getString("name");
 
@@ -53,7 +52,7 @@ public class BarBean implements Serializable {
 			this.bar_Address = obj.getString("city_county");
 		}
 		if (obj.has("pic_path")) {
-			this.imageUrl = BusinessHelper.BASE_URL + obj.getString("pic_path");
+			this.imageUrl = BASE_URL + obj.getString("pic_path");
 		}
 		if (obj.has("intro")) {
 			this.bar_Intro = obj.getString("intro");
@@ -62,19 +61,25 @@ public class BarBean implements Serializable {
 			this.bar_Type = obj.getString("type");
 
 		}
-		if(obj.has("latitude")){
+		if (obj.has("latitude")) {
 			this.latitude = obj.getString("latitude");
 		}
-		if(obj.has("longitude")){
+		if (obj.has("longitude")) {
 			this.longitude = obj.getString("longitude");
 		}
 		if (obj.has("pic_path")) {
-			this.recommendImageUrl = BusinessHelper.BASE_URL + obj.getString("pic_path");
+			this.recommendImageUrl = BASE_URL + obj.getString("pic_path");
+		}
+		if (obj.has("view_number")) {
+			this.hot = obj.getString("view_number");
+		}
+		if (obj.has("type_name")) {
+			this.barType = obj.getString("type_name");
+		}
+		if (obj.has("pic_path")) {
+			this.showPhotoUrl = obj.getString("pic_path");
 		}
 	}
-
-	
-
 
 	/**
 	 * 构建list list 最后得到的数据是:解析出的有所有的数据 使用 for 循环加载所有的 Array
@@ -140,16 +145,13 @@ public class BarBean implements Serializable {
 		return latitude;
 	}
 
-
 	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
 
-
 	public String getLongitude() {
 		return longitude;
 	}
-
 
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
@@ -161,6 +163,30 @@ public class BarBean implements Serializable {
 
 	public void setRecommendImageUrl(String recommendImageUrl) {
 		this.recommendImageUrl = recommendImageUrl;
+	}
+
+	public String getHot() {
+		return hot;
+	}
+
+	public void setHot(String hot) {
+		this.hot = hot;
+	}
+
+	public String getBarType() {
+		return barType;
+	}
+
+	public void setBarType(String barType) {
+		this.barType = barType;
+	}
+
+	public String getShowPhotoUrl() {
+		return showPhotoUrl;
+	}
+
+	public void setShowPhotoUrl(String showPhotoUrl) {
+		this.showPhotoUrl = showPhotoUrl;
 	}
 
 }

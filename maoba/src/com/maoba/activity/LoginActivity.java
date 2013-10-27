@@ -6,13 +6,18 @@ package com.maoba.activity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,7 +28,6 @@ import com.maoba.R;
 import com.maoba.SystemException;
 import com.maoba.activity.bar.BarListActivity;
 import com.maoba.activity.base.BaseActivity;
-import com.maoba.activity.personalnfo.PersonalInfoActivity;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
@@ -34,7 +38,7 @@ import com.umeng.analytics.MobclickAgent;
 
 /**
  * 
- * @author zhuoyong
+ * @author zhouyong
  * @data 创建时间：2013-10-16 下午1:23:52
  */
 public class LoginActivity extends BaseActivity implements OnClickListener {
@@ -51,6 +55,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	private static final String SCOPE = "all";
 
 	private Button btn;
+
+	private String nickName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +143,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				if (NetUtil.checkNet(this)) {
 					logintype = Constants.LOGIN_QQ;
 					new CheckTask(logintype, openUid).execute();
-					
+
 				} else {
 					showShortToast(R.string.NoSignalException);
 				}
@@ -168,19 +174,22 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		private String userName;
 		private String passWord;
 		private int logintype;
+		private String nickName;
 
 		private String openid;
 		private boolean isThirdLogin = false;
 
 		/**
+		 * @param nickName
 		 * @param LoginWay
 		 * @param openUid
 		 */
-		public LoginTask(int logintype, String openUid, boolean isThirdLogin) {
+		public LoginTask(String nickName, int logintype, String openUid, boolean isThirdLogin) {
 			super();
 			this.openid = openUid;
 			this.logintype = logintype;
 			this.isThirdLogin = isThirdLogin;
+			this.nickName = nickName;
 		}
 
 		/**
@@ -211,7 +220,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		protected JSONObject doInBackground(Void... params) {
 			try {
 				if (isThirdLogin) {
-					return new BusinessHelper().thirdLogin(logintype, openid);
+					return new BusinessHelper().thirdLogin(nickName, logintype, openid);
 
 				} else {
 					return new BusinessHelper().login(logintype, userName, passWord);
@@ -288,15 +297,53 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				pd.dismiss();
 			}
 			if (result != null) {
+
 				try {
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_FAILD) {
-						// Bundle b = new Bundle();
-						// b.putInt("logintype", logintype);
-						// b.putString("openUid", openUid);
-						// openActivity(PersonalInfoActivity.class, b);
+						
+						LayoutInflater inflater = getLayoutInflater();
+						View view = inflater.inflate(R.layout.dialog_ninkname_, null); //
+						TextView tvDialogMsg = (TextView) view.findViewById(R.id.tvDialogMsg); // 取得布局文件的控件
+						final EditText etNickName = (EditText) view.findViewById(R.id.etNickName); // 取得布局文件的控件
+						Button btnDialogLeft = (Button) view.findViewById(R.id.btnDialogLeft);
+						btnDialogLeft.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								nickName = etNickName.getText().toString().trim();
+								if (TextUtils.isEmpty(nickName)) {
+									showShortToast("请输入昵称");
+								} else {
+									new LoginTask(nickName, logintype, openUid, true).execute();
+								}
+
+							}
+						});
+						Button btnDialogRight = (Button) view.findViewById(R.id.btnDialogRight);
+						btnDialogRight.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								finish();
+							}
+						});
+						btnDialogRight.setText("取消");
+
+						tvDialogMsg.setText("没有昵称无法第三方登录，请输入昵称");
+						final Dialog dialog = new Dialog(LoginActivity.this, R.style.dialog); // 取得style的文件
+
+						dialog.setContentView(view); // 将取得布局文件set进去
+						dialog.show(); // 显示
+						WindowManager windowManager = getWindowManager();
+						Display display = windowManager.getDefaultDisplay();
+						WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+						lp.width = (int) (display.getWidth() - 30); // 设置宽度
+
+						dialog.getWindow().setAttributes(lp);
+
 					} else {
-						new LoginTask(logintype, openUid, true).execute();
+						new LoginTask(nickName, logintype, openUid, true).execute();
 					}
 				} catch (JSONException e) {
 					showShortToast(R.string.json_exception);
@@ -305,7 +352,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				showShortToast(R.string.connect_server_exception);
 			}
 		}
-
 	}
 
 	private class BaseUiListener implements IUiListener {
@@ -330,7 +376,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				openid = response.getString("openid");
 				String currTime = System.currentTimeMillis() + "";
 				SharedPrefUtil.setQQInfo(LoginActivity.this, access_token, expires_in, openid, currTime);
-				new LoginTask(logintype, openid, true).execute();
+				// new LoginTask(logintype, openid, true).execute();
 			} catch (JSONException e) {
 			}
 		}
@@ -354,7 +400,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			if (resultCode == RESULT_OK) {
 				String uid = SharedPrefUtil.getWeiboUid(LoginActivity.this);
 				logintype = Constants.LOGIN_SINA;
-				new LoginTask(logintype, uid, true).execute();
+				// new LoginTask(logintype, uid, true).execute();
 			}
 			break;
 		case Constants.REQUEST_CODE_REGISTER:

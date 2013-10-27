@@ -31,7 +31,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * 注册界面
  * 
- * @author zhuoyong
+ * @author zhouyong
  * @data 创建时间：2013-10-16 上午9:24:55
  */
 public class RegisterActivity extends BaseActivity implements OnClickListener {
@@ -193,7 +193,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 		protected JSONObject doInBackground(Void... params) {
 			try {
 				if (isThirdLogin) {
-					return new BusinessHelper().thirdLogin(logintype, openId);
+				//	return new BusinessHelper().thirdLogin(logintype, openId);
 				} else {
 					return new BusinessHelper().register(logintype, userName, eMail, passWord);
 				}

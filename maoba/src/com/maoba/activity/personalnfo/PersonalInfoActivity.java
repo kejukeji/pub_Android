@@ -30,12 +30,12 @@ import com.maoba.activity.base.BaseActivity;
 /**
  * 个人信息修改界面
  * 
- * @author zhuoyong
+ * @author zhouyong
  * @data 创建时间：2013-10-23 下午5:10:47
  */
 public class PersonalInfoActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft, ibRight;
-	private Button btnRight;
+	private TextView tvRight;
 	private TextView tvTitle;
 
 	private ImageView ivUserImage;
@@ -62,7 +62,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		ibRight = (ImageButton) this.findViewById(R.id.ibRight);
-		btnRight = (Button) this.findViewById(R.id.btnRight);
+		tvRight = (Button) this.findViewById(R.id.tvRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
 		ivUserImage = (ImageView) this.findViewById(R.id.ivUserImage);
@@ -96,8 +96,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		ibLeft.setBackgroundResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 		ibRight.setVisibility(View.GONE);
-		btnRight.setText("提交");
-		btnRight.setOnClickListener(this);
+		tvRight.setText("提交");
+		tvRight.setOnClickListener(this);
 		tvTitle.setText("个人资料");
 
 		viewSex.setOnClickListener(this);
@@ -115,7 +115,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		case R.id.ibLeft:
 			finish();
 			break;
-		case R.id.btnRight:
+		case R.id.tvRight:
 			String nickName = edNickName.getText().toString().trim();
 			String birthday = edBirthday.getText().toString().trim();
 			String sex = edSex.getText().toString().trim();

@@ -5,6 +5,9 @@
     android:versionName="1.0" >
 
     <uses-sdk android:minSdkVersion="8" />
+     <!-- 定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
  	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <!-- 网络访问权限 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -49,9 +52,11 @@
         <activity  android:name=".activity.MainActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
         <activity  android:name=".activity.LoginActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
         <activity  android:name=".activity.RegisterActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
-        <!--酒吧注册 -->
+        <!--酒吧 -->
         <activity  android:name="com.maoba.activity.bar.BarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
         <activity  android:name="com.maoba.activity.bar.BarDetailActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name="com.maoba.activity.bar.SearchActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name="com.maoba.activity.bar.SearchListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
        <!--个人信息 -->
         <activity android:name="com.maoba.activity.personalnfo.PersonalInfoActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
 		<!-- push服务 -->

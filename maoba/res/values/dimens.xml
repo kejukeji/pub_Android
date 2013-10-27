@@ -6,7 +6,6 @@
     <dimen name="TitleTextSize">20dp</dimen>
     <dimen name="SmallTextSize">13dp</dimen>
     <dimen name="SmallerTextSize">12dp</dimen>
-    
     <dimen name="LargestTextSize">30dp</dimen>
     <dimen name="ChattingTextSize">16dp</dimen>
     <dimen name="ChattingContentMinHeight">49dp</dimen>

@@ -130,25 +130,23 @@
             <!-- 三方登录 -->
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginRight="60dp"
                 android:orientation="horizontal"
+                android:layout_gravity="center"
                 android:paddingTop="20dp" >
 
                 <ImageView
                     android:id="@+id/ivSinaLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_sina" />
 
                 <ImageView
                     android:id="@+id/ivQQLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="45dp"
+                    android:layout_marginLeft="40dp"
                     android:src="@drawable/ic_qq" />
             </LinearLayout>
         </LinearLayout>

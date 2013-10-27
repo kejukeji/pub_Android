@@ -76,7 +76,7 @@
             android:layout_width="130dp"
             android:layout_height="95dp"
             android:padding="5dp"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
     </LinearLayout>
 
 </LinearLayout>

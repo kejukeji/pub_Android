@@ -283,7 +283,7 @@ public class HttpClient implements java.io.Serializable {
     			url += "&" + HttpClient.encodeParameters(params);
     		}
 		}
-        return httpRequest(url, null);
+    	return httpRequest(url, null);
     }
     /**
      * 设置统一参数
