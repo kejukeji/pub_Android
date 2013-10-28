@@ -18,7 +18,7 @@ import com.maoba.internet.PostParameter;
 /**
  * 网络访问操作
  * 
- * @author zhouyong 说明�?1、一些网络操作方�?2、访问系统业务方法，转换成json数据对象，或者业务对象�?
+ * @author zhouyong 说明�?1、一些网络操作方�?2、访问系统业务方法，转换成json数据对象，或者业务对象�?
  */
 public class BusinessHelper {
 
@@ -68,7 +68,7 @@ public class BusinessHelper {
 	}
 
 	/**
-	 * 第三方登陆接�?
+	 * 第三方登陆接�?
 	 * 
 	 * @param nickName
 	 * 
@@ -85,7 +85,7 @@ public class BusinessHelper {
 	}
 
 	/**
-	 * 第三方登陆检查接�?
+	 * 第三方登陆检查接�?
 	 * 
 	 * @param loginWay
 	 * @param openUid
@@ -137,7 +137,7 @@ public class BusinessHelper {
 				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
 			}
 		} catch (SystemException e1) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失�?);
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
 		} catch (JSONException e) {
 			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
 		}
@@ -146,7 +146,7 @@ public class BusinessHelper {
 	}
 
 	/**
-	 * 获取酒吧详情接口 用户登录状�?
+	 * 获取酒吧详情接口 用户登录状�?
 	 * 
 	 * @param bar_id 酒吧的id
 	 * @param uid 用户的id
@@ -184,7 +184,7 @@ public class BusinessHelper {
 				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
 			}
 		} catch (SystemException e1) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失�?);
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
 		} catch (JSONException e) {
 			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
 		}
@@ -193,7 +193,7 @@ public class BusinessHelper {
 	}
 
 	/**
-	 * 获取酒吧详情接口 用户无登录状�?
+	 * 获取酒吧详情接口 用户无登录状�?
 	 * 
 	 * @param bar_id  酒吧的id
 	 * @param uid用户的id
@@ -226,7 +226,7 @@ public class BusinessHelper {
 				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
 			}
 		} catch (SystemException e1) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失�?);
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
 		} catch (JSONException e) {
 			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
 		}
@@ -235,7 +235,7 @@ public class BusinessHelper {
 	}
 
 	/**
-	 * 获取酒吧热门搜索面接�?
+	 * 获取酒吧热门搜索面接�?
 	 * 
 	 * @param bar_id 酒吧的id
 	 * @param uid 用户的id
@@ -263,7 +263,7 @@ public class BusinessHelper {
 				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
 			}
 		} catch (SystemException e1) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失�?);
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
 		} catch (JSONException e) {
 			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
 		}
@@ -274,7 +274,7 @@ public class BusinessHelper {
 	/**
 	 * 搜索酒吧接口
 	 * 
-	 * @param content 关键�?       
+	 * @param content 关键�?       
 	 * @param pageIndex 页数
 	 *           
 	 * @return
@@ -304,7 +304,7 @@ public class BusinessHelper {
 				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
 			}
 		} catch (SystemException e1) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失�?);
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
 		} catch (JSONException e) {
 			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
 		}
@@ -341,7 +341,7 @@ public class BusinessHelper {
 				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
 			}
 		} catch (SystemException e1) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失�?);
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
 		} catch (JSONException e) {
 			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
 		}
