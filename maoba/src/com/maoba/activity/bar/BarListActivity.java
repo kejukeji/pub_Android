@@ -283,7 +283,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			final BarBean bean = hotlist.get(i);
 			LinearLayout.LayoutParams paramItem = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
 					LinearLayout.LayoutParams.WRAP_CONTENT);
-			paramItem.rightMargin = 10;
+			paramItem.rightMargin = 5;
 			final View view = getLayoutInflater().inflate(R.layout.today_commened_item, null);
 			view.setLayoutParams(paramItem);
 			ImageView ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
