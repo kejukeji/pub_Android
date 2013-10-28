@@ -342,4 +342,33 @@ public class BaseActivity extends Activity {
 	public void defaultFinish() {
 		super.finish();
 	}
+	private ProgressDialog pd;
+	/**
+	 * 显示progressDialog
+	 */
+	protected void showPd(String message){
+		if(pd == null){
+			pd = new ProgressDialog(this);
+		}
+		pd.setMessage(message);
+		pd.show();
+	}
+	/**
+	 * 显示progressDialog
+	 */
+	protected void showPd(int msgId){
+		if(pd == null){
+			pd = new ProgressDialog(this);
+		}
+		pd.setMessage(getString(msgId));
+		pd.show();
+	}
+	/**
+	 * 关闭progressDialog
+	 */
+	protected void dismissPd(){
+		if(pd != null){
+			pd.dismiss();
+		}
+	}
 }
