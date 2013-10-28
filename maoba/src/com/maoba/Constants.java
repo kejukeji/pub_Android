@@ -10,7 +10,6 @@ public class Constants {
 	 * 应用文件存放目录
 	 */
 	public static final String APP_DIR_NAME = "maomao";
-
 	/**
 	 * 网络请求状态
 	 */

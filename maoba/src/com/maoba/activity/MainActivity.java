@@ -1,15 +1,35 @@
 package com.maoba.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.maoba.AsyncImageLoader;
+import com.maoba.AsyncImageLoader.ImageCallback;
+import com.maoba.Constants;
 import com.maoba.R;
+import com.maoba.SystemException;
+import com.maoba.activity.bar.BarListActivity;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.personalnfo.PersonalInfoActivity;
 import com.maoba.view.MyHorizontalScrollView;
@@ -26,52 +46,88 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout rlSetting;// 设置
 
 	private Button btnLeftMenu;
+	private int screenWidth;
+	private ImageView ivTop;
+	private TextView tvTop;
+	private GridViewInScrollView gvBarType;
+	private List<BarTypeBean> barTypeList;
+	private Adapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		Display display = this.getWindowManager().getDefaultDisplay();
+		screenWidth = display.getWidth();
 		findView();
+		fillData();
 	}
 
 	private void findView() {
 		// 设置界面
 		LayoutInflater inflater = LayoutInflater.from(this);
 		scrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.main, null);// 加载水平滑动控件按钮
+
 		setContentView(scrollView);// 动�?加载view
 
 		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界�?
+=======
+		setContentView(scrollView);// 动�?加载view
+		/************************** 侧边�?  **********************/
+		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界�?
+		rlCollect = (LinearLayout) settingView.findViewById(R.id.rlCollect);
+		rlInfromation = (LinearLayout) settingView.findViewById(R.id.rlInfromation);
+		rlSetting = (LinearLayout) settingView.findViewById(R.id.rlSetting);
+		rlCollect.setOnClickListener(this);
+		rlInfromation.setOnClickListener(this);
+		rlSetting.setOnClickListener(this);
+		/************************** 主页   **********************/
+
 		homeView = inflater.inflate(R.layout.home, null);// 加载头部按钮界面
 		btnLeftMenu = (Button) homeView.findViewById(R.id.btnLeftMenu);// 头部界面左边按钮控件
-		btnLeftMenu.setOnClickListener(new ClickListenerForScrolling(scrollView, settingView));//
+		btnLeftMenu.setOnClickListener(new ClickListenerForScrolling(scrollView, settingView));
+		ivTop = (ImageView) homeView.findViewById(R.id.ivTop);
+		gvBarType = (GridViewInScrollView) homeView.findViewById(R.id.gvBarType);
+		tvTop = (TextView) homeView.findViewById(R.id.tvTop);
 
 		final View[] children = new View[] { settingView, homeView };
 		int scrollToViewIdx = 1;
 		scrollView.initViews(children, scrollToViewIdx, new SizeCallbackForMenu(btnLeftMenu));
 		currentView = homeView;
 
-		rlCollect = (LinearLayout) settingView.findViewById(R.id.rlCollect);
-		rlInfromation = (LinearLayout) settingView.findViewById(R.id.rlInfromation);
-		rlSetting = (LinearLayout) settingView.findViewById(R.id.rlSetting);
-
-		rlCollect.setOnClickListener(this);
-		rlInfromation.setOnClickListener(this);
-		rlSetting.setOnClickListener(this);
-
 	}
+	private void fillData(){
+		barTypeList = new ArrayList<BarTypeBean>();
+		adapter = new Adapter();
+		gvBarType.setAdapter(adapter);
+		gvBarType.setOnItemClickListener(itemListener);
+		if(NetUtil.checkNet(this)){
+			new GetHomeTask().execute();
+		}else{
+			showShortToast(R.string.NoSignalException);
+		}
+	}
+	OnItemClickListener itemListener = new OnItemClickListener() {
 
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			BarTypeBean bean = barTypeList.get(position);
+			Bundle b = new Bundle();
+			b.putSerializable(Constants.EXTRA_DATA, bean);
+			openActivity(BarListActivity.class, b);
+		}
+	};
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.rlCollect:
-			Toast.makeText(MainActivity.this, "你点击了收藏", 1).show();
+			showShortToast("你点击了收藏");
 			break;
 		case R.id.rlInfromation:
-			Toast.makeText(MainActivity.this, "你点击了信息", 1).show();
+			showShortToast("你点击了信息");
 			break;
 		case R.id.rlSetting:
-			Toast.makeText(MainActivity.this, "你点击了设置", 1).show();
+			showShortToast("你点击了设置");
 		default:
 			break;
 		}
@@ -165,6 +221,138 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				// 当视图不是中间的视图
 				dims[0] = w - btnWidth;
 			}
+		}
+	}
+	/**
+	 * 获取首页数据
+	 * @author Zhoujun
+	 *
+	 */
+	private class GetHomeTask extends AsyncTask<Void, Void, JSONObject>{
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			try {
+				return new BusinessHelper().getHomeData();
+			} catch (SystemException e) {
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd(R.string.loading);
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			dismissPd();
+			if(result != null){
+				try {
+					if(Constants.REQUEST_SUCCESS == result.getInt("status")){
+						List<BarTypeBean> tempList = BarTypeBean.constractList(result.getJSONArray("list"));
+						final BarTypeBean topBean = tempList.get(0);
+						tvTop.setText(topBean.getName());
+						ivTop.setTag(topBean.getUrl());
+						Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(topBean.getUrl(), new ImageCallback() {
+							
+							@Override
+							public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+								if(imageDrawable != null){
+									ivTop.setImageDrawable(imageDrawable);
+								}
+							}
+						});
+						if(cacheDrawable != null){
+							ivTop.setImageDrawable(cacheDrawable);
+						}
+						ivTop.setOnClickListener(new View.OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								Bundle b = new Bundle();
+								b.putSerializable(Constants.EXTRA_DATA, topBean);
+								openActivity(BarListActivity.class, b);
+							}
+						});
+						tempList.remove(0);
+						barTypeList.addAll(tempList);
+						adapter.notifyDataSetChanged();
+					}else{
+						showShortToast(R.string.connect_server_exception);
+					}
+				} catch (JSONException e) {
+					showShortToast(R.string.json_exception);
+				}
+			}else{
+				showShortToast(R.string.connect_server_exception);
+			}
+		}
+	}
+	/**
+	 * 酒吧类型适配�?
+	 * @author Zhoujun
+	 *
+	 */
+	private class Adapter extends BaseAdapter{
+
+		@Override
+		public int getCount() {
+			return barTypeList.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return barTypeList.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder = null;
+			BarTypeBean bean = barTypeList.get(position);
+			if(convertView == null){
+				holder = new ViewHolder();
+				convertView = getLayoutInflater().inflate(R.layout.bar_type_item, null);
+				holder.ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
+				holder.tvBarType = (TextView) convertView.findViewById(R.id.tvBarType);
+				convertView.setTag(holder);
+			}else{
+				holder = (ViewHolder) convertView.getTag();
+			}
+			holder.tvBarType.setText(bean.getName());
+			int itemWidth = (screenWidth - 30 -10)/2;
+			LayoutParams params = holder.ivImage.getLayoutParams();
+			params.width = itemWidth;
+			params.height = itemWidth * 2/3;
+			holder.ivImage.setLayoutParams(params);
+			holder.ivImage.setTag(bean.getUrl());
+			Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(bean.getUrl(), new ImageCallback() {
+				
+				@Override
+				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+					ImageView image = (ImageView) gvBarType.findViewWithTag(imageUrl);
+					if(image != null){
+						if(imageDrawable != null){
+							image.setImageDrawable(imageDrawable);
+						}
+					}
+				}
+			});
+			if(cacheDrawable != null){
+				holder.ivImage.setImageDrawable(cacheDrawable);
+			}
+			
+			return convertView;
+		}
+		class ViewHolder {
+			private ImageView ivImage;
+			private TextView tvBarType;
 		}
 	}
 }

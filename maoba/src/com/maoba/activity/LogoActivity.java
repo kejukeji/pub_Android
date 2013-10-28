@@ -10,6 +10,7 @@ import android.view.animation.Animation.AnimationListener;
 
 import com.maoba.CommonApplication;
 import com.maoba.R;
+import com.maoba.util.SharedPrefUtil;
 
 public class LogoActivity extends Activity {
 	private View viewLogo;
@@ -32,7 +33,11 @@ public class LogoActivity extends Activity {
 		viewLogo.startAnimation(aa);
 		aa.setAnimationListener(new AnimationListener() {
 			public void onAnimationEnd(Animation arg0) {
-				startActivity(new Intent(LogoActivity.this, LoginActivity.class));
+				if(SharedPrefUtil.isLogin(LogoActivity.this)){
+					startActivity(new Intent(LogoActivity.this, MainActivity.class));
+				}else{
+					startActivity(new Intent(LogoActivity.this, LoginActivity.class));
+				}
 				finish();
 			}
 

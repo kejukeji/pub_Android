@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.maoba.helper.BusinessHelper;
+
 /**
  * 酒吧类型
  * @author Zhoujun
@@ -28,8 +30,8 @@ public class BarTypeBean implements Serializable {
 		if(obj.has("name")){
 			this.name = obj.getString("name");
 		}
-		if(obj.has("pic_name")){
-			
+		if(obj.has("pic_path")){
+			this.url = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
 	}
 	/**

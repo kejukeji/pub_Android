@@ -6,7 +6,6 @@ package com.maoba.activity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -248,7 +247,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 						}
 						SharedPrefUtil.setUid(LoginActivity.this, uid);
 						showShortToast("登录成功");
-						// finish();
+						openActivity(MainActivity.class);
+						finish();
 					} else {
 						showShortToast(result.getString("message"));
 					}
