@@ -31,7 +31,10 @@ import com.maoba.R;
 import com.maoba.SystemException;
 import com.maoba.activity.bar.BarListActivity;
 import com.maoba.activity.base.BaseActivity;
+import com.maoba.bean.BarTypeBean;
 import com.maoba.activity.personalnfo.PersonalInfoActivity;
+import com.maoba.util.NetUtil;
+import com.maoba.view.GridViewInScrollView;
 import com.maoba.view.MyHorizontalScrollView;
 import com.maoba.view.MyHorizontalScrollView.SizeCallback;
 
@@ -68,13 +71,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		LayoutInflater inflater = LayoutInflater.from(this);
 		scrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.main, null);// 加载水平滑动控件按钮
 
-		setContentView(scrollView);// 动�?加载view
+		setContentView(scrollView);
 
-		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界�?
-=======
-		setContentView(scrollView);// 动�?加载view
-		/************************** 侧边�?  **********************/
-		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界�?
+		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界
+
+		setContentView(scrollView);
+		/************************** 侧边�?  **********************/
+		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界
 		rlCollect = (LinearLayout) settingView.findViewById(R.id.rlCollect);
 		rlInfromation = (LinearLayout) settingView.findViewById(R.id.rlInfromation);
 		rlSetting = (LinearLayout) settingView.findViewById(R.id.rlSetting);
@@ -166,7 +169,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			view.setVisibility(View.VISIBLE);
 			if (v.getId() == R.id.btnLeftMenu) {
 				if (!leftMenuOut) {
-					/* 根据分辨来辨�?偏移 各种分辨率偏移是不一样的 */
+					/* 根据分辨来辨�?偏移 各种分辨率偏移是不一样的 */
 					int offset = 0;
 					left = 0;
 					if (viewWidth <= 320) {
@@ -291,7 +294,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 	/**
-	 * 酒吧类型适配�?
+	 * 酒吧类型适配�?
 	 * @author Zhoujun
 	 *
 	 */
