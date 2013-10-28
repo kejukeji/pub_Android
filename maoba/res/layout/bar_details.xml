@@ -53,7 +53,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="潮人 酒吧"
-                                android:textSize="@dimen/TitleTextSize" />
+                                android:textSize="@dimen/LargeTextSize"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -67,6 +68,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:text="人气："
+                                android:textColor="@color/saffron_yellow_text"
                                 android:textSize="@dimen/SmallerTextSize" />
 
                             <TextView
@@ -74,6 +76,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:textColor="@color/saffron_yellow_text"
                                 android:textSize="@dimen/SmallerTextSize" />
                         </LinearLayout>
                     </LinearLayout>
@@ -93,14 +96,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="距离:"
-                                android:textSize="@dimen/SmallerTextSize" />
+                                android:textSize="@dimen/SmallTextSize" />
 
                             <TextView
                                 android:id="@+id/tvDistanceLabel"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="@dimen/SmallerTextSize" />
+                                android:textSize="@dimen/SmallTextSize" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -119,14 +122,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="地址："
-                                android:textSize="@dimen/SmallerTextSize" />
+                                android:textSize="@dimen/SmallTextSize" />
 
                             <TextView
                                 android:id="@+id/tvAddress"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="@dimen/SmallerTextSize" />
+                                android:textSize="@dimen/SmallTextSize" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -145,14 +148,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="酒吧类型："
-                                android:textSize="@dimen/SmallerTextSize" />
+                                android:textSize="@dimen/SmallTextSize" />
 
                             <TextView
                                 android:id="@+id/tvBarType"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="@dimen/SmallerTextSize" />
+                                android:textSize="@dimen/SmallTextSize" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -172,8 +175,8 @@
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_width="47dp"
-                        android:layout_height="47dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:src="@drawable/bg_show" />
 
                     <TextView
@@ -181,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
                         android:text="签到 show"
-                        android:textSize="@dimen/TitleTextSize" />
+                        android:textSize="@dimen/LargeTextSize" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -220,7 +223,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="酒吧简介："
-                    android:textSize="@dimen/TitleTextSize" />
+                    android:textSize="@dimen/LargeTextSize" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -236,7 +239,7 @@
                         android:ellipsize="end"
                         android:maxLines="3"
                         android:textColor="@color/dark_text"
-                        android:textSize="@dimen/BasicTextSize" />
+                        android:textSize="@dimen/SmallTextSize" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

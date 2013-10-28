@@ -356,6 +356,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				holder.tvBarName = (TextView) convertView.findViewById(R.id.tvBarName);
 				holder.tvAddress = (TextView) convertView.findViewById(R.id.tvAddress);
 				holder.tvDistanceLabel = (TextView) convertView.findViewById(R.id.tvDistanceLabel);
+				holder.tvContent = (TextView) convertView.findViewById(R.id.tvcontent);
 				holder.ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
 				convertView.setTag(holder);
 			} else {
@@ -384,6 +385,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			}
 			holder.tvBarName.setText(bean.getBar_Name());
 			holder.tvAddress.setText(bean.getBar_Address());
+			holder.tvContent.setText(bean.getBar_Intro());
 
 			double latitude;
 			try {
@@ -415,7 +417,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	}
 
 	class ViewHolder {
-		private TextView tvBarName, tvDistanceLabel, tvAddress;
+		private TextView tvBarName, tvDistanceLabel, tvAddress, tvContent;
 		private ImageView ivImage;
 	}
 

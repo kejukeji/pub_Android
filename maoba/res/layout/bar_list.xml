@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_bg"
     android:orientation="vertical" >
 
     <include layout="@layout/common_title_bar" />
@@ -9,6 +10,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="#272727"
         android:orientation="horizontal" >
 
         <LinearLayout
@@ -22,7 +24,7 @@
             <TextView
                 android:id="@+id/btnAll"
                 android:layout_width="wrap_content"
-                android:layout_height="85dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/bg_today_recommend"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
@@ -30,13 +32,13 @@
             <HorizontalScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="3dp"
                 android:scrollbarAlwaysDrawVerticalTrack="false"
                 android:scrollbars="none" >
 
                 <LinearLayout
                     android:id="@+id/viewMenuList"
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal" >
                 </LinearLayout>
@@ -46,9 +48,10 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -71,15 +74,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="附近酒吧"
-            android:textSize="18sp" />
+            android:background="@drawable/bg_nearby_bar" />
     </LinearLayout>
 
     <ListView
         android:id="@+id/lvBarList"
+        style="@style/listviewStyle"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        style="@style/listviewStyle">
+        android:layout_height="wrap_content" >
     </ListView>
 
 </LinearLayout>

@@ -15,4 +15,7 @@
     
      <color name="dark_text">#333333</color>
 
+       <color name="saffron_yellow_text">#e17d1a</color>
+       <color name="common_bg">#e3e4e8</color>
+     
 </resources>

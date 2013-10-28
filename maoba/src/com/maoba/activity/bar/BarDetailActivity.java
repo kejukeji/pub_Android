@@ -98,7 +98,12 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 
 		ibRight.setVisibility(View.GONE);// 隐藏并且不占用布局的空间
 
-		tvName.setText(bean.getBar_Name());
+		tvName.setText(bean.getBar_Name());// 酒吧名字
+		tvBarType.setText(bean.getBarType());// 酒吧类型
+		tvAddress.setText(bean.getBar_Address());// 酒吧地址
+		tvTitle.setText(bean.getBar_Name());// 酒吧标题
+		tvIntro.setText(bean.getBar_Intro());// 酒吧内容
+		tvHot.setText(bean.getHot());// 酒吧人气
 
 		if (NetUtil.checkNet(BarDetailActivity.this)) {
 			new GetBarDetailTask().execute();
@@ -106,7 +111,36 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			showShortToast(R.string.NoSignalException);
 		}
 
-		String imageUrl = bean.getImageUrl();
+		// 距离
+		double latitude;
+		try {
+			latitude = Double.parseDouble(bean.getLatitude());
+		} catch (NumberFormatException e) {
+			latitude = 0;
+		}
+		double longitude;
+		try {
+			longitude = Double.parseDouble(bean.getLongitude());
+		} catch (NumberFormatException e) {
+			longitude = 0;
+		}
+		try {
+			if (app.getLastLocation() != null) {
+				double distance = StringUtil.getDistance(app.getLastLocation().getLatitude(), app.getLastLocation()
+						.getLongitude(), latitude, longitude);
+				if (distance > 1000) {
+					distance = distance / 1000;
+					tvDistanceLabel.setText(String.format("%.1f", distance) + "km");
+				} else {
+					tvDistanceLabel.setText(String.format("%.0f", distance) + "m");
+				}
+			} else {
+				tvDistanceLabel.setText("");
+			}
+		} catch (Exception e) {
+		}
+
+		String imageUrl = bean.getShowPhotoUrl();
 		ivImage.setTag(imageUrl);
 		Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(imageUrl, new ImageCallback() {
 
@@ -127,6 +161,17 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		} else {
 			ivImage.setImageResource(R.drawable.ic_default);
 		}
+
+		ivImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+                  
+				Bundle b = new Bundle();
+				b.putSerializable(Constants.EXTRA_DATA, bean);
+				openActivity(ShowBarEnvironmentActivity.class, b);
+			}
+		});
 	}
 
 	@Override
@@ -136,7 +181,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.tvRight:
-
+			// 收藏
 		default:
 			break;
 		}
@@ -186,43 +231,9 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			if (result != null) {
 				if (result.getStatus() != Constants.REQUEST_FAILD) {
 					barDetailList.addAll(result.getObjList1());
-
-					if (barDetailList != null && barDetailList.size() > 0) {
-						BarBean barDetail = barDetailList.get(0);
-						tvTitle.setText(barDetail.getBar_Name());
-						tvIntro.setText(barDetail.getBar_Intro());
-						tvHot.setText(barDetail.getHot());
-						tvBarType.setText(barDetail.getBarType());
-						tvAddress.setText(barDetail.getBar_Address());
-						double latitude;
-						try {
-							latitude = Double.parseDouble(barDetail.getLatitude());
-						} catch (NumberFormatException e) {
-							latitude = 0;
-						}
-						// 距离
-						double longitude;
-						try {
-							longitude = Double.parseDouble(barDetail.getLongitude());
-						} catch (NumberFormatException e) {
-							longitude = 0;
-						}
-						try {
-							if (app.getLastLocation() != null) {
-								double distance = StringUtil.getDistance(app.getLastLocation().getLatitude(), app
-										.getLastLocation().getLongitude(), latitude, longitude);
-								if (distance > 1000) {
-									distance = distance / 1000;
-									tvDistanceLabel.setText(String.format("%.1f", distance) + "km");
-								} else {
-									tvDistanceLabel.setText(String.format("%.0f", distance) + "m");
-								}
-							} else {
-								tvDistanceLabel.setText("");
-							}
-						} catch (Exception e) {
-						}
-					}
+					// if (barDetailList != null && barDetailList.size() > 0) {
+					// BarBean barDetail = barDetailList.get(0);
+					// }
 					showList.addAll(result.getObjList());
 
 					fillShowList(result.getObjList());
@@ -257,7 +268,6 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			ivPhoto.setTag(picUrl);
 			if (!TextUtils.isEmpty(picUrl)) {
 				Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(picUrl, new ImageCallback() {
-
 					@Override
 					public void imageLoaded(Drawable imageDrawable, String imageUrl) {
 						ImageView image = (ImageView) viewShowList.findViewWithTag(imageUrl);

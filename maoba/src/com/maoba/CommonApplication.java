@@ -61,6 +61,7 @@ public class CommonApplication extends Application {
 		instance = this;
 		dataBaseAdapter = new DataBaseAdapter(this);
 		dataBaseAdapter.open();
+		initBMapInfo();
 	}
 	/**
 	 *初始化地图信息

@@ -11,13 +11,14 @@ import android.widget.Toast;
 
 import com.maoba.R;
 import com.maoba.activity.base.BaseActivity;
+import com.maoba.activity.personalnfo.PersonalInfoActivity;
 import com.maoba.view.MyHorizontalScrollView;
 import com.maoba.view.MyHorizontalScrollView.SizeCallback;
 
 public class MainActivity extends BaseActivity implements OnClickListener {
 	private MyHorizontalScrollView scrollView; // 水平滑动控件按钮
 	private static View settingView;//设置界面
-	private static View homeView;//主界面
+	private static View homeView;//主界�?
 	private static View currentView;// 当前显示的view
 
 	private LinearLayout rlCollect;// 收藏
@@ -38,9 +39,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// 设置界面
 		LayoutInflater inflater = LayoutInflater.from(this);
 		scrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.main, null);// 加载水平滑动控件按钮
-		setContentView(scrollView);// 动态加载view
+		setContentView(scrollView);// 动�?加载view
 
-		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界面
+		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界�?
 		homeView = inflater.inflate(R.layout.home, null);// 加载头部按钮界面
 		btnLeftMenu = (Button) homeView.findViewById(R.id.btnLeftMenu);// 头部界面左边按钮控件
 		btnLeftMenu.setOnClickListener(new ClickListenerForScrolling(scrollView, settingView));//
@@ -109,7 +110,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			view.setVisibility(View.VISIBLE);
 			if (v.getId() == R.id.btnLeftMenu) {
 				if (!leftMenuOut) {
-					/* 根据分辨来辨别 偏移 各种分辨率偏移是不一样的 */
+					/* 根据分辨来辨�?偏移 各种分辨率偏移是不一样的 */
 					int offset = 0;
 					left = 0;
 					if (viewWidth <= 320) {
