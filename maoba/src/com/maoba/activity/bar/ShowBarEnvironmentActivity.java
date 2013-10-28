@@ -36,7 +36,7 @@ import com.maoba.util.NetUtil;
  * 显示酒吧环境
  * 
  * @author zhouyong
- * @data 创建时间：2013-10-27 下午10:21:13
+ * @data 创建时间�?013-10-27 下午10:21:13
  */
 public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
@@ -83,7 +83,7 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 
 		tvRight.setOnClickListener(this);
 
-		ibRight.setVisibility(View.GONE);// 隐藏并且不占用布局的空间
+		ibRight.setVisibility(View.GONE);// 隐藏并且不占用布�?��空间
 
 		adapter = new BarEnvironmentPhotoAdapter();
 		gvBarEnvironmentPhoto.setAdapter(adapter);
@@ -122,6 +122,7 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 			pd.show();
 		}
 
+		
 		@Override
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
 			try {
@@ -154,8 +155,7 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 	}
 
 	/**
-	 * 酒吧环境照片显示适配器
-	 * 
+	 * 酒吧环境照片显示适配�?	 * 
 	 * @author zhouyong
 	 * 
 	 */
