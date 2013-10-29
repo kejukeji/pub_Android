@@ -6,13 +6,17 @@ package com.maoba.activity.bar;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +28,7 @@ import com.maoba.CommonApplication;
 import com.maoba.Constants;
 import com.maoba.R;
 import com.maoba.SystemException;
+import com.maoba.activity.LoginActivity;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.bean.BarBean;
 import com.maoba.bean.ResponseBean;
@@ -41,8 +46,7 @@ import com.umeng.analytics.MobclickAgent;
  */
 public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
-	private ImageButton ibRight;
-	private TextView tvRight;
+	private Button btnRight;
 	private TextView tvTitle;
 
 	private TextView tvName, tvDistanceLabel, tvAddress, tvBarType, tvIntro, tvHot;
@@ -52,6 +56,8 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 
 	private ProgressDialog pd;
 	private CommonApplication app;
+
+	private boolean isCollectingTask = false;// 是否收藏
 
 	private BarBean bean;
 	private List<BarBean> barDetailList = new ArrayList<BarBean>();// 酒吧详情
@@ -71,8 +77,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		tvRight = (TextView) this.findViewById(R.id.tvRight);
-		ibRight = (ImageButton) this.findViewById(R.id.ibRight);
+		btnRight = (Button) this.findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
 		tvName = (TextView) this.findViewById(R.id.tvName);
@@ -88,20 +93,18 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void fillData() {
-
-		ibLeft.setBackgroundResource(R.drawable.ic_btn_left);
+		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
-
-		tvRight.setText("收藏");
-		tvRight.setOnClickListener(this);
+        btnRight.setText("收 藏");
+		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
+		btnRight.setOnClickListener(this);
 		ivImage.setOnClickListener(this);
-
-		ibRight.setVisibility(View.GONE);// 隐藏并且不占用布局的空间
-
+		tvTitle.setText("酒吧详情");
+		
 		tvName.setText(bean.getBar_Name());// 酒吧名字
 		tvBarType.setText(bean.getBarType());// 酒吧类型
 		tvAddress.setText(bean.getBar_Address());// 酒吧地址
-		tvTitle.setText(bean.getBar_Name());// 酒吧标题
+	
 		tvIntro.setText(bean.getBar_Intro());// 酒吧内容
 		tvHot.setText(bean.getHot());// 酒吧人气
 
@@ -166,7 +169,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-                  
+
 				Bundle b = new Bundle();
 				b.putSerializable(Constants.EXTRA_DATA, bean);
 				openActivity(ShowBarEnvironmentActivity.class, b);
@@ -180,8 +183,28 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		case R.id.ibLeft:
 			finish();
 			break;
-		case R.id.tvRight:
-			// 收藏
+		case R.id.btnRight:
+			if (!SharedPrefUtil.isLogin(this)) {
+				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						openActivity(LoginActivity.class);
+					}
+				}, null, null);
+				return;
+			}
+			if (isCollectingTask == false) {
+				showShortToast("正在执行收藏操作,请稍等...");
+			//	return;
+			}
+			if (NetUtil.checkNet(this)) {
+				isCollectingTask = true;
+				new CollectTask().execute();
+			} else {
+				showShortToast(R.string.NoSignalException);
+			}
+			break;
 		default:
 			break;
 		}
@@ -246,6 +269,46 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
+	 * 收藏
+	 * 
+	 * @author Zhouyong
+	 * 
+	 */
+	private class CollectTask extends AsyncTask<Void, Void, JSONObject> {
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			int uid = SharedPrefUtil.getUid(BarDetailActivity.this);
+			try {
+				return new BusinessHelper().collectBar(uid, bean.getBar_id());
+			} catch (SystemException e) {
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			if (result != null) {
+				try {
+					int status = result.getInt("status");
+					if (status == Constants.REQUEST_SUCCESS) {
+						showShortToast("收藏成功");
+					} else {
+						showShortToast(result.getString("message"));
+					}
+				} catch (JSONException e) {
+					showShortToast(R.string.json_exception);
+				}
+			} else {
+				showShortToast(R.string.connect_server_exception);
+			}
+			isCollectingTask = false;
+		}
+
+	}
+
+	/**
 	 * 填充签到数据
 	 * 
 	 * @param list
@@ -259,15 +322,14 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			final BarBean showBean = showlist.get(i);
 			LinearLayout.LayoutParams paramItem = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
 					LinearLayout.LayoutParams.WRAP_CONTENT);
-			paramItem.rightMargin = 10;
+			paramItem.rightMargin = 6;
 			final View view = getLayoutInflater().inflate(R.layout.show_item, null);
 			view.setLayoutParams(paramItem);
 			ImageView ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
 
 			String picUrl = showBean.getShowPhotoUrl();
 			ivPhoto.setTag(picUrl);
-			if (!TextUtils.isEmpty(picUrl)) {
-				Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(picUrl, new ImageCallback() {
+			Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(picUrl, new ImageCallback() {
 					@Override
 					public void imageLoaded(Drawable imageDrawable, String imageUrl) {
 						ImageView image = (ImageView) viewShowList.findViewWithTag(imageUrl);
@@ -285,7 +347,6 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 				} else {
 					ivPhoto.setImageResource(R.drawable.ic_default);
 				}
-			}
 			viewShowList.addView(view);
 		}
 

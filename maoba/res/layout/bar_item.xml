@@ -37,26 +37,25 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/LargeTextSize"
                     android:textStyle="bold" />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
+                    android:src="@drawable/ic_distance" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="距离："
-                        android:textSize="@dimen/SmallerTextSize" />
-
-                    <TextView
-                        android:id="@+id/tvDistanceLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:textSize="@dimen/SmallerTextSize" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvDistanceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="@dimen/SmallerTextSize" />
             </LinearLayout>
 
             <LinearLayout
@@ -95,7 +94,8 @@
                     android:layout_marginTop="3dp"
                     android:ellipsize="end"
                     android:lineSpacingExtra="1dp"
-                    android:maxLines="3"
+                    android:maxEms="28"
+                    android:singleLine="true"
                     android:text=""
                     android:textSize="@dimen/SmallerTextSize" />
             </LinearLayout>

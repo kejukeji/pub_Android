@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,14 +37,13 @@ import com.maoba.util.NetUtil;
  * 显示酒吧环境
  * 
  * @author zhouyong
- * @data 创建时间�?013-10-27 下午10:21:13
+ * @data 创建时间2013-10-27 下午10:21:13
  */
 public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
-	private ImageButton ibRight;
-	private TextView tvRight;
+	private Button btnRight;
 	private TextView tvTitle;
-	
+
 	private BarBean bean;
 	private ArrayList<BarBean> environmentBean = new ArrayList<BarBean>();
 	private GridView gvBarEnvironmentPhoto;
@@ -68,8 +68,7 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		tvRight = (TextView) this.findViewById(R.id.tvRight);
-		ibRight = (ImageButton) this.findViewById(R.id.ibRight);
+		btnRight = (Button) this.findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
 		gvBarEnvironmentPhoto = (GridView) findViewById(R.id.gvPhoto);
@@ -81,9 +80,7 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 
-		tvRight.setOnClickListener(this);
-
-		ibRight.setVisibility(View.GONE);// 隐藏并且不占用布�?��空间
+		btnRight.setOnClickListener(this);
 
 		adapter = new BarEnvironmentPhotoAdapter();
 		gvBarEnvironmentPhoto.setAdapter(adapter);
@@ -122,7 +119,6 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 			pd.show();
 		}
 
-		
 		@Override
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
 			try {
@@ -155,7 +151,8 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 	}
 
 	/**
-	 * 酒吧环境照片显示适配�?	 * 
+	 * 酒吧环境照片显示适配
+	 * 
 	 * @author zhouyong
 	 * 
 	 */

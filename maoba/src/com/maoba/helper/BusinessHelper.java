@@ -103,7 +103,8 @@ public class BusinessHelper {
 	 * 获取酒吧列表接口
 	 * 
 	 * @param bar_id酒吧的id
-	 * @param pageIndex 页数
+	 * @param pageIndex
+	 *            页数
 	 * @return
 	 * @throws SystemException
 	 */
@@ -124,8 +125,8 @@ public class BusinessHelper {
 				List<BarBean> list = null;
 				List<BarBean> list1 = null;
 				if (!TextUtils.isEmpty(obj.getString("pub_list"))) {
-					list = BarBean.constractList(obj.getJSONArray("pub_list"));//酒吧列表
-					list1 = BarBean.constractList(obj.getJSONArray("picture_list"));//推荐酒吧列表
+					list = BarBean.constractList(obj.getJSONArray("pub_list"));// 酒吧列表
+					list1 = BarBean.constractList(obj.getJSONArray("picture_list"));// 推荐酒吧列表
 				} else {
 					list = new ArrayList<BarBean>();
 					list1 = new ArrayList<BarBean>();
@@ -148,8 +149,10 @@ public class BusinessHelper {
 	/**
 	 * 获取酒吧详情接口 用户登录状�?
 	 * 
-	 * @param bar_id 酒吧的id
-	 * @param uid 用户的id
+	 * @param bar_id
+	 *            酒吧的id
+	 * @param uid
+	 *            用户的id
 	 * @return
 	 * @throws SystemException
 	 */
@@ -171,8 +174,8 @@ public class BusinessHelper {
 				List<BarBean> list = null;
 				List<BarBean> list1 = null;
 				if (!TextUtils.isEmpty(obj.getString("picture_list"))) {
-					list = BarBean.constractList(obj.getJSONArray("picture_list"));//签到列表
-					list1 = BarBean.constractList(obj.getJSONArray("pub_list"));//酒吧列表
+					list = BarBean.constractList(obj.getJSONArray("picture_list"));// 签到列表
+					list1 = BarBean.constractList(obj.getJSONArray("pub_list"));// 酒吧列表
 				} else {
 					list = new ArrayList<BarBean>();
 					list1 = new ArrayList<BarBean>();
@@ -195,7 +198,8 @@ public class BusinessHelper {
 	/**
 	 * 获取酒吧详情接口 用户无登录状�?
 	 * 
-	 * @param bar_id  酒吧的id
+	 * @param bar_id
+	 *            酒吧的id
 	 * @param uid用户的id
 	 * @return
 	 * @throws SystemException
@@ -237,8 +241,10 @@ public class BusinessHelper {
 	/**
 	 * 获取酒吧热门搜索面接�?
 	 * 
-	 * @param bar_id 酒吧的id
-	 * @param uid 用户的id
+	 * @param bar_id
+	 *            酒吧的id
+	 * @param uid
+	 *            用户的id
 	 * @return
 	 * @throws SystemException
 	 */
@@ -273,8 +279,7 @@ public class BusinessHelper {
 
 	/**
 	 * 搜索酒吧接口
-	 * 
-	 * @param content 关键�?       
+	 * @param content关键
 	 * @param pageIndex 页数
 	 *           
 	 * @return
@@ -311,10 +316,12 @@ public class BusinessHelper {
 		return response;
 
 	}
+
 	/**
 	 * 获取酒吧环境接口
 	 * 
-	 * @param bar_id  酒吧的id
+	 * @param bar_id
+	 *            酒吧的id
 	 * @return
 	 * @throws SystemException
 	 */
@@ -348,12 +355,72 @@ public class BusinessHelper {
 		return response;
 
 	}
+
 	/**
-	 * 获取首页数据
+	 * 获取用户收藏的酒吧接口
+	 * 
+	 * @param uid
+	 * @param pageIndex
+	 * @return
+	 * @throws SystemException
+	 * */
+	public ResponseBean<BarBean> getcollectBar(int uid, int pageIndex) throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		if (uid > 0) {
+			p.add(new PostParameter("user_id", uid));
+		} else {
+			p.add(new PostParameter("user_id", ""));
+		}
+		p.add(new PostParameter("page", pageIndex));
+		ResponseBean<BarBean> response;
+		JSONObject obj;
+		try {
+			obj = httpClient.get(BASE_URL + "user/collect", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<BarBean>(obj);
+				List<BarBean> list;
+				if (!TextUtils.isEmpty(obj.getString("list"))) {
+					list = BarBean.constractList(obj.getJSONArray("list"));
+
+				} else {
+					list = new ArrayList<BarBean>();
+				}
+				response.setObjList(list);
+			} else {
+				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString(""));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e2) {
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析失败");
+		}
+
+		return response;
+
+	}
+
+	/**
+	 * 收藏酒吧
+	 * 
+	 * @param uid
+	 * @param id
 	 * @return
 	 * @throws SystemException
 	 */
-	public JSONObject getHomeData() throws SystemException{
+	public JSONObject collectBar(int uid, int bar_id) throws SystemException {
+		return httpClient.get(BASE_URL + "pub/collect",
+				new PostParameter[] { new PostParameter("user_id", uid), new PostParameter("pub_id", bar_id) })
+				.asJSONObject();
+	}
+
+	/**
+	 * 获取首页数据
+	 * 
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject getHomeData() throws SystemException {
 		return httpClient.get(BASE_URL + "pub/home").asJSONObject();
 	}
 }

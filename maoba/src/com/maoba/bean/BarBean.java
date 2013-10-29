@@ -32,6 +32,7 @@ public class BarBean implements Serializable {
 	private String hot;
 	private String barType;
 	private String barEnviromentPhoto;
+	private String collectTime;
 
 	private String latitude;// 纬度（跳转地图时，纬度放在前面）
 	private String longitude;// 经度
@@ -82,6 +83,10 @@ public class BarBean implements Serializable {
 		}
 		if (obj.has("pic_path")) {
 			this.barEnviromentPhoto = BASE_URL + obj.getString("pic_path");
+		}
+		
+		if (obj.has("difference")) {
+			this.collectTime = obj.getString("difference");
 		}
 	}
 
@@ -200,5 +205,14 @@ public class BarBean implements Serializable {
 	public void setShowPhotoUrl(String showPhotoUrl) {
 		this.showPhotoUrl = showPhotoUrl;
 	}
+
+	public String getCollectTime() {
+		return collectTime;
+	}
+
+	public void setCollectTime(String collectTime) {
+		this.collectTime = collectTime;
+	}
+	
 
 }

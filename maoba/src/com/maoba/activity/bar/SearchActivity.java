@@ -67,7 +67,7 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void fillData() {
-		ibLeft.setBackgroundResource(R.drawable.ic_btn_left);
+		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 
 		ivSerarch.setOnClickListener(this);

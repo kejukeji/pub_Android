@@ -6,10 +6,12 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,10 +33,12 @@ import com.maoba.R;
 import com.maoba.SystemException;
 import com.maoba.activity.bar.BarListActivity;
 import com.maoba.activity.base.BaseActivity;
+import com.maoba.activity.my.CollectionOfBarListActivity;
 import com.maoba.bean.BarTypeBean;
 import com.maoba.helper.BusinessHelper;
-import com.maoba.activity.personalnfo.PersonalInfoActivity;
+import com.maoba.util.AndroidUtil;
 import com.maoba.util.NetUtil;
+import com.maoba.util.SharedPrefUtil;
 import com.maoba.view.GridViewInScrollView;
 import com.maoba.view.MyHorizontalScrollView;
 import com.maoba.view.MyHorizontalScrollView.SizeCallback;
@@ -42,7 +46,7 @@ import com.maoba.view.MyHorizontalScrollView.SizeCallback;
 public class MainActivity extends BaseActivity implements OnClickListener {
 	private MyHorizontalScrollView scrollView; // 水平滑动控件按钮
 	private static View settingView;//设置界面
-	private static View homeView;//主界�?
+	private static View homeView;//主界
 	private static View currentView;// 当前显示的view
 
 	private LinearLayout rlCollect;// 收藏
@@ -125,7 +129,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.rlCollect:
-			showShortToast("你点击了收藏");
+			if (!SharedPrefUtil.isLogin(this)) {
+				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						openActivity(LoginActivity.class);
+					}
+				}, null, null);
+				return;
+			}
+			openActivity(CollectionOfBarListActivity.class);
 			break;
 		case R.id.rlInfromation:
 			showShortToast("你点击了信息");
@@ -295,7 +309,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 	/**
-	 * 酒吧类型适配�?
+	 * 酒吧类型适配
 	 * @author Zhoujun
 	 *
 	 */
@@ -358,5 +372,20 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			private ImageView ivImage;
 			private TextView tvBarType;
 		}
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+			showAlertDialog(R.string.msg, R.string.logout, new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					AndroidUtil.exitApp(MainActivity.this);
+				}
+			}, null, null);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

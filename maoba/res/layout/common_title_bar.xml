@@ -20,6 +20,7 @@
         android:paddingRight="12dp"
         android:paddingTop="8dp"
         android:textColor="@android:color/white"
+        android:background="@null"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -45,8 +46,8 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvRight"
+    <Button
+        android:id="@+id/btnRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -58,22 +59,8 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="8dp"
+        android:background="@null"
         android:textColor="@android:color/white"
-        android:textSize="14dp" />
-
-    <ImageButton
-        android:id="@+id/ibRight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp"
-        android:textColor="@android:color/white"
-        android:textSize="14dp"
-        android:visibility="gone" />
+        android:textSize="@dimen/BasicTextSize" />
 
 </RelativeLayout>

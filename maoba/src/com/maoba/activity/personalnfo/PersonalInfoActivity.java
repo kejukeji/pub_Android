@@ -9,7 +9,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maoba.R;
 import com.maoba.activity.base.BaseActivity;
@@ -35,7 +33,7 @@ import com.maoba.activity.base.BaseActivity;
  */
 public class PersonalInfoActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft, ibRight;
-	private TextView tvRight;
+	private Button btnRight;
 	private TextView tvTitle;
 
 	private ImageView ivUserImage;
@@ -61,8 +59,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		ibRight = (ImageButton) this.findViewById(R.id.ibRight);
-		tvRight = (Button) this.findViewById(R.id.tvRight);
+		btnRight = (Button) this.findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
 		ivUserImage = (ImageView) this.findViewById(R.id.ivUserImage);
@@ -93,11 +90,14 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 	}
 
 	private void fillData() {
-		ibLeft.setBackgroundResource(R.drawable.ic_btn_left);
+		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 		ibRight.setVisibility(View.GONE);
-		tvRight.setText("提交");
-		tvRight.setOnClickListener(this);
+
+		btnRight.setText("提 交");
+		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
+		btnRight.setOnClickListener(this);
+
 		tvTitle.setText("个人资料");
 
 		viewSex.setOnClickListener(this);
@@ -115,7 +115,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		case R.id.ibLeft:
 			finish();
 			break;
-		case R.id.tvRight:
+		case R.id.btnRight:
 			String nickName = edNickName.getText().toString().trim();
 			String birthday = edBirthday.getText().toString().trim();
 			String sex = edSex.getText().toString().trim();

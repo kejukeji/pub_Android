@@ -9,7 +9,8 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:background="@color/common_bg" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -25,7 +26,7 @@
 
                 <ImageView
                     android:id="@+id/ivImage"
-                    android:layout_width="130dp"
+                    android:layout_width="140dp"
                     android:layout_height="95dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_default" />
@@ -52,8 +53,9 @@
                                 android:id="@+id/tvName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:singleLine="true"
                                 android:text="潮人 酒吧"
-                                android:textSize="@dimen/LargeTextSize"
+                                android:textSize="@dimen/BasicTextSize"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -66,7 +68,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginLeft="15dp"
                                 android:text="人气："
                                 android:textColor="@color/saffron_yellow_text"
                                 android:textSize="@dimen/SmallerTextSize" />
@@ -92,11 +94,10 @@
                             android:layout_weight="1"
                             android:orientation="horizontal" >
 
-                            <TextView
+                            <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="距离:"
-                                android:textSize="@dimen/SmallTextSize" />
+                                android:src="@drawable/ic_distance" />
 
                             <TextView
                                 android:id="@+id/tvDistanceLabel"
@@ -155,6 +156,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:maxEms="5"
+                                android:singleLine="true"
                                 android:textSize="@dimen/SmallTextSize" />
                         </LinearLayout>
                     </LinearLayout>
@@ -165,14 +169,15 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="8dp" >
+                android:orientation="vertical" >
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_bar_details_show"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal"
+                    android:padding="8dp" >
 
                     <ImageView
                         android:layout_width="40dp"
@@ -182,7 +187,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="20dp"
                         android:text="签到 show"
                         android:textSize="@dimen/LargeTextSize" />
                 </LinearLayout>
@@ -190,15 +195,15 @@
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                     <HorizontalScrollView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="3dp"
                         android:scrollbarAlwaysDrawVerticalTrack="false"
                         android:scrollbars="none" >
 
@@ -211,6 +216,11 @@
                     </HorizontalScrollView>
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="4dp"
+                android:background="@drawable/bg_bar_details_line" />
 
             <LinearLayout
                 android:id="@+id/viewIntro"

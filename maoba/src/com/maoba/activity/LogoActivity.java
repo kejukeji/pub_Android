@@ -33,11 +33,7 @@ public class LogoActivity extends Activity {
 		viewLogo.startAnimation(aa);
 		aa.setAnimationListener(new AnimationListener() {
 			public void onAnimationEnd(Animation arg0) {
-				if(SharedPrefUtil.isLogin(LogoActivity.this)){
-					startActivity(new Intent(LogoActivity.this, MainActivity.class));
-				}else{
-					startActivity(new Intent(LogoActivity.this, LoginActivity.class));
-				}
+				startActivity(new Intent(LogoActivity.this, MainActivity.class));
 				finish();
 			}
 

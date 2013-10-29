@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,8 +43,7 @@ import com.umeng.analytics.MobclickAgent;
  */
 public class PhotoShowActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
-	private ImageButton ibRight;
-	private TextView tvRight;
+	private Button btnRight;
 	private TextView tvTitle;
 
 	private ViewPager mViewPager;
@@ -89,8 +89,7 @@ public class PhotoShowActivity extends BaseActivity implements OnClickListener {
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		tvRight = (TextView) this.findViewById(R.id.tvRight);
-		ibRight = (ImageButton) this.findViewById(R.id.ibRight);
+		btnRight = (Button) this.findViewById(R.id.btnRight);
 
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
@@ -127,13 +126,10 @@ public class PhotoShowActivity extends BaseActivity implements OnClickListener {
 
 	private void fillData() {
 
-		ibLeft.setBackgroundResource(R.drawable.ic_btn_left);
+		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 
-		tvRight.setOnClickListener(this);
-
-		ibRight.setVisibility(View.GONE);// 隐藏并且不占用布局的空间
-
+		btnRight.setOnClickListener(this);
 		tvTitle.setText("酒吧环境图片");
 
 	}

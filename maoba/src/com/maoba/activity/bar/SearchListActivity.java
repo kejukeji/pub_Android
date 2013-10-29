@@ -12,24 +12,25 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.maoba.AsyncImageLoader;
+import com.maoba.AsyncImageLoader.ImageCallback;
 import com.maoba.CommonApplication;
 import com.maoba.Constants;
 import com.maoba.R;
-import com.maoba.AsyncImageLoader.ImageCallback;
 import com.maoba.SystemException;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.bean.BarBean;
@@ -46,7 +47,7 @@ import com.umeng.analytics.MobclickAgent;
  */
 public class SearchListActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
-	private TextView tvRight;
+	private Button btnRight;
 	private ImageButton ibRight;
 
 	private ListView lvSearchBarList;
@@ -87,8 +88,7 @@ public class SearchListActivity extends BaseActivity implements OnClickListener 
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		tvRight = (TextView) this.findViewById(R.id.tvRight);
-		ibRight = (ImageButton) this.findViewById(R.id.ibRight);
+		btnRight = (Button) this.findViewById(R.id.btnRight);
 		lvSearchBarList = (ListView) this.findViewById(R.id.lvSearchBarList);
 
 		// 加载更多footer
@@ -100,11 +100,7 @@ public class SearchListActivity extends BaseActivity implements OnClickListener 
 
 	private void fillData() {
 		ibLeft.setOnClickListener(this);
-		ibLeft.setBackgroundResource(R.drawable.ic_btn_left);
-
-		ibRight.setVisibility(View.GONE);// 隐藏并且不占用布局的空间
-		// tvRight.setOnClickListener(this);
-		// tvRight.setText("搜索");
+		ibLeft.setImageResource(R.drawable.ic_btn_left);
 
 		searchBarList = new ArrayList<BarBean>();
 		adapter = new Adapter();
