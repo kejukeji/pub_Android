@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/personalLetterTitle"
+        layout="@layout/common_title_bar" />
+
+    <com.maoba.view.PullToRefreshListView
+        android:id="@+id/lvPersonalLetter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@null"
+        android:cacheColorHint="#00000000"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="15dp"
+        android:fadingEdge="none"
+        android:fadingEdgeLength="0dip"
+        android:listSelector="@android:color/transparent"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp" />
+
+    <RelativeLayout
+        android:id="@+id/rlInputBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#D3D3D3" >
+
+        <ImageView
+            android:id="@+id/ivCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bg_btn_selector"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/ivEmoticon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/ivCamera"
+            android:background="@drawable/ic_news_emoticon" />
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_btn_selector"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp"
+            android:text="发送"
+            android:textColor="#898989"
+            android:textSize="@dimen/BasicTextSize" />
+
+        <EditText
+            android:id="@+id/edtLetter"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/btnSend"
+            android:layout_toRightOf="@id/ivEmoticon"
+            android:background="@drawable/bg_news_describe"
+            android:maxLength="250"
+            android:padding="5dp"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textSize="@dimen/SmallTextSize" />
+    </RelativeLayout>
+     <ScrollView
+        android:id="@+id/scroll_view_face"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:visibility="gone" >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/view_face01"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:minHeight="50dip" />
+
+                <LinearLayout
+                    android:id="@+id/view_face02"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:minHeight="50dip" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </ScrollView>
+    
+
+</LinearLayout>

@@ -63,6 +63,19 @@
         <activity  android:name="com.maoba.activity.my.CollectionOfBarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
        <!--个人信息 -->
         <activity android:name="com.maoba.activity.personalnfo.PersonalInfoActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <!-- 消息 -->
+         <activity android:name="com.maoba.activity.news.NewsActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
+         <activity android:name="com.maoba.activity.news.SystemNewsListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>      
+         <activity android:name="com.maoba.activity.news.PrivateNewsListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
+         <activity android:name="com.maoba.activity.news.PrivateLetterActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <!--个人中心 -->
+         <activity android:name="com.maoba.activity.personalcenter.PersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
+         
+         <!--设置 -->
+         <activity android:name="com.maoba.activity.setting.SettingAboutActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name="com.maoba.activity.setting.SettingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name="com.maoba.activity.setting.SettingFeedbackActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name="com.maoba.activity.setting.SettingNoticeActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
 		<!-- push服务 -->
         <service android:name=".service.PullService"></service>
          <meta-data android:value="51f5c71456240b8f8b022f77" android:name="UMENG_APPKEY"/>

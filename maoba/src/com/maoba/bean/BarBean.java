@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.maoba.helper.BusinessHelper;
+
 /**
  * 酒吧实体类
  * 
@@ -20,7 +22,6 @@ import org.json.JSONObject;
 public class BarBean implements Serializable {
 
 	private static final long serialVersionUID = 4617043918315208981L;
-	public static final String BASE_URL = "http://42.121.108.142:6001/";
 	private int bar_id;
 	private String bar_Name;
 	private String bar_Address;
@@ -54,7 +55,7 @@ public class BarBean implements Serializable {
 			this.bar_Address = obj.getString("city_county");
 		}
 		if (obj.has("pic_path")) {
-			this.imageUrl = BASE_URL + obj.getString("pic_path");
+			this.imageUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
 		if (obj.has("intro")) {
 			this.bar_Intro = obj.getString("intro");
@@ -70,7 +71,7 @@ public class BarBean implements Serializable {
 			this.longitude = obj.getString("longitude");
 		}
 		if (obj.has("pic_path")) {
-			this.recommendImageUrl = BASE_URL + obj.getString("pic_path");
+			this.recommendImageUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
 		if (obj.has("view_number")) {
 			this.hot = obj.getString("view_number");
@@ -79,10 +80,10 @@ public class BarBean implements Serializable {
 			this.barType = obj.getString("type_name");
 		}
 		if (obj.has("pic_path")) {
-			this.showPhotoUrl = BASE_URL + obj.getString("pic_path");
+			this.showPhotoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
 		if (obj.has("pic_path")) {
-			this.barEnviromentPhoto = BASE_URL + obj.getString("pic_path");
+			this.barEnviromentPhoto = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
 		
 		if (obj.has("difference")) {

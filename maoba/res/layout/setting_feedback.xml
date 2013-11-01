@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e3e4e8"
+    android:orientation="vertical" >
+
+    <include layout="@layout/common_title_bar" />
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dp"
+	    android:layout_marginLeft="15dp"
+	    android:layout_marginRight="15dp"
+	    android:orientation="vertical" >
+	<EditText
+	    android:id="@+id/etFeedback"
+	    android:layout_width="match_parent"
+	    android:layout_height="200dp"
+	    android:background="@drawable/bg_feedback_input"
+	    android:hint="告诉我们你的意见，我们将做的更好.."
+	    android:gravity="top"
+	     android:textSize="@dimen/SmallTextSize"
+	     
+	    />
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	<TextView
+	    android:id="@+id/tvNum"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/SmallTextSize"
+	    
+	    />
+	<TextView
+	   android:text="/140"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/SmallTextSize"
+	   
+	    />
+	</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

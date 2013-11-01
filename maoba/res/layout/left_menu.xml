@@ -9,7 +9,7 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/llSettingTitle"
+            android:id="@+id/viewSettingTitle"
             android:layout_width="fill_parent"
             android:layout_height="180dp"
             android:background="@drawable/left_menu_bg_black"

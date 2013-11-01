@@ -10,6 +10,9 @@ public class Constants {
 	 * 应用文件存放目录
 	 */
 	public static final String APP_DIR_NAME = "maomao";
+	
+	public static final int NOTI_LETTER = 3;//私信通知
+	public static final int NOTI_SYSTEM=21;//系统通知
 	/**
 	 * 网络请求状态
 	 */

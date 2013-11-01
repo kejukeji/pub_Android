@@ -11,6 +11,8 @@ import android.text.TextUtils;
 import com.maoba.Constants;
 import com.maoba.SystemException;
 import com.maoba.bean.BarBean;
+import com.maoba.bean.LetterBean;
+import com.maoba.bean.NewsBean;
 import com.maoba.bean.ResponseBean;
 import com.maoba.internet.HttpClient;
 import com.maoba.internet.PostParameter;
@@ -27,7 +29,7 @@ public class BusinessHelper {
 	 */
 
 	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
-	public static final String PIC_BASE_URL = "http://42.121.108.142:6001/";
+	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
 	HttpClient httpClient = new HttpClient();
 
 	/**
@@ -102,9 +104,8 @@ public class BusinessHelper {
 	/**
 	 * 获取酒吧列表接口
 	 * 
-	 * @param bar_id酒吧的id
-	 * @param pageIndex
-	 *            页数
+	 * @param bar_id  酒吧的id
+	 * @param pageIndex  页数
 	 * @return
 	 * @throws SystemException
 	 */
@@ -149,10 +150,8 @@ public class BusinessHelper {
 	/**
 	 * 获取酒吧详情接口 用户登录状�?
 	 * 
-	 * @param bar_id
-	 *            酒吧的id
-	 * @param uid
-	 *            用户的id
+	 * @param bar_id  酒吧的id
+	 * @param uid 用户的id
 	 * @return
 	 * @throws SystemException
 	 */
@@ -198,8 +197,7 @@ public class BusinessHelper {
 	/**
 	 * 获取酒吧详情接口 用户无登录状�?
 	 * 
-	 * @param bar_id
-	 *            酒吧的id
+	 * @param bar_id  酒吧的id
 	 * @param uid用户的id
 	 * @return
 	 * @throws SystemException
@@ -241,10 +239,8 @@ public class BusinessHelper {
 	/**
 	 * 获取酒吧热门搜索面接�?
 	 * 
-	 * @param bar_id
-	 *            酒吧的id
-	 * @param uid
-	 *            用户的id
+	 * @param bar_id 酒吧的id
+	 * @param uid 用户的id
 	 * @return
 	 * @throws SystemException
 	 */
@@ -320,8 +316,8 @@ public class BusinessHelper {
 	/**
 	 * 获取酒吧环境接口
 	 * 
-	 * @param bar_id
-	 *            酒吧的id
+	 * @param bar_id 酒吧的id
+	 *            
 	 * @return
 	 * @throws SystemException
 	 */
@@ -379,7 +375,7 @@ public class BusinessHelper {
 			int status = obj.getInt("status");
 			if (status == Constants.REQUEST_SUCCESS) {
 				response = new ResponseBean<BarBean>(obj);
-				List<BarBean> list;
+				List<BarBean> list=null;
 				if (!TextUtils.isEmpty(obj.getString("list"))) {
 					list = BarBean.constractList(obj.getJSONArray("list"));
 
@@ -423,4 +419,188 @@ public class BusinessHelper {
 	public JSONObject getHomeData() throws SystemException {
 		return httpClient.get(BASE_URL + "pub/home").asJSONObject();
 	}
+	
+	
+	/**
+	 * 获取私信会话列表
+	 * 
+	 * @param uid
+	 * @param pageIndex
+	 * @return
+	 * @throws SystemException
+	 * */
+	public ResponseBean<NewsBean> getPrivateNews(int uid, int pageIndex) throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		if (uid > 0) {
+			p.add(new PostParameter("user_id", uid));
+		} else {
+			p.add(new PostParameter("user_id", ""));
+		}
+		p.add(new PostParameter("page", pageIndex));
+		ResponseBean<NewsBean> response;
+		JSONObject obj;
+		try {
+			obj = httpClient.get(BASE_URL + "user/direct/message", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<NewsBean>(obj);
+				List<NewsBean> list;
+				if (!TextUtils.isEmpty(obj.getString("list"))) {
+					list = NewsBean.constractList(obj.getJSONArray("list"));
+
+				} else {
+					list = new ArrayList<NewsBean>();
+				}
+				response.setObjList(list);
+			} else {
+				response = new ResponseBean<NewsBean>(Constants.REQUEST_FAILD, obj.getString(""));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<NewsBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e2) {
+			response = new ResponseBean<NewsBean>(Constants.REQUEST_FAILD, "json解析失败");
+		}
+
+		return response;
+
+	}
+	
+	/**
+	 * 获取某个私信会话列表
+	 * 
+	 * @param uid
+	 * @param friendId
+	 * @return
+	 * @throws SystemException
+	 * */
+	public ResponseBean<LetterBean> getLetterList(int uid, int friendId) throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		if (uid > 0) {
+			p.add(new PostParameter("sender_id", uid));
+		} else {
+			p.add(new PostParameter("sender_id", ""));
+		}
+		if (friendId > 0) {
+			p.add(new PostParameter("receiver_id", uid));
+		} else {
+			p.add(new PostParameter("receiver_id", ""));
+		}
+		ResponseBean<LetterBean> response;
+		JSONObject obj;
+		try {
+			obj = httpClient.get(BASE_URL + "user/message/info", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<LetterBean>(obj);
+				List<LetterBean> list=null;
+				if (!TextUtils.isEmpty(obj.getString("list"))) {
+					list = LetterBean.constractList(obj.getJSONArray("list"));
+				} else {
+					list = new ArrayList<LetterBean>();
+				}
+				response.setObjList(list);
+
+			} else {
+				response = new ResponseBean<LetterBean>(Constants.REQUEST_FAILD, obj.getString(""));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<LetterBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e2) {
+			response = new ResponseBean<LetterBean>(Constants.REQUEST_FAILD, "json解析失败");
+		}
+
+		return response;
+
+	}
+	
+	/**
+	 * 发送私信
+	 * 
+	 * @param content
+	 * @param sender 发送者
+	 * @param receiver接受者
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject getSendLetter(long senderId, long receiverId,String content) throws SystemException {
+			
+		return httpClient.get(BASE_URL + "user/sender/message",
+				new PostParameter[] {new PostParameter("sender_id", senderId),
+				new PostParameter("receiver_id", receiverId), 
+			    new PostParameter("content", content),}).asJSONObject();
+			    
+						
+	}
+
+	/**
+	 * 系统信息
+	 * 
+	 * @param user_id
+	 * @return
+	 * @throws SystemException
+	 */
+	public ResponseBean<NewsBean> getSysLetter(int uid) throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		if (uid > 0) {
+			p.add(new PostParameter("user_id", uid));
+		} else {
+			p.add(new PostParameter("user_id", ""));
+		}
+		ResponseBean<NewsBean> response;
+		JSONObject obj;
+		try {
+			obj = httpClient.get(BASE_URL + "user/message", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<NewsBean>(obj);
+				List<NewsBean> list=null;
+				if (!TextUtils.isEmpty(obj.getString("system_message_list"))) {
+					list = NewsBean.constractList(obj.getJSONArray("system_message_list"));
+				} else {
+					list = new ArrayList<NewsBean>();
+				}
+				response.setObjList(list);
+
+			} else {
+				response = new ResponseBean<NewsBean>(Constants.REQUEST_FAILD, obj.getString(""));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<NewsBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e2) {
+			response = new ResponseBean<NewsBean>(Constants.REQUEST_FAILD, "json解析失败");
+		}
+
+		return response;
+
+	}
+
+	/**
+	 * 获取系统信息和私信信息的条数 
+	 * 
+	 * @param user_id
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject getSysLetter1(int uid) throws SystemException {
+			
+		return httpClient.get(BASE_URL + "user/message",
+				new PostParameter[] { new PostParameter("user_id", uid),	
+			    }).asJSONObject();
+						
+	}
+	/**
+	 * 清除用户信息
+	 * 
+	 * @param user_id
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject getClear(int uid) throws SystemException {
+			
+		return httpClient.get(BASE_URL + "user/clear/message",
+				new PostParameter[] { new PostParameter("user_id", uid),	
+			    }).asJSONObject();
+						
+	}
+	
 }

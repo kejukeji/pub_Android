@@ -48,7 +48,7 @@ import com.umeng.analytics.MobclickAgent;
 public class SearchListActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
 	private Button btnRight;
-	private ImageButton ibRight;
+	private TextView tvTitle;
 
 	private ListView lvSearchBarList;
 	private Adapter adapter;
@@ -89,6 +89,7 @@ public class SearchListActivity extends BaseActivity implements OnClickListener 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		btnRight = (Button) this.findViewById(R.id.btnRight);
+		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		lvSearchBarList = (ListView) this.findViewById(R.id.lvSearchBarList);
 
 		// 加载更多footer
@@ -101,6 +102,7 @@ public class SearchListActivity extends BaseActivity implements OnClickListener 
 	private void fillData() {
 		ibLeft.setOnClickListener(this);
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
+		tvTitle.setText("搜索酒吧列表");
 
 		searchBarList = new ArrayList<BarBean>();
 		adapter = new Adapter();
@@ -224,8 +226,8 @@ public class SearchListActivity extends BaseActivity implements OnClickListener 
 				// 这里获取到十条数据
 				List<BarBean> tempList = result.getObjList();
 				if (tempList.size() <= 0) {
-                   showShortToast("没有你要查询的酒吧,请重新查询");
-                  return;
+					showShortToast("没有你要查询的酒吧,请重新查询");
+					return;
 				}
 				boolean isLastPage = false;
 				if (tempList.size() > 0) {

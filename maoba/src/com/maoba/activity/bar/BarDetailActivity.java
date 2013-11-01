@@ -70,7 +70,10 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		MobclickAgent.onError(this);
 		bean = (BarBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
 		MobclickAgent.onEvent(this, "bar_details");
-
+       
+		app = (CommonApplication) getApplication();
+		app.addActivity(this);
+		
 		findView();
 		fillData();
 	}
@@ -95,16 +98,16 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	private void fillData() {
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
-        btnRight.setText("收 藏");
+		btnRight.setText("收 藏");
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
 		btnRight.setOnClickListener(this);
 		ivImage.setOnClickListener(this);
 		tvTitle.setText("酒吧详情");
-		
+
 		tvName.setText(bean.getBar_Name());// 酒吧名字
 		tvBarType.setText(bean.getBarType());// 酒吧类型
 		tvAddress.setText(bean.getBar_Address());// 酒吧地址
-	
+
 		tvIntro.setText(bean.getBar_Intro());// 酒吧内容
 		tvHot.setText(bean.getHot());// 酒吧人气
 
@@ -196,7 +199,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			}
 			if (isCollectingTask == false) {
 				showShortToast("正在执行收藏操作,请稍等...");
-			//	return;
+				// return;
 			}
 			if (NetUtil.checkNet(this)) {
 				isCollectingTask = true;
@@ -295,7 +298,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 					if (status == Constants.REQUEST_SUCCESS) {
 						showShortToast("收藏成功");
 					} else {
-						showShortToast(result.getString("message"));
+						showShortToast("你已经收藏过了");
 					}
 				} catch (JSONException e) {
 					showShortToast(R.string.json_exception);
@@ -330,23 +333,23 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			String picUrl = showBean.getShowPhotoUrl();
 			ivPhoto.setTag(picUrl);
 			Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(picUrl, new ImageCallback() {
-					@Override
-					public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-						ImageView image = (ImageView) viewShowList.findViewWithTag(imageUrl);
-						if (image != null) {
-							if (imageDrawable != null) {
-								image.setImageDrawable(imageDrawable);
-							} else {
-								image.setImageResource(R.drawable.ic_default);
-							}
+				@Override
+				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+					ImageView image = (ImageView) viewShowList.findViewWithTag(imageUrl);
+					if (image != null) {
+						if (imageDrawable != null) {
+							image.setImageDrawable(imageDrawable);
+						} else {
+							image.setImageResource(R.drawable.ic_default);
 						}
 					}
-				});
-				if (cacheDrawble != null) {
-					ivPhoto.setImageDrawable(cacheDrawble);
-				} else {
-					ivPhoto.setImageResource(R.drawable.ic_default);
 				}
+			});
+			if (cacheDrawble != null) {
+				ivPhoto.setImageDrawable(cacheDrawble);
+			} else {
+				ivPhoto.setImageResource(R.drawable.ic_default);
+			}
 			viewShowList.addView(view);
 		}
 

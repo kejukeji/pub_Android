@@ -25,6 +25,8 @@ public class SharedPrefUtil {
 	public static final String QQ_ACCESS_CURR_TIME = "qq_sccess_curr_time";// 新浪微博授权时间
 
 	public static final String UID = "uid";// 用户id
+	public static final String IS_INFO_COMPLETE = "is_info_complete";//个人信息补全
+
 
 	/**
 	 * 判断是否是第一次进入应用
@@ -233,5 +235,27 @@ public class SharedPrefUtil {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		return sp.getLong(CHECK_UPDATE_TIME_KEY, 5 * 60 * 1000);
 	}
+	/**
+	 * 清除用户信息
+	 * @param context
+	 */
+	public static void clearUserinfo(Context context){
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.remove(UID).remove(WEIBO_ACCESS_TOKEN).remove(WEIBO_EXPIRES_IN).remove(SINA_UID);
+		e.remove(QQ_ACCESS_TOKEN).remove(QQ_EXPIRES_IN).remove(QQ_OPENID).remove(QQ_ACCESS_CURR_TIME);
+		e.commit();
+	}
+	/**
+	 * 设置补充信息完整
+	 * @param context
+	 */
+	public static void setInfoComplete(Context context,boolean isComplete){
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putBoolean(IS_INFO_COMPLETE, isComplete);
+		e.commit();
+}
+
 
 }

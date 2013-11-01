@@ -12,10 +12,10 @@
     <color name="lightransparent">#a0000000</color>
     <color name="transparent">#00000000</color>
     <color name="navpage">#FFE1E8EB</color>
-    
-     <color name="dark_text">#333333</color>
+    <color name="dark_text">#333333</color>
+    <color name="bg_home"> #1f2227</color>
+    <color name="saffron_yellow_text">#e17d1a</color>
+    <color name="common_bg">#e3e4e8</color>
+    <color name="size_color">#1d5869</color>
 
-       <color name="saffron_yellow_text">#e17d1a</color>
-       <color name="common_bg">#e3e4e8</color>
-     
 </resources>

@@ -127,5 +127,33 @@ public class DateUtil {
 	        } catch (ParseException e) {  
 	        }  
 	        return result;  
-	    }  
+	    }
+	
+	/**
+	 * 如果是昨天就显示年月日，今天的只显示时间；
+	 * 
+	 * @param time
+	 * @return
+	 */
+	public static String getConversationTime(String str1) {
+		String result = "";
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date one;
+		Date two;
+		try {
+			one = df.parse(str1);
+			two = new Date();
+
+			if (one.getYear() == two.getYear()
+					&& one.getMonth() == two.getMonth()
+					&& one.getDay() == two.getDay()) {
+				result = "今天  " + dateToString("HH:mm", one);
+				;
+			} else {
+				result = dateToString("yyyy-MM-dd", one);
+			}
+		} catch (ParseException e) {
+		}
+		return result;
+	}
 }
