@@ -18,7 +18,8 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical"
@@ -38,9 +39,11 @@
                     android:textSize="@dimen/SmallTextSize" />
 
                 <TextView
-                    android:id="@+id/tvBarName"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvEventTitle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="加入我们拒绝驾驶"
                     android:textSize="@dimen/SmallTextSize" />
             </LinearLayout>
 
@@ -48,8 +51,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingTop="5dp"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:paddingTop="5dp" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -59,10 +62,16 @@
 
                 <TextView
                     android:id="@+id/tvDistanceLabel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:textSize="@dimen/SmallerTextSize" />
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:lineSpacingExtra="1dp"
+                    android:maxEms="8"
+                    android:singleLine="true"
+                    android:text="上海市闵行区凯旋路238号"
+                    android:textSize="@dimen/SmallTextSize" />
             </LinearLayout>
 
             <LinearLayout
@@ -76,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_face_001" />
+                    android:src="@drawable/bg_time" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -96,13 +105,15 @@
                             android:textSize="@dimen/SmallTextSize" />
 
                         <TextView
-                            android:id="@+id/tvAddress"
+                            android:id="@+id/tvStartTime"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
                             android:layout_weight="1"
+                            android:text="8月20日8时"
                             android:textSize="@dimen/SmallTextSize" />
                     </LinearLayout>
-                    
+
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -119,11 +130,12 @@
                             android:id="@+id/tvEndTime"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
                             android:layout_weight="1"
+                            android:text="8月20日8时"
                             android:textSize="@dimen/SmallTextSize" />
                     </LinearLayout>
                 </LinearLayout>
-                
             </LinearLayout>
 
             <LinearLayout
@@ -140,7 +152,7 @@
                     android:textSize="@dimen/SmallTextSize" />
 
                 <TextView
-                    android:id="@+id/tvcontent"
+                    android:id="@+id/tvJionNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"

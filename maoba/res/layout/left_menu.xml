@@ -27,7 +27,6 @@
                 android:src="@drawable/left_menu_userimage" />
 
             <TextView
-                android:id="@+id/tvSettingUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -36,15 +35,16 @@
                 android:text="微笑"
                 android:textColor="#B4B4B4"
                 android:textSize="@dimen/BasicTextSize"
-                android:textStyle="bold" />
+                android:textStyle="bold" 
+                android:visibility="gone"/>
 
             <TextView
+                android:id="@+id/tvsignaTure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="微笑着安静是一种漠然"
                 android:textColor="#B4B4B4"
                 android:textSize="@dimen/BasicTextSize"
                 android:textStyle="bold" />

@@ -23,6 +23,8 @@ public class BarBean implements Serializable {
 
 	private static final long serialVersionUID = 4617043918315208981L;
 	private int bar_id;
+	private int userId;
+	
 	private String bar_Name;
 	private String bar_Address;
 	private String imageUrl;
@@ -34,7 +36,7 @@ public class BarBean implements Serializable {
 	private String barType;
 	private String barEnviromentPhoto;
 	private String collectTime;
-
+	
 	private String latitude;// 纬度（跳转地图时，纬度放在前面）
 	private String longitude;// 经度
 
@@ -45,6 +47,9 @@ public class BarBean implements Serializable {
 	public BarBean(JSONObject obj) throws JSONException {
 		if (obj.has("id")) {
 			this.bar_id = obj.getInt("id");
+		}
+		if (obj.has("user_id")) {
+			this.userId = obj.getInt("user_id");
 		}
 
 		if (obj.has("name")) {
@@ -109,6 +114,14 @@ public class BarBean implements Serializable {
 
 	public void setBar_id(int bar_id) {
 		this.bar_id = bar_id;
+	}
+	
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public String getBar_Name() {

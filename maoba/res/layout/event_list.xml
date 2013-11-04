@@ -8,44 +8,42 @@
     <include layout="@layout/common_title_bar" />
 
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:background="#272727"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#272727"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp" >
 
-            <TextView
-                android:id="@+id/btnAll"
+        <TextView
+            android:id="@+id/btnAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/bg_today_recommend"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="推\n荐\n活\n动"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="3dp"
+            android:scrollbarAlwaysDrawHorizontalTrack="false"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:id="@+id/viewEventList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_today_recommend"
-                android:paddingTop="5dp"
-                android:text="推\n荐\n活\n动"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:layout_marginBottom="2dp"
-                android:textSize="14sp" />
-
-            <HorizontalScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="3dp"
-                android:scrollbarAlwaysDrawHorizontalTrack="false"
-                android:scrollbars="none" >
-
-                <LinearLayout
-                    android:id="@+id/viewMenuList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-                </LinearLayout>
-            </HorizontalScrollView>
-   </LinearLayout>
-
-       
+                android:orientation="horizontal" >
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -67,7 +65,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/lvBarList"
+        android:id="@+id/lvEventList"
         style="@style/listviewStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >

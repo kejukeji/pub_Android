@@ -10,9 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.maoba.R;
-import com.maoba.activity.HomeActivity;
 import com.maoba.activity.LoginActivity;
-import com.maoba.activity.MainActivity;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
@@ -22,44 +20,48 @@ import com.umeng.update.UpdateResponse;
 
 /**
  * 设置界面
- *@author lhm
- *@date 创建时间：2013-10-30
+ * 
+ * @author lhm
+ * @date 创建时间：2013-10-30
  */
-public class SettingActivity extends BaseActivity implements OnClickListener{
+public class SettingActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
 	private TextView tvTitle;
-	private LinearLayout rlNotice,rlAbout,rlVersionTest,rlFeedback;
+	private LinearLayout rlNotice, rlAbout, rlVersionTest, rlFeedback;
 	private Button btnLogout;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setting_page);
 		findView();
 		fillData();
-		
+
 	}
+
 	private void fillData() {
 		tvTitle.setText("设置");
-		
+
 	}
+
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
-		rlNotice=(LinearLayout) findViewById(R.id.rlNotice);
+		rlNotice = (LinearLayout) findViewById(R.id.rlNotice);
 		rlNotice.setOnClickListener(this);
-		rlAbout=(LinearLayout) findViewById(R.id.rlAbout);
+		rlAbout = (LinearLayout) findViewById(R.id.rlAbout);
 		rlAbout.setOnClickListener(this);
-		rlVersionTest=(LinearLayout) findViewById(R.id.rlVersionTest);
+		rlVersionTest = (LinearLayout) findViewById(R.id.rlVersionTest);
 		rlVersionTest.setOnClickListener(this);
-		rlFeedback=(LinearLayout) findViewById(R.id.rlFeedback);
+		rlFeedback = (LinearLayout) findViewById(R.id.rlFeedback);
 		rlFeedback.setOnClickListener(this);
 		btnLogout = (Button) this.findViewById(R.id.btnLogout);
 		btnLogout.setOnClickListener(this);
-		
+
 	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -76,24 +78,23 @@ public class SettingActivity extends BaseActivity implements OnClickListener{
 				UmengUpdateAgent.setUpdateAutoPopup(false);
 				UmengUpdateAgent.setUpdateAutoPopup(false);
 				UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-					
+
 					@Override
-					public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
+					public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
 						switch (updateStatus) {
 						case 0:
 							UmengUpdateAgent.showUpdateDialog(SettingActivity.this, updateInfo);
 							break;
-						 case 1: // has no update
-				                showShortToast("已经是最新版本");
-				                break;
-				            case 2: // none wifi
-				            	showShortToast("没有wifi连接， 只在wifi下更新");
-				                break;
-				            case 3: // time out
-				            	showShortToast("连接服务器超时");
-				                break;
+						case 1: // has no update
+							showShortToast("已经是最新版本");
+							break;
+						case 2: // none wifi
+							showShortToast("没有wifi连接， 只在wifi下更新");
+							break;
+						case 3: // time out
+							showShortToast("连接服务器超时");
+							break;
 
-						
 						}
 					}
 				});
@@ -109,13 +110,12 @@ public class SettingActivity extends BaseActivity implements OnClickListener{
 			break;
 		case R.id.btnLogout:
 			showAlertDialog("提示", "确定要注销登录吗？", new DialogInterface.OnClickListener() {
-
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					//MainActivity.rb_home.setChecked(true);
-					//MainActivity.rb_my.setChecked(false);
+					// MainActivity.rb_home.setChecked(true);
+					// MainActivity.rb_my.setChecked(false);
 					SharedPrefUtil.clearUserinfo(SettingActivity.this);
-					SharedPrefUtil.setInfoComplete(SettingActivity.this,false);
+					SharedPrefUtil.setInfoComplete(SettingActivity.this, false);
 					openActivity(LoginActivity.class);
 				}
 			}, new DialogInterface.OnClickListener() {
@@ -131,10 +131,10 @@ public class SettingActivity extends BaseActivity implements OnClickListener{
 
 				}
 			});
+
 			break;
 		default:
 			break;
 		}
 	}
 }
-

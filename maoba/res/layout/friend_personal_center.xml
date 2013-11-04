@@ -5,29 +5,26 @@
     android:clickable="true"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rlCommon"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
         android:background="@drawable/bg_title"
+        android:gravity="center_vertical"
         android:paddingTop="3dp" >
 
-        <Button
-            android:id="@+id/btnLeftMenu"
+        <ImageButton
+            android:id="@+id/ibLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:background="@drawable/left_btn_menu_bg" />
+            android:background="@null"
+            android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/tvSignature1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnLeftMenu"
-            android:layout_marginLeft="35dp"
-            android:layout_toRightOf="@+id/btnLeftMenu"
+            android:layout_marginLeft="50dp"
             android:text="个性签名："
             android:textColor="@color/white"
             android:textSize="@dimen/BasicTextSize" />
@@ -36,12 +33,10 @@
             android:id="@+id/tvSignature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tvSignature1"
             android:layout_marginLeft="2dp"
-            android:layout_toRightOf="@id/tvSignature1"
             android:textColor="@color/white"
-            android:textSize="@dimen/BasicTextSize" />
-    </RelativeLayout>
+            android:textSize="@dimen/SmallTextSize" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -51,7 +46,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="250dp"
             android:layout_gravity="center_vertical"
             android:background="@color/bg_home"
             android:orientation="horizontal" >
@@ -134,37 +129,17 @@
                     android:src="@drawable/left_menu_collect" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
                     android:text="我 的 收 藏" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:background="@drawable/bg_bar_details_line" />
-
-            <LinearLayout
-                android:id="@+id/viewMyNews"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:paddingBottom="10dp" >
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/left_menu_information" />
 
                 <TextView
+                    android:id="@+id/tvCollectNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="我 的 私 信" />
+                    android:layout_marginRight="20dp" />
             </LinearLayout>
 
             <View

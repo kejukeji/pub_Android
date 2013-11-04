@@ -38,8 +38,11 @@ import com.maoba.util.SharedPrefUtil;
 import com.maoba.util.StringUtil;
 
 /**
- * 我收藏的酒吧
- * */
+ * 我的收藏的酒吧例表
+ * 
+ * @author zhouyong
+ * @data 创建时间：2013-10-27 下午10:16:13
+ */
 public class CollectionOfBarListActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
 	private Button btnRight;
@@ -56,7 +59,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 	private int pageIndex = 1;
 	private ProgressDialog pd;
 
-	private BarBean bean;
+	private int userId;
 
 	private boolean isLoadMore = false;
 	private boolean isLoad = false;// 是否正在加载数据
@@ -67,15 +70,17 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collection_bar_list);
+		
+		userId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		findView();
 		fillData();
 		app = (CommonApplication) getApplication();
 		app.addActivity(this);
 	}
-	
+
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-	    btnRight = (Button) findViewById(R.id.btnRight);
+		btnRight = (Button) findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		lvCollBarList = (ListView) findViewById(R.id.lvCollBarList);
 
@@ -85,6 +90,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 		tvFooterMore = (TextView) vFooter.findViewById(R.id.tvMore);
 
 	}
+
 	private void fillData() {
 		ibLeft.setOnClickListener(this);
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
@@ -94,7 +100,6 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 		adapter = new Adapter();
 		lvCollBarList.addFooterView(vFooter);
 		lvCollBarList.setAdapter(adapter);
-		lvCollBarList.setDividerHeight(0);
 		lvCollBarList.setOnScrollListener(LoadListener);
 		lvCollBarList.setOnItemClickListener(itemListener);
 		lvCollBarList.setDivider(null);
@@ -106,7 +111,6 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 			showShortToast(R.string.NoSignalException);
 		}
 	}
-
 
 	@Override
 	public void onClick(View v) {
@@ -193,9 +197,14 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(CollectionOfBarListActivity.this);
 			try {
-				return new BusinessHelper().getcollectBar(uid, pageIndex);
+				if (uid == userId) {
+					return new BusinessHelper().getcollectBar(uid, pageIndex);
+				} else {
+					return new BusinessHelper().getcollectBar(userId, pageIndex);
+				}
 			} catch (SystemException e) {
 			}
+
 			return null;
 		}
 
@@ -214,6 +223,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 					adapter.notifyDataSetChanged();
 					pageIndex++;
 				} else {
+					showShortToast("还没有收藏哦！");
 					isLastPage = true;
 				}
 				if (isLastPage) {

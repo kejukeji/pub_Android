@@ -30,6 +30,7 @@ import com.maoba.R;
 import com.maoba.SystemException;
 import com.maoba.activity.LoginActivity;
 import com.maoba.activity.base.BaseActivity;
+import com.maoba.activity.personalcenter.FriendPersonalCenter;
 import com.maoba.bean.BarBean;
 import com.maoba.bean.ResponseBean;
 import com.maoba.helper.BusinessHelper;
@@ -70,10 +71,10 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		MobclickAgent.onError(this);
 		bean = (BarBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
 		MobclickAgent.onEvent(this, "bar_details");
-       
+
 		app = (CommonApplication) getApplication();
 		app.addActivity(this);
-		
+
 		findView();
 		fillData();
 	}
@@ -350,6 +351,25 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			} else {
 				ivPhoto.setImageResource(R.drawable.ic_default);
 			}
+			ivPhoto.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (!SharedPrefUtil.isLogin(BarDetailActivity.this)) {
+						showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								openActivity(LoginActivity.class);
+							}
+						}, null, null);
+						return;
+					} else {
+						Bundle b = new Bundle();
+						b.putSerializable(Constants.EXTRA_DATA, showBean);
+						openActivity(FriendPersonalCenter.class, b);
+					}
+				}
+			});
 			viewShowList.addView(view);
 		}
 

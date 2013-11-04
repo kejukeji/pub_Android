@@ -25,8 +25,11 @@ public class SharedPrefUtil {
 	public static final String QQ_ACCESS_CURR_TIME = "qq_sccess_curr_time";// 新浪微博授权时间
 
 	public static final String UID = "uid";// 用户id
-	public static final String IS_INFO_COMPLETE = "is_info_complete";//个人信息补全
+	public static final String IS_INFO_COMPLETE = "is_info_complete";// 个人信息补全
 
+	public static final String OPEN_ID = "open_id";// 开放的open_id
+	public static final String LOGIN_TYPE = "login_type";// 登录方式 0 普通登陆 1 新浪登陆 2
+															// qq登录
 
 	/**
 	 * 判断是否是第一次进入应用
@@ -75,6 +78,42 @@ public class SharedPrefUtil {
 	public static int getUid(Context context) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		return sp.getInt(UID, 0);
+	}
+
+	/**
+	 * 保存open_id
+	 * 
+	 * @param context
+	 * @param uid
+	 */
+	public static void setOpenId(Context context, String openid) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putString(OPEN_ID, openid);
+		e.commit();
+	}
+
+	public static String getOpenId(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getString(OPEN_ID, null);
+	}
+
+	/**
+	 * 保存登陆的方式
+	 * 
+	 * @param context
+	 * @param uid
+	 */
+	public static void setLoginType(Context context, int logintype) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putInt(LOGIN_TYPE, logintype);
+		e.commit();
+	}
+
+	public static int getLoginType(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getInt(LOGIN_TYPE, 0);
 	}
 
 	// -----------------------------新浪微博验证信息-----------------
@@ -235,27 +274,30 @@ public class SharedPrefUtil {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		return sp.getLong(CHECK_UPDATE_TIME_KEY, 5 * 60 * 1000);
 	}
+
 	/**
 	 * 清除用户信息
+	 * 
 	 * @param context
 	 */
-	public static void clearUserinfo(Context context){
+	public static void clearUserinfo(Context context) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor e = sp.edit();
 		e.remove(UID).remove(WEIBO_ACCESS_TOKEN).remove(WEIBO_EXPIRES_IN).remove(SINA_UID);
 		e.remove(QQ_ACCESS_TOKEN).remove(QQ_EXPIRES_IN).remove(QQ_OPENID).remove(QQ_ACCESS_CURR_TIME);
 		e.commit();
 	}
+
 	/**
 	 * 设置补充信息完整
+	 * 
 	 * @param context
 	 */
-	public static void setInfoComplete(Context context,boolean isComplete){
+	public static void setInfoComplete(Context context, boolean isComplete) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor e = sp.edit();
 		e.putBoolean(IS_INFO_COMPLETE, isComplete);
 		e.commit();
-}
-
+	}
 
 }

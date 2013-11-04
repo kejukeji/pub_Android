@@ -1,7 +1,12 @@
 package com.maoba.activity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +15,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +29,7 @@ import android.widget.Toast;
 import com.maoba.CommonApplication;
 import com.maoba.Constants;
 import com.maoba.R;
+import com.maoba.activity.base.BaseActivity;
 import com.maoba.util.SharedPrefUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.weibo.sdk.android.Oauth2AccessToken;
@@ -30,16 +38,18 @@ import com.weibo.sdk.android.WeiboAuthListener;
 import com.weibo.sdk.android.WeiboDialogError;
 import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.WeiboParameters;
+import com.weibo.sdk.android.net.AsyncWeiboRunner;
+import com.weibo.sdk.android.net.RequestListener;
 import com.weibo.sdk.android.sso.SsoHandler;
 import com.weibo.sdk.android.util.Utility;
 
 /**
  * 授权界面
  * 
- * @author Aizhimin
+ * @author Zhoujun
  * 
  */
-public class AuthorizeActivity extends Activity {
+public class AuthorizeActivity extends BaseActivity {
 
 	private final static String TAG = "AuthorizeActivity";
 
@@ -54,6 +64,10 @@ public class AuthorizeActivity extends Activity {
 	public static final String KEY_EXPIRES = "expires_in";
 	public static final String KEY_REFRESHTOKEN = "refresh_token";
 	public static String URL_OAUTH2_ACCESS_AUTHORIZE = "https://api.weibo.com/oauth2/authorize";
+	private static final String get_token_url = "https://api.weibo.com/oauth2/access_token";// 获取token
+	private static Oauth2AccessToken oauth2AccessToken;
+	
+	private static final int WEIBO_BIND_SUCCESS = 1;//微博授权
 
 	private WeiboAuthListener mListener;
 	/**
@@ -107,7 +121,19 @@ public class AuthorizeActivity extends Activity {
 		mSpinner.setMessage("加载中...");
 
 	}
+	Handler hander = new Handler(){
 
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+			case WEIBO_BIND_SUCCESS:
+				showShortToast(R.string.account_bind_success);
+				break;
+			}
+		}
+		
+	};
 	// --------------------------------------sina_weibo_start----------------------------//
 
 	public void authorizeWeibo(Context context, final WeiboAuthListener listener){
@@ -115,7 +141,10 @@ public class AuthorizeActivity extends Activity {
 		WEIBO_APP_KEY = Constants.WEIBO_CONSUMER_KEY;	
         WEIBO_APP_SECRET = Constants.WEIBO_CONSUMER_SECRET;
 //		startAuthDialog(context, listener);
-        Weibo mWeibo = Weibo.getInstance(WEIBO_APP_KEY, mRedirectUrl);
+        String scope = "email,direct_messages_read,direct_messages_write,"
+				+ "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
+				+ "follow_app_official_microblog," + "invitation_write";
+        Weibo mWeibo = Weibo.getInstance(WEIBO_APP_KEY, mRedirectUrl,scope);
         
 		 /**
          * 下面两个注释掉的代码，仅当sdk支持sso时有效，
@@ -203,16 +232,25 @@ public class AuthorizeActivity extends Activity {
 	class AuthDialogListener implements WeiboAuthListener {
 		@Override
 		public void onComplete(Bundle values) {
-			String sina_uid = values.getString("uid");
-			String token = values.getString("access_token");
-			String expires_in = values.getString("expires_in");
-			String currTime = System.currentTimeMillis() + "";
-			SharedPrefUtil.setWeiboInfo(AuthorizeActivity.this, sina_uid, token, expires_in, currTime);
-			Oauth2AccessToken accessToken = new Oauth2AccessToken(token, expires_in);
-			accessToken.setExpiresIn(expires_in);
-			setResult(RESULT_OK);
-			AuthorizeActivity.this.finish();
-			Toast.makeText(AuthorizeActivity.this, R.string.account_bind_success, Toast.LENGTH_SHORT).show();
+			if(values.containsKey("code")){
+				String code = values.getString("code");
+				WeiboParameters bundle = new WeiboParameters();
+				bundle.add("client_id", Constants.WEIBO_CONSUMER_KEY);
+				bundle.add("client_secret", Constants.WEIBO_CONSUMER_SECRET);
+				bundle.add("code", code);
+				bundle.add("redirect_uri", Constants.WEIBO_REDIRECT_URL);
+				AsyncWeiboRunner.request(get_token_url, bundle, "POST", getTokenListener);
+			}else{
+				String sina_uid = values.getString("uid");
+				String token = values.getString("access_token");
+				String expires_in = values.getString("expires_in");
+				String currTime = System.currentTimeMillis() + "";
+				SharedPrefUtil.setWeiboInfo(AuthorizeActivity.this, sina_uid, token, expires_in, currTime);
+				long time= Long.parseLong(expires_in)*1000+ System.currentTimeMillis();  
+				hander.sendEmptyMessage(WEIBO_BIND_SUCCESS);
+				setResult(RESULT_OK);
+				AuthorizeActivity.this.finish();
+			}
 		}
 
 		@Override
@@ -232,7 +270,44 @@ public class AuthorizeActivity extends Activity {
 		}
 
 	}
+	/**
+	 * 获取token
+	 */
+	RequestListener getTokenListener = new RequestListener() {
 
+		@Override
+		public void onIOException(IOException arg0) {
+
+		}
+
+		@Override
+		public void onError(WeiboException arg0) {
+
+		}
+
+		@Override
+		public void onComplete(String arg0) {
+			try {
+				JSONObject obj = new JSONObject(arg0);
+				String sina_uid = obj.getString("uid");
+				String token = obj.getString("access_token");
+				String expires_in = obj.getString("expires_in");
+				String currTime = System.currentTimeMillis() + "";
+				SharedPrefUtil.setWeiboInfo(AuthorizeActivity.this, sina_uid, token, expires_in, currTime);
+				long time= Long.parseLong(expires_in)*1000+ System.currentTimeMillis();  
+				hander.sendEmptyMessage(WEIBO_BIND_SUCCESS);
+				setResult(RESULT_OK);
+				AuthorizeActivity.this.finish();
+			} catch (JSONException e) {
+			}
+		}
+
+		@Override
+		public void onComplete4binary(ByteArrayOutputStream arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
 	private class WeiboWebViewClient extends WebViewClient {
 
 		@Override

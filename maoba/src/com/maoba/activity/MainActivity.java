@@ -35,7 +35,6 @@ import com.maoba.activity.bar.BarListActivity;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.my.CollectionOfBarListActivity;
 import com.maoba.activity.news.NewsActivity;
-import com.maoba.activity.news.PrivateNewsListActivity;
 import com.maoba.activity.personalcenter.PersonalCenter;
 import com.maoba.activity.setting.SettingActivity;
 import com.maoba.bean.BarTypeBean;
@@ -58,6 +57,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout rlSetting;// 设置
 	private LinearLayout viewSettingTitle;
 
+	private ImageView ivSettingUserPhoto;
+	private TextView tvsignaTure;
 	private Button btnLeftMenu;
 	private int screenWidth;
 	private ImageView ivTop;
@@ -88,6 +89,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		/************************** 侧边栏 **********************/
 		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界
 
+		ivSettingUserPhoto = (ImageView) settingView.findViewById(R.id.ivSettingUserPhoto);
+		tvsignaTure = (TextView)settingView.findViewById(R.id.tvsignaTure);
 		rlCollect = (LinearLayout) settingView.findViewById(R.id.rlCollect);
 		rlInfromation = (LinearLayout) settingView.findViewById(R.id.rlInfromation);
 		rlSetting = (LinearLayout) settingView.findViewById(R.id.rlSetting);
@@ -120,6 +123,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		gvBarType.setOnItemClickListener(itemListener);
 		if (NetUtil.checkNet(this)) {
 			new GetHomeTask().execute();
+			new GetUserInfor().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
@@ -150,7 +154,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				}, null, null);
 				return;
 			}
-			openActivity(CollectionOfBarListActivity.class);
+			int uid = SharedPrefUtil.getUid(MainActivity.this);
+			Bundle b = new Bundle();
+			b.putInt(Constants.EXTRA_DATA, uid);
+			openActivity(CollectionOfBarListActivity.class, b);
 			break;
 		case R.id.rlInfromation:
 			if (!SharedPrefUtil.isLogin(this)) {
@@ -166,6 +173,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			openActivity(NewsActivity.class);
 			break;
 		case R.id.rlSetting:
+			if (!SharedPrefUtil.isLogin(this)) {
+				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						openActivity(LoginActivity.class);
+					}
+				}, null, null);
+				return;
+			}
 			openActivity(SettingActivity.class);
 			break;
 		case R.id.viewSettingTitle:
@@ -179,6 +196,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				}, null, null);
 				return;
 			}
+			
 			openActivity(PersonalCenter.class);
 			break;
 		default:
@@ -275,6 +293,86 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				dims[0] = w - btnWidth;
 			}
 		}
+	}
+
+	/**
+	 * 
+	 * 获取用户个人资料信息
+	 * 
+	 * */
+	private class GetUserInfor extends AsyncTask<Void, Void, JSONObject> {
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd("正在加载...");
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			int uid = SharedPrefUtil.getUid(MainActivity.this);
+			if (uid == 0) {
+			} else {
+				try {
+					return new BusinessHelper().getUserInfor(uid);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			dismissPd();
+			if (result != null) {
+				try {
+					int status = result.getInt("status");
+					if (status == Constants.REQUEST_SUCCESS) {
+						JSONObject userJson = result.getJSONObject("user_info");
+						String signaTure = userJson.getString("signature");
+						if (signaTure.equals("null")) {
+							tvsignaTure.setText("未设置");
+						} else {
+							tvsignaTure.setText(signaTure);
+						}
+						String photoUrl = BusinessHelper.BASE_URL + userJson.getString("pic_name");
+						ivSettingUserPhoto.setTag(photoUrl);
+						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
+								new ImageCallback() {
+									@Override
+									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+										ImageView image = (ImageView) ivSettingUserPhoto.findViewWithTag(imageUrl);
+										if (image != null) {
+											if (imageDrawable != null) {
+												image.setImageDrawable(imageDrawable);
+											} else {
+												image.setImageResource(R.drawable.bg_show11);
+											}
+										}
+									}
+								});
+						if (cacheDrawble != null) {
+							ivSettingUserPhoto.setImageDrawable(cacheDrawble);
+						} else {
+							ivSettingUserPhoto.setImageResource(R.drawable.ic_default);
+						}
+
+					} else {
+						showShortToast(result.getString("message"));
+
+					}
+				} catch (JSONException e) {
+					showShortToast(R.string.json_exception);
+				}
+			} else {
+				
+				ivSettingUserPhoto.setImageResource(R.drawable.bg_show11);
+				tvsignaTure.setText("未设置");
+			}
+		}
+
 	}
 
 	/**

@@ -1,5 +1,9 @@
 package com.maoba.activity.setting;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,8 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.maoba.Constants;
 import com.maoba.R;
+import com.maoba.SystemException;
 import com.maoba.activity.base.BaseActivity;
+import com.maoba.helper.BusinessHelper;
+import com.maoba.util.NetUtil;
+import com.maoba.util.SharedPrefUtil;
+import com.maoba.util.StringUtil;
 
 /**
  * 意见反馈
@@ -67,28 +77,37 @@ public class SettingFeedbackActivity extends BaseActivity implements OnClickList
 		case R.id.ibLeft:
 			finish();
 			break;
-
 		default:
+		case R.id.btnRight:
+			String feedBackContent = etFeedback.getText().toString().trim();
+			if (StringUtil.isBlank(feedBackContent)) {
+				showShortToast("请输入你要反馈的内容");
+				return;
+			} else {
+				if (NetUtil.checkNet(SettingFeedbackActivity.this)) {
+					new FeedBack(feedBackContent).execute();
+				} else {
+					showShortToast(R.string.NoSignalException);
+				}
+			}
 			break;
 		}
 	}
 
 	@Override
-	public void afterTextChanged(Editable s) {
-		int number = s.length();
+	public void afterTextChanged(Editable editable) {
+		int number = editable.length();
 		tvNum.setText("" + number);
-		selectionStart = tvNum.getSelectionStart();
+		// selectionStart = tvNum.getSelectionStart();
 		selectionEnd = etFeedback.getSelectionEnd();
 		if (temp.length() > num) {
-			s.delete(selectionStart - 1, selectionEnd);
+			editable.delete(num, number);
 			int tempSelection = selectionEnd;
-			etFeedback.setText(s);
+			etFeedback.setText(editable);
 			etFeedback.setSelection(tempSelection);// 设置光标在最后
-			/*
-			 * if (tvNum.length()>141) { showShortToast("最多可输入140个字..");
-			 * 
-			 * }
-			 */
+
+			showShortToast("最多可输入140个字..");
+
 		}
 
 	}
@@ -101,6 +120,61 @@ public class SettingFeedbackActivity extends BaseActivity implements OnClickList
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		temp = s;
+	}
+
+	/**
+	 * 
+	 * 反馈接口
+	 * 
+	 * */
+
+	private class FeedBack extends AsyncTask<Void, Void, JSONObject> {
+		private String feedBackContent;
+
+		/**
+		 * @param feedBackContent
+		 */
+		public FeedBack(String feedBackContent) {
+			this.feedBackContent = feedBackContent;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd("正在提交...");
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			int uid = SharedPrefUtil.getUid(SettingFeedbackActivity.this);
+			try {
+				return new BusinessHelper().getFeedBack(uid, feedBackContent);
+			} catch (SystemException e) {
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			dismissPd();
+			if (result != null) {
+				try {
+					int status = result.getInt("status");
+					if (status == Constants.REQUEST_SUCCESS) {
+						showShortToast("感谢你为我们提交了宝贵意见");
+						finish();
+					} else {
+						showShortToast("意见反馈失败");
+					}
+				} catch (JSONException e) {
+					showShortToast(R.string.json_exception);
+				}
+			} else {
+				showShortToast(R.string.connect_server_exception);
+			}
+		}
+
 	}
 
 }

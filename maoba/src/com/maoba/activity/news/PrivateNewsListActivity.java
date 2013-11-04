@@ -223,7 +223,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		protected ResponseBean<NewsBean> doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(PrivateNewsListActivity.this);
 			try {
-				return new BusinessHelper().getPrivateNews(uid, pageIndex);
+				return new BusinessHelper().getPrivateNews(2, pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -344,23 +344,17 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 			}
 
 			if (spannableString != null) {
-				// viewHolder.tvLocation.setText(spannableString);
+				 viewHolder.tvContent.setText(spannableString);
 			} else {
-				// viewHolder.tvLocation.setText(contentStr);
+				 viewHolder.tvContent.setText(contentStr);
 			}
 
-			// viewHolder.tvLocation.setText(bean.getLastLetter());
 
 			String sendTime = DateUtil.getConversationTime(bean.getSendTime());
 			viewHolder.tvCreateTime.setText(sendTime);
 			viewHolder.tvNickName.setText(bean.getNickName());
 			viewHolder.tvAge.setText(bean.getAge());
 			viewHolder.tvContent.setText(bean.getContent());
-			// if (bean.getStatus() == 0) {
-			// viewHolder.ivIsRead.setImageResource(R.drawable.msg_unread);
-			// } else {
-			// viewHolder.ivIsRead.setImageResource(R.drawable.msg_read);
-			// }
 		}
 
 		private class ViewHolder {

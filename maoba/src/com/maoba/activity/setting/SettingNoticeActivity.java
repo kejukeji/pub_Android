@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.maoba.R;
@@ -22,7 +21,6 @@ public class SettingNoticeActivity extends BaseActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setting_notice);
 		findView();
@@ -30,12 +28,10 @@ public class SettingNoticeActivity extends BaseActivity implements
 	}
 
 	private void fillData() {
-		// TODO Auto-generated method stub
 		tvTitle.setText("消息推送通知");
 	}
 
 	private void findView() {
-		// TODO Auto-generated method stub
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
@@ -45,7 +41,6 @@ public class SettingNoticeActivity extends BaseActivity implements
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();

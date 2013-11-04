@@ -60,9 +60,9 @@ public class Constants {
 	/**
 	 * 腾讯微博配置
 	 */
-	public static final String TENCENT_APP_ID = "100492496";// app id
-	public static final String TENCENT_APP_KEY = "65a1355f898df7f19a6ccd47bdb45d92";// app
-																					// key
+	public static final String TENCENT_APP_ID = "100548650";// app id
+	public static final String TENCENT_APP_KEY = "a06b8f65a67e1b4a37b54d5dbe5ababb";// app// key
+																					
 	public static final String TENCENT_REDIRECT_URL = "http://www.eemedia.cn/app_download.aspx";
 
 	/**

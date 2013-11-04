@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import com.maoba.helper.BusinessHelper;
 
 /**
+ * 酒吧活动 实体类
  * 
  * @author zhouyong
  * @data 创建时间：2013-10-31 上午10:26:17
@@ -22,14 +23,15 @@ public class EventBean implements Serializable {
 	private static final long serialVersionUID = 4617043918315208981L;
 
 	private int id;
-	private String title;
-	private String address;
+	private String eventTitle;
+	private String eventAddress;
 	private String startTime;// 活动开始时间
 	private String endTime; // 活动结束时间
 	private int joinNumber;
 	private String photoUrl;
-	private String recommendPhotoUrl;// 推荐图片
-
+	private String recommendPhotoUrl;// 推荐活动图片
+	
+	private int barId;
 	private String barName;
 	private String barAddress;
 	private String eventContent;
@@ -40,23 +42,26 @@ public class EventBean implements Serializable {
 	 */
 	public EventBean(JSONObject obj) throws JSONException {
 
+		if (obj.has("pub_id")) {
+			this.id = obj.getInt("pub_id");
+		}
 		if (obj.has("id")) {
 			this.id = obj.getInt("id");
 		}
 
 		if (obj.has("name")) {
-			this.title = obj.getString("name");
+			this.eventTitle = obj.getString("name");
 
 		}
 		if (obj.has("city_county")) {
-			this.address = obj.getString("city_county");
+			this.eventAddress = obj.getString("city_county");
 		}
 
-		if (obj.has("time")) {
-			this.startTime = obj.getString("time");
+		if (obj.has("start_date")) {
+			this.startTime = obj.getString("start_date");
 		}
-		if (obj.has("endTime")) {
-			this.endTime = obj.getString("endTime");
+		if (obj.has("end_date")) {
+			this.endTime = obj.getString("end_date");
 
 		}
 
@@ -70,8 +75,8 @@ public class EventBean implements Serializable {
 			this.recommendPhotoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("recommendPhotoUrl");
 		}
 
-		if (obj.has("barName")) {
-			this.barName = obj.getString("barName");
+		if (obj.has("pub_name")) {
+			this.barName = obj.getString("pub_name");
 		}
 		if (obj.has("barAddress")) {
 			this.barAddress = obj.getString("barAddress");
@@ -103,20 +108,28 @@ public class EventBean implements Serializable {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public int getBarId() {
+		return barId;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setBarId(int barId) {
+		this.barId = barId;
 	}
 
-	public String getAddress() {
-		return address;
+	public String getEventTitle() {
+		return eventTitle;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setEventTitle(String eventTitle) {
+		this.eventTitle = eventTitle;
+	}
+
+	public String getEventAddress() {
+		return eventAddress;
+	}
+
+	public void setEventAddress(String eventAddress) {
+		this.eventAddress = eventAddress;
 	}
 
 	public String getStartTime() {

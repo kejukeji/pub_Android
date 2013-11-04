@@ -108,6 +108,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			}
 			if (NetUtil.checkNet(LoginActivity.this)) {
 				logintype = Constants.LOGIN_COMMON;// 表示普通登陆
+				SharedPrefUtil.setLoginType(LoginActivity.this, logintype);
 				new LoginTask(logintype, userName, passWord).execute();
 			} else {
 				showShortToast(R.string.NoSignalException);
@@ -119,6 +120,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				String openUid = SharedPrefUtil.getWeiboUid(this);
 				if (NetUtil.checkNet(this)) {
 					logintype = Constants.LOGIN_SINA;// 表示新浪微博登陆
+					SharedPrefUtil.setLoginType(LoginActivity.this, logintype);
+					SharedPrefUtil.setOpenId(LoginActivity.this, openUid);
 					new CheckTask(logintype, openUid).execute();
 
 				} else {
@@ -141,6 +144,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				String openUid = SharedPrefUtil.getQQOpenid(this);
 				if (NetUtil.checkNet(this)) {
 					logintype = Constants.LOGIN_QQ;
+					SharedPrefUtil.setLoginType(LoginActivity.this, logintype);
+					SharedPrefUtil.setOpenId(LoginActivity.this, openUid);
 					new CheckTask(logintype, openUid).execute();
 
 				} else {
@@ -173,7 +178,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		private String userName;
 		private String passWord;
 		private int logintype;
-		private String nickName;
 
 		private String openid;
 		private boolean isThirdLogin = false;
@@ -183,12 +187,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		 * @param LoginWay
 		 * @param openUid
 		 */
-		public LoginTask(String nickName, int logintype, String openUid, boolean isThirdLogin) {
+		public LoginTask(int logintype, String openUid, boolean isThirdLogin) {
 			super();
 			this.openid = openUid;
 			this.logintype = logintype;
 			this.isThirdLogin = isThirdLogin;
-			this.nickName = nickName;
 		}
 
 		/**
@@ -219,7 +222,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		protected JSONObject doInBackground(Void... params) {
 			try {
 				if (isThirdLogin) {
-					return new BusinessHelper().thirdLogin(nickName, logintype, openid);
+					return new BusinessHelper().thirdLogin(logintype, openid);
 
 				} else {
 					return new BusinessHelper().login(logintype, userName, passWord);
@@ -301,7 +304,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				try {
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_FAILD) {
-						
+
 						LayoutInflater inflater = getLayoutInflater();
 						View view = inflater.inflate(R.layout.dialog_ninkname_, null); //
 						TextView tvDialogMsg = (TextView) view.findViewById(R.id.tvDialogMsg); // 取得布局文件的控件
@@ -315,7 +318,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 								if (TextUtils.isEmpty(nickName)) {
 									showShortToast("请输入昵称");
 								} else {
-									new LoginTask(nickName, logintype, openUid, true).execute();
+									if (NetUtil.checkNet(LoginActivity.this)) {
+										new RegisterTask(nickName, logintype, openUid, true).execute();
+									} else {
+										showShortToast(R.string.NoSignalException);
+									}
+
 								}
 
 							}
@@ -343,7 +351,85 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 						dialog.getWindow().setAttributes(lp);
 
 					} else {
-						new LoginTask(nickName, logintype, openUid, true).execute();
+						if (NetUtil.checkNet(LoginActivity.this)) {
+							new LoginTask(logintype, openUid, true).execute();
+						} else {
+							showShortToast(R.string.NoSignalException);
+						}
+					}
+				} catch (JSONException e) {
+					showShortToast(R.string.json_exception);
+				}
+			} else {
+				showShortToast(R.string.connect_server_exception);
+			}
+		}
+	}
+
+	public class RegisterTask extends AsyncTask<Void, Void, JSONObject> {
+		private String nickName;
+		private int logintype;
+		private String openId;;
+
+		private boolean isThirdLogin = false;
+
+		/**
+		 * @param nickName
+		 * @param logintype
+		 * @param openId
+		 * @param isThirdLogin
+		 */
+		public RegisterTask(String nickName, int logintype, String openId, boolean isThirdLogin) {
+
+			this.nickName = nickName;
+			this.logintype = logintype;
+			this.openId = openId;
+			this.isThirdLogin = isThirdLogin;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			if (pd == null) {
+				pd = new ProgressDialog(LoginActivity.this);
+			}
+			pd.setMessage("登陆中...");
+			pd.show();
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			try {
+				if (isThirdLogin) {
+					return new BusinessHelper().register(nickName, logintype, openId);
+				} else {
+					// return new BusinessHelper().thirdLogin(logintype,
+					// openId);
+				}
+			} catch (SystemException e) {
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			if (pd != null) {
+				pd.dismiss();
+			}
+			if (result != null) {
+				try {
+					int status = result.getInt("status");
+					if (status == Constants.REQUEST_SUCCESS) {
+						JSONObject userJson = result.getJSONObject("user");
+						showShortToast("登陆成功");
+						int uid = userJson.getInt("id");
+						SharedPrefUtil.setUid(LoginActivity.this, uid);
+						setResult(RESULT_OK);
+						openActivity(MainActivity.class);
+						finish();
+					} else {
+						showShortToast(result.getString("message"));
 					}
 				} catch (JSONException e) {
 					showShortToast(R.string.json_exception);
@@ -376,7 +462,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				openid = response.getString("openid");
 				String currTime = System.currentTimeMillis() + "";
 				SharedPrefUtil.setQQInfo(LoginActivity.this, access_token, expires_in, openid, currTime);
-				// new LoginTask(logintype, openid, true).execute();
+				new LoginTask(logintype, openid, true).execute();
 			} catch (JSONException e) {
 			}
 		}
@@ -400,7 +486,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			if (resultCode == RESULT_OK) {
 				String uid = SharedPrefUtil.getWeiboUid(LoginActivity.this);
 				logintype = Constants.LOGIN_SINA;
-				// new LoginTask(logintype, uid, true).execute();
+				new LoginTask(logintype, uid, true).execute();
 			}
 			break;
 		case Constants.REQUEST_CODE_REGISTER:

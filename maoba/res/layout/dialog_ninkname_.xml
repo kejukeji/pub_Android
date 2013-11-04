@@ -42,7 +42,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="5dp" >
 
@@ -50,15 +50,17 @@
                 android:id="@+id/btnDialogLeft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:paddingLeft="12dp"
+                android:background="@drawable/bg_btn_red"
+                android:padding="15dp"
                 android:text="确定" />
 
             <Button
                 android:id="@+id/btnDialogRight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_btn_red"
                 android:layout_marginLeft="10dp"
+                   android:padding="15dp"
                 android:text="取消" />
         </LinearLayout>
     </LinearLayout>

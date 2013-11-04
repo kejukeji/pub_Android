@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import com.maoba.Constants;
 import com.maoba.SystemException;
 import com.maoba.bean.BarBean;
+import com.maoba.bean.EventBean;
 import com.maoba.bean.LetterBean;
 import com.maoba.bean.NewsBean;
 import com.maoba.bean.ResponseBean;
@@ -51,6 +52,26 @@ public class BusinessHelper {
 						new PostParameter("password", passWord) }).asJSONObject();
 
 	}
+	
+	/**
+	 * 注册接口
+	 * 
+	 * @param flagLoginWay
+	 * @param userName
+	 * @param eMail
+	 * @param passWord
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject register(String nickName, int logintype,String openUid) throws SystemException {
+
+		return httpClient.post(
+				BASE_URL + "user/register",
+				new PostParameter[] { new PostParameter("nick_name", nickName),
+						new PostParameter("login_type", logintype),
+						new PostParameter("open_id", openUid) }).asJSONObject();
+
+	}
 
 	/**
 	 * 登录接口
@@ -79,11 +100,12 @@ public class BusinessHelper {
 	 * @return
 	 * @throws SystemException
 	 */
-	public JSONObject thirdLogin(String nickName, int loginWay, String openUid) throws SystemException {
+	public JSONObject thirdLogin(int loginWay, String openUid) throws SystemException {
 		return httpClient.post(
 				BASE_URL + "user/login",
-				new PostParameter[] { new PostParameter("login_type", loginWay), new PostParameter("open_id", openUid),
-						new PostParameter("user_name", nickName) }).asJSONObject();
+				new PostParameter[] { new PostParameter("login_type", loginWay), 
+						new PostParameter("open_id", openUid)}).asJSONObject();
+						
 	}
 
 	/**
@@ -353,7 +375,7 @@ public class BusinessHelper {
 	}
 
 	/**
-	 * 获取用户收藏的酒吧接口
+	 * 获取用户收藏的酒吧列表接口
 	 * 
 	 * @param uid
 	 * @param pageIndex
@@ -394,6 +416,28 @@ public class BusinessHelper {
 
 		return response;
 
+	}
+	
+	
+	/**
+	 * 获取用户收藏的酒吧条数接口
+	 * 
+	 * @param uid
+	 * @param pageIndex
+	 * @return
+	 * @throws SystemException
+	 * */
+	public JSONObject getContentNum(int uid, int pageIndex) throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		if (uid > 0) {
+			p.add(new PostParameter("user_id", uid));
+		} else {
+			p.add(new PostParameter("user_id", ""));
+		}
+		p.add(new PostParameter("page", pageIndex));
+		JSONObject obj;
+	    obj = httpClient.get(BASE_URL + "user/collect", p.toArray(new PostParameter[p.size()])).asJSONObject();
+	   return obj;
 	}
 
 	/**
@@ -589,7 +633,7 @@ public class BusinessHelper {
 						
 	}
 	/**
-	 * 清除用户信息
+	 * 清除私信聊天信息
 	 * 
 	 * @param user_id
 	 * @return
@@ -602,5 +646,81 @@ public class BusinessHelper {
 			    }).asJSONObject();
 						
 	}
+	/**
+	 * 提交意见反馈接口
+	 * 
+	 * @param user_id
+	 * @param content 反馈的内容
+	 * @return
+	 * @throws SystemException
+	 */
+	
+	public JSONObject getFeedBack(int uid,String content) throws SystemException {
+		
+		return httpClient.get(BASE_URL + "feed/back",
+				new PostParameter[] { new PostParameter("user_id", uid),
+				new PostParameter("content", content) }).asJSONObject();
+	}
+	
+	/**
+	 * 获取酒吧活动列表接口
+	 * 
+	 * @param bar_id  酒吧的id
+	 * @param pageIndex  页数
+	 * @return
+	 * @throws SystemException
+	 */
+
+	public ResponseBean<EventBean> getEventList(int pageIndex) throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+//		if (bar_id > 0) {
+//			p.add(new PostParameter("type_id", bar_id));
+//		}
+		p.add(new PostParameter("page", pageIndex));
+		ResponseBean<EventBean> response;
+		try {
+			JSONObject obj;
+			obj = httpClient.get(BASE_URL + "activity/list", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<EventBean>(obj);
+				List<EventBean> list = null;
+				List<EventBean> list1 = null;
+				if (!TextUtils.isEmpty(obj.getString("activity_list"))) {
+					list = EventBean.constractList(obj.getJSONArray("activity_list"));// 活动列表
+					list1 = EventBean.constractList(obj.getJSONArray("hot_list"));// 推荐活动列表
+				} else {
+					list = new ArrayList<EventBean>();
+					list1 = new ArrayList<EventBean>();
+				}
+				response.setObjList(list);
+
+				response.setObjList1(list1);
+			} else {
+				response = new ResponseBean<EventBean>(Constants.REQUEST_FAILD, obj.getString("message"));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<EventBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e) {
+			response = new ResponseBean<EventBean>(Constants.REQUEST_FAILD, "json解析错误");
+		}
+		return response;
+
+	}
+	
+	/**
+	 * 获取用户资料
+	 * 
+	 * @param loginWay
+	 * @param openId
+	 * @param uid
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject getUserInfor(int uid) throws SystemException {
+		return httpClient.post(
+				BASE_URL + "user/user_info/"+uid).asJSONObject();
+	}
+	
 	
 }

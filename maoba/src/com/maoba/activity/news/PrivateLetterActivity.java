@@ -68,6 +68,7 @@ import com.umeng.analytics.MobclickAgent;
 public class PrivateLetterActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLift;
 	private TextView tvTitle;
+	private Button btnRight;
 
 	private PullToRefreshListView lvPersonalLetter;// 聊天的listView
 
@@ -132,6 +133,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 	private void findView() {
 		ibLift = (ImageButton) this.findViewById(R.id.ibLeft);
+		btnRight = (Button) this.findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
 		lvPersonalLetter = (PullToRefreshListView) this.findViewById(R.id.lvPersonalLetter);
@@ -148,6 +150,11 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		ibLift.setImageResource(R.drawable.ic_btn_left);
 		ibLift.setOnClickListener(this);
+		btnRight.setText("资料");
+		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
+		btnRight.setOnClickListener(this);
+		btnRight.setVisibility(View.GONE);
+		
 		tvTitle.setText(newsbean.getNickName());
 
 		scrollViewFace = (ScrollView) this.findViewById(R.id.scroll_view_face);
@@ -160,7 +167,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		letterAdapter = new LetterAdapter();
 		lvPersonalLetter.setAdapter(letterAdapter);
 		lvPersonalLetter.setonRefreshListener(onRefreshListener);
-		
+
 		if (NetUtil.checkNet(PrivateLetterActivity.this)) {
 			new ListLetterTask().execute();
 		} else {
@@ -181,6 +188,8 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 				scrollViewFace.setVisibility(View.VISIBLE);
 			}
 			break;
+		case R.id.btnRight:
+			break;
 		case R.id.btnSend:// 发送
 			try {
 				String letterStr = edtLetter.getText().toString().trim();
@@ -193,7 +202,6 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 				} else {
 					showShortToast("请您输入信息");
 				}
-
 			} catch (Exception e) {
 			}
 
@@ -246,6 +254,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		}
 	};
 
+	/**
+	 * 上拉刷新数据
+	 */
 	OnRefreshListener onRefreshListener = new OnRefreshListener() {
 
 		@Override
@@ -354,7 +365,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		@Override
 		protected JSONObject doInBackground(Void... params) {
 			try {
-				return new BusinessHelper().getSendLetter(newsbean.getId(), newsbean.getFriendId(),letterStr);
+				return new BusinessHelper().getSendLetter(newsbean.getId(), newsbean.getFriendId(), letterStr);
 			} catch (SystemException e) {
 			}
 			return null;
@@ -453,6 +464,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 			String contentStr = bean.getContent();
 			SpannableString spannableString = null;
+			// 判读单个回话列表是文字还是表情头像
 			if (!StringUtil.isBlank(contentStr)) {
 				boolean isHaveFacePic = contentStr.contains("[edu");
 				if (isHaveFacePic == true) {
