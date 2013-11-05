@@ -1,22 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.maoba.view.MyHorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_margin="0px"
-    android:background="#00ffffff"
-    android:fadingEdge="none"
-    android:fadingEdgeLength="0px"
-    android:padding="0px"
-    android:scrollbars="none" >
+    android:orientation="vertical"
+    android:background="@color/common_bg"
+    android:clickable="true" >
 
-    <LinearLayout
-        android:id="@+id/top"
+    <RelativeLayout
+        android:id="@+id/rlCommon"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="0px"
-        android:background="#ffffffff"
-        android:orientation="horizontal"
-        android:padding="0px" >
-    </LinearLayout>
+        android:layout_height="55dp"
+        android:background="@drawable/bg_title"
+        android:paddingTop="3dp">
 
-</com.maoba.view.MyHorizontalScrollView>
+        <Button
+            android:id="@+id/btnLeftMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/left_btn_menu_bg" />
+
+        <LinearLayout
+            android:id="@+id/llHomeCenterTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal" >
+			
+            <ImageView
+                android:id="@+id/ivChoiceLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp" />
+        </LinearLayout>
+    </RelativeLayout>
+	<ScrollView android:layout_width="fill_parent" android:layout_height="wrap_content" android:scrollbars="none" >
+	    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:padding="15dp" android:orientation="vertical">
+	        <FrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+	            <ImageView android:id="@+id/ivTop" android:layout_width="fill_parent" android:layout_height="150dp" android:scaleType="centerCrop"
+	                android:focusable="true" android:focusableInTouchMode="true"/>
+	            <TextView android:id="@+id/tvTop" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white"
+	                android:textSize="20dp" android:textStyle="bold" android:layout_gravity="center_vertical|left" android:layout_marginLeft="15dp"/>
+	        </FrameLayout>
+	        <com.maoba.view.GridViewInScrollView android:id="@+id/gvBarType" android:layout_width="fill_parent" android:layout_height="wrap_content" android:listSelector="@android:color/transparent"
+	            android:numColumns="2" android:horizontalSpacing="10dp" android:verticalSpacing="10dp" android:layout_marginTop="10dp">
+	            
+	        </com.maoba.view.GridViewInScrollView>
+	    </LinearLayout>
+	</ScrollView>
+</LinearLayout>
