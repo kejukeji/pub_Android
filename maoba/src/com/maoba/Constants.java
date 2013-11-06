@@ -7,6 +7,18 @@ package com.maoba;
  */
 public class Constants {
 	/**
+	 * 生日设置滚轮显示项目数
+	 */
+	public static final int TIME_LIST_NUMBER=3;
+	/** 
+	 * 用来标识请求照相功能的activity
+	 */
+	public static final int CAMERA_WITH_DATA = 3023;
+	/** 
+	 * 用来标识请求gallery的activity 
+	 * */
+	public static final int PHOTO_PICKED_WITH_DATA = 3021;
+	/**
 	 * 应用文件存放目录
 	 */
 	public static final String APP_DIR_NAME = "maomao";
@@ -28,7 +40,10 @@ public class Constants {
 	 * intent code
 	 */
 	public static final String EXTRA_DATA = "extra_data";// 跳转绑定的数据；
-
+	public static final String INTENT_BIRTHDAY = "com.maoba.intent.action.BirthdaySetActivity";
+	public static final String INTENT_SIGNATURE = "com.maoba.intent.action.PersonalizedSignatureActivity";
+	public static final String INTENT_NICKNAME = "com.maoba.intent.action.NickNameActivity";
+	public static final String INTENT_PASSWORD="com.maoba.intent.action.ChangingPasswordActivity";
 	/**
 	 * 分页数据
 	 */
@@ -78,5 +93,10 @@ public class Constants {
 	 * activity RequestCode
 	 */
 	public static final int REQUEST_CODE_REGISTER = 1;
+	public static final int BIRTHDAYNUM = 4;
+	public static final int SIGNATURENUM = 5;
+	public static final int NICKNAMENUM = 6;
+	public static final int PASSWORDNUMBER=7;
+	public static final int DISTRICT=8;
 
 }

@@ -54,6 +54,7 @@
             android:orientation="vertical" >
 
             <LinearLayout
+                android:id="@+id/viewNickname"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -68,8 +69,8 @@
                     android:textColor="@color/dark_text"
                     android:textSize="@dimen/TitleTextSize" />
 
-                <EditText
-                    android:id="@+id/edNickName"
+                <TextView
+                    android:id="@+id/tvNickName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null" />
@@ -103,8 +104,8 @@
                     android:textColor="@color/dark_text"
                     android:textSize="@dimen/TitleTextSize" />
 
-                <EditText
-                    android:id="@+id/edBirthday"
+                <TextView
+                    android:id="@+id/tvBirthday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null" />
@@ -138,8 +139,8 @@
                     android:textColor="@color/dark_text"
                     android:textSize="@dimen/TitleTextSize" />
 
-                <EditText
-                    android:id="@+id/edSex"
+                <TextView
+                    android:id="@+id/tvSex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null" />
@@ -158,6 +159,7 @@
                 android:background="@drawable/personal_line_repeat" />
 
             <LinearLayout
+                android:id="@+id/viewSignature"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -172,16 +174,19 @@
                     android:textColor="@color/dark_text"
                     android:textSize="@dimen/TitleTextSize" />
 
-                <EditText
-                    android:id="@+id/edSignature"
+                <TextView
+                    android:id="@+id/tvSignature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null" />
+                    android:background="@null" 
+                    android:maxLength="12"
+                    android:singleLine="false"
+                    />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
+              		android:layout_marginLeft="12dp"
                     android:layout_marginRight="6dp"
                     android:src="@drawable/ic_grey_right_arrow" />
             </LinearLayout>
@@ -190,15 +195,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/personal_line_repeat"
-                android:visibility="gone" />
+                 />
 
             <LinearLayout
+                android:id="@+id/viewdistrict"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="10dp"
-                android:visibility="gone" >
+                 >
 
                 <TextView
                     android:layout_width="0dp"
@@ -208,8 +214,8 @@
                     android:textColor="@color/dark_text"
                     android:textSize="@dimen/TitleTextSize" />
 
-                <EditText
-                    android:id="@+id/edAddress"
+                <TextView
+                    android:id="@+id/tvDistrict"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null" />
@@ -224,6 +230,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/viewChangingPassword"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -231,7 +238,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="12dp"
-            android:visibility="gone" >
+            >
 
             <TextView
                 android:layout_width="0dp"
@@ -255,6 +262,5 @@
                 android:layout_marginRight="6dp"
                 android:src="@drawable/ic_grey_right_arrow" />
         </LinearLayout>
-    </LinearLayout>
-
-</LinearLayout>
+     </LinearLayout>
+     </LinearLayout>
