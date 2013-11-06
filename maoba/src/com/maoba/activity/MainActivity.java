@@ -47,14 +47,14 @@ import com.maoba.view.slidingmenu.SlidingMenu;
 
 public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener {
 	private SlidingMenu sm;
-	//侧边栏
+	// 侧边栏
 	private LinearLayout rlCollect;// 收藏
 	private LinearLayout rlInfromation;// 信息
 	private LinearLayout rlSetting;// 设置
 	private LinearLayout viewSettingTitle;
 	private ImageView ivSettingUserPhoto;
 	private TextView tvsignaTure;
-	//主页
+	// 主页
 	private Button btnLeftMenu;
 	private int screenWidth;
 	private ImageView ivTop;
@@ -98,14 +98,12 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		gvBarType = (GridViewInScrollView) findViewById(R.id.gvBarType);
 		tvTop = (TextView) findViewById(R.id.tvTop);
 
-		
-		View settingView = getLayoutInflater().inflate(R.layout.left_menu, null);
-		ivSettingUserPhoto = (ImageView) settingView.findViewById(R.id.ivSettingUserPhoto);
-		tvsignaTure = (TextView) settingView.findViewById(R.id.tvsignaTure);
-		rlCollect = (LinearLayout) settingView.findViewById(R.id.rlCollect);
-		rlInfromation = (LinearLayout) settingView.findViewById(R.id.rlInfromation);
-		rlSetting = (LinearLayout) settingView.findViewById(R.id.rlSetting);
-		viewSettingTitle = (LinearLayout) settingView.findViewById(R.id.viewSettingTitle);
+		ivSettingUserPhoto = (ImageView) findViewById(R.id.ivSettingUserPhoto);
+		tvsignaTure = (TextView) findViewById(R.id.tvsignaTure);
+		rlCollect = (LinearLayout) findViewById(R.id.rlCollect);
+		rlInfromation = (LinearLayout) findViewById(R.id.rlInfromation);
+		rlSetting = (LinearLayout) findViewById(R.id.rlSetting);
+		viewSettingTitle = (LinearLayout) findViewById(R.id.viewSettingTitle);
 
 		rlCollect.setOnClickListener(this);
 		rlInfromation.setOnClickListener(this);
@@ -355,7 +353,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			}
 		}
 	}
-	
+
 	/**
 	 * 酒吧类型适配
 	 * 
@@ -423,39 +421,41 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			private TextView tvBarType;
 		}
 	}
+
 	/**
 	 * 连续按两次返回键就退出
 	 */
-	private int keyBackClickCount=0;
+	private int keyBackClickCount = 0;
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		keyBackClickCount=0;
+		keyBackClickCount = 0;
 	}
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			switch (keyBackClickCount++) {
-				case 0:
-					showShortToast("请再按次返回键退出");
-					Timer timer = new Timer();
-					timer.schedule(new TimerTask() {
-						@Override
-						public void run() {
-							keyBackClickCount=0;
-						}
-					}, 3000);
-					break;
-				case 1:
-					defaultFinish();
-					AndroidUtil.exitApp(MainActivity.this);
-					break;
-				default:
-					break;
+			case 0:
+				showShortToast("请再按次返回键退出");
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						keyBackClickCount = 0;
+					}
+				}, 3000);
+				break;
+			case 1:
+				defaultFinish();
+				AndroidUtil.exitApp(MainActivity.this);
+				break;
+			default:
+				break;
 			}
 			return true;
-		} 
+		}
 		return super.onKeyDown(keyCode, event);
 	}
 }
