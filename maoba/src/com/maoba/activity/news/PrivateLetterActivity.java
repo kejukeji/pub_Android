@@ -54,6 +54,7 @@ import com.maoba.bean.ResponseBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.ImageUtil;
 import com.maoba.util.NetUtil;
+import com.maoba.util.SharedPrefUtil;
 import com.maoba.util.StringUtil;
 import com.maoba.view.PullToRefreshListView;
 import com.maoba.view.PullToRefreshListView.OnRefreshListener;
@@ -85,7 +86,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 	private List<LetterBean> letterBeans;
 
-	private NewsBean newsbean;// 私信列表传递的bean
+//	private NewsBean newsbean;// 私信列表传递的bean
 
 	private String dateLine = "";
 
@@ -95,6 +96,8 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	private ProgressDialog pd;
 
 	private final static int HANDLER_DATA = 11;
+	
+	private int friendId;
 
 	// 表情
 	private ScrollView scrollViewFace;
@@ -111,7 +114,8 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		newsbean = (NewsBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
+	//	newsbean = (NewsBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
+		friendId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		setContentView(R.layout.private_news_layoute);
 		findView();
 		fillData();
@@ -154,8 +158,8 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
 		btnRight.setOnClickListener(this);
 		btnRight.setVisibility(View.GONE);
-		
-		tvTitle.setText(newsbean.getNickName());
+
+	//	tvTitle.setText(newsbean.getNickName());
 
 		scrollViewFace = (ScrollView) this.findViewById(R.id.scroll_view_face);
 		ivEmoticon.setOnClickListener(this);
@@ -277,8 +281,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		@Override
 		protected ResponseBean<LetterBean> doInBackground(Void... params) {
+			int userId = SharedPrefUtil.getUid(PrivateLetterActivity.this);
 			try {
-				return new BusinessHelper().getLetterList(newsbean.getUserId(), newsbean.getFriendId());
+				return new BusinessHelper().getLetterList(userId, friendId);
 			} catch (SystemException e) {
 			}
 			return null;
@@ -293,6 +298,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 					if (letterList.size() > 0) {
 						letterBeans.addAll(letterList);
 					}
+					// 安时间排序
 					sortNotifyListByTime(letterBeans);
 					letterAdapter.notifyDataSetChanged();
 					lvPersonalLetter.onRefreshComplete();
@@ -364,8 +370,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
+			int userId= SharedPrefUtil.getUid(PrivateLetterActivity.this);
 			try {
-				return new BusinessHelper().getSendLetter(newsbean.getId(), newsbean.getFriendId(), letterStr);
+				return new BusinessHelper().getSendLetter(userId, friendId, letterStr);
 			} catch (SystemException e) {
 			}
 			return null;
@@ -565,10 +572,34 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	private void startNotifyTask() {
 		if (letterTimerTask == null) {
 			letterTimerTask = new TimerTask() {
-
 				@Override
 				public void run() {
-
+					try {
+						if (NetUtil.checkNet(PrivateLetterActivity.this)) {
+							if (!isLoaded) {
+								isLoaded = true;
+								BusinessHelper businessHelper = new BusinessHelper();
+								int userId = SharedPrefUtil.getUid(PrivateLetterActivity.this);
+								ResponseBean<LetterBean> result = businessHelper.getLetterList(userId,
+										friendId);
+								if (result != null) {
+									if (result.getStatus() != Constants.REQUEST_FAILD) {
+										List<LetterBean> letterList = result.getObjList();
+										if (letterList.size() > 0) {
+											Message msg = new Message();
+											msg.what = HANDLER_DATA;
+											msg.obj = letterList;
+											iLetterHandler.sendMessage(msg);
+										}
+									}
+								} else {
+									showShortToast("链接服务器失败");
+								}
+								isLoaded = false;
+							}
+						}
+					} catch (Exception e) {
+					}
 				}
 			};
 			letterTimer = new Timer();

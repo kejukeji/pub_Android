@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_bg"
     android:orientation="vertical" >
-
+    
     <include layout="@layout/common_title_bar" />
 
     <LinearLayout
@@ -29,14 +30,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="头像"
-                android:textSize="@dimen/TitleTextSize" />
+                android:textSize="@dimen/BasicTextSize" />
 
             <ImageView
                 android:id="@+id/ivUserImage"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/left_menu_information" />
+                android:src="@drawable/bg_photo_left" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -67,7 +68,7 @@
                     android:layout_weight="1"
                     android:text="昵称 "
                     android:textColor="@color/dark_text"
-                    android:textSize="@dimen/TitleTextSize" />
+                    android:textSize="@dimen/BasicTextSize" />
 
                 <TextView
                     android:id="@+id/tvNickName"
@@ -102,7 +103,7 @@
                     android:layout_weight="1"
                     android:text="生日"
                     android:textColor="@color/dark_text"
-                    android:textSize="@dimen/TitleTextSize" />
+                    android:textSize="@dimen/BasicTextSize" />
 
                 <TextView
                     android:id="@+id/tvBirthday"
@@ -137,7 +138,7 @@
                     android:layout_weight="1"
                     android:text="性别"
                     android:textColor="@color/dark_text"
-                    android:textSize="@dimen/TitleTextSize" />
+                    android:textSize="@dimen/BasicTextSize" />
 
                 <TextView
                     android:id="@+id/tvSex"
@@ -172,7 +173,7 @@
                     android:layout_weight="1"
                     android:text="个性签名 "
                     android:textColor="@color/dark_text"
-                    android:textSize="@dimen/TitleTextSize" />
+                    android:textSize="@dimen/BasicTextSize" />
 
                 <TextView
                     android:id="@+id/tvSignature"
@@ -195,6 +196,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/personal_line_repeat"
+                android:visibility="gone"
                  />
 
             <LinearLayout
@@ -204,6 +206,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="10dp"
+                android:visibility="gone"
                  >
 
                 <TextView
@@ -212,7 +215,7 @@
                     android:layout_weight="1"
                     android:text="地区 "
                     android:textColor="@color/dark_text"
-                    android:textSize="@dimen/TitleTextSize" />
+                    android:textSize="@dimen/BasicTextSize" />
 
                 <TextView
                     android:id="@+id/tvDistrict"
@@ -244,16 +247,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="修改密码 "
+                android:text="密码 "
                 android:textColor="@color/dark_text"
-                android:textSize="@dimen/TitleTextSize" />
+                android:textSize="@dimen/BasicTextSize" />
 
-            <EditText
-                android:id="@+id/edModificationPassword"
+            <TextView
+                android:id="@+id/tvModificationPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:inputType="textPassword" />
+                 />
 
             <ImageView
                 android:layout_width="wrap_content"

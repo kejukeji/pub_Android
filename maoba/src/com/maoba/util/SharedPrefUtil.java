@@ -29,8 +29,8 @@ public class SharedPrefUtil {
 
 	public static final String OPEN_ID = "open_id";// 开放的open_id
 	public static final String LOGIN_TYPE = "login_type";// 登录方式 0 普通登陆 1 新浪登陆 2
-															// qq登录
-
+													// qq登录
+    public static final String PASSWORD = "password"; //密码
 	/**
 	 * 判断是否是第一次进入应用
 	 * 
@@ -114,6 +114,24 @@ public class SharedPrefUtil {
 	public static int getLoginType(Context context) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		return sp.getInt(LOGIN_TYPE, 0);
+	}
+	
+	/**
+	 * 保存登陆的方式
+	 * 
+	 * @param context
+	 * @param uid
+	 */
+	public static void setPassword(Context context, String passWord) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putString(PASSWORD, passWord);
+		e.commit();
+	}
+
+	public static String getPassword(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getString(PASSWORD, null);
 	}
 
 	// -----------------------------新浪微博验证信息-----------------

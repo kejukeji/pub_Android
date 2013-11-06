@@ -6,6 +6,7 @@ package com.maoba.activity.bar;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,7 +33,6 @@ import com.maoba.activity.LoginActivity;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.personalcenter.FriendPersonalCenter;
 import com.maoba.bean.BarBean;
-import com.maoba.bean.ResponseBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
@@ -99,7 +99,6 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	private void fillData() {
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
-		btnRight.setText("收 藏");
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
 		btnRight.setOnClickListener(this);
 		ivImage.setOnClickListener(this);
@@ -117,7 +116,6 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
-
 		// 距离
 		double latitude;
 		try {
@@ -188,16 +186,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.btnRight:
-			if (!SharedPrefUtil.isLogin(this)) {
-				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						openActivity(LoginActivity.class);
-					}
-				}, null, null);
-				return;
-			}
 			if (isCollectingTask == false) {
 				showShortToast("正在执行收藏操作,请稍等...");
 				// return;
@@ -205,12 +194,26 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			if (NetUtil.checkNet(this)) {
 				isCollectingTask = true;
 				new CollectTask().execute();
+				refreshData();
 			} else {
 				showShortToast(R.string.NoSignalException);
 			}
 			break;
+
 		default:
 			break;
+		}
+	}
+
+	/**
+	 * 刷新数据
+	 */
+	private void refreshData() {
+		if (NetUtil.checkNet(BarDetailActivity.this)) {
+			// pageIndex = 1;
+			new GetBarDetailTask().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
 		}
 	}
 
@@ -220,7 +223,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	 * 
 	 * */
 
-	public class GetBarDetailTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
+	public class GetBarDetailTask extends AsyncTask<Void, Void, JSONObject> {
 
 		@Override
 		protected void onPreExecute() {
@@ -233,42 +236,53 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		}
 
 		@Override
-		protected ResponseBean<BarBean> doInBackground(Void... params) {
+		protected JSONObject doInBackground(Void... params) {
 			Integer uid = SharedPrefUtil.getUid(BarDetailActivity.this);
-			if (uid == 0) {
-				try {
-					return new BusinessHelper().getBarDetail(bean.getBar_id());
-				} catch (SystemException e) {
-				}
-			} else {
-				try {
-					return new BusinessHelper().getBarDetail(bean.getBar_id(), uid);
-				} catch (SystemException e) {
-				}
+			try {
+				return new BusinessHelper().getBarDetail(bean.getBar_id(), uid);
+			} catch (SystemException e) {
 			}
 			return null;
 		}
 
 		@Override
-		protected void onPostExecute(ResponseBean<BarBean> result) {
+		protected void onPostExecute(JSONObject result) {
 			super.onPostExecute(result);
 			if (pd != null) {
 				pd.dismiss();
 			}
 			if (result != null) {
-				if (result.getStatus() != Constants.REQUEST_FAILD) {
-					barDetailList.addAll(result.getObjList1());
-					// if (barDetailList != null && barDetailList.size() > 0) {
-					// BarBean barDetail = barDetailList.get(0);
-					// }
-					showList.addAll(result.getObjList());
+				if (result.has("status")) {
+					try {
+						int status = result.getInt("status");
+						if (status == Constants.REQUEST_SUCCESS) {
+							btnRight.setText(result.getString("is_collect"));
+							if (result.has("picture_list")) {
+								JSONArray showArrList = result.getJSONArray("picture_list");
+								if (showArrList != null) {
+									ArrayList<BarBean> showBeans = (ArrayList<BarBean>) BarBean
+											.constractList(showArrList);
+									showList.addAll(showBeans);
+									fillShowList(showBeans);
+								}
+								JSONArray barDetailList1 = result.getJSONArray("pub_list");
+								ArrayList<BarBean> barDetailBeans = (ArrayList<BarBean>) BarBean
+										.constractList(barDetailList1);
+								barDetailList.addAll(barDetailBeans);
+							}
 
-					fillShowList(result.getObjList());
+						} else {
+							showShortToast("json解析错误");
+						}
+					} catch (JSONException e) {
 
+					}
 				}
+
 			} else {
-				showShortToast(R.string.connect_server_exception);
+				showShortToast("服务器连接失败");
 			}
+
 		}
 	}
 

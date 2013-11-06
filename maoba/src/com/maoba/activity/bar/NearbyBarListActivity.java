@@ -1,9 +1,11 @@
-package com.maoba.activity.my;
+/**
+ * 
+ */
+package com.maoba.activity.bar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,7 +17,6 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,51 +29,46 @@ import com.maoba.CommonApplication;
 import com.maoba.Constants;
 import com.maoba.R;
 import com.maoba.SystemException;
-import com.maoba.activity.bar.BarDetailActivity;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.bean.BarBean;
 import com.maoba.bean.ResponseBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
-import com.maoba.util.SharedPrefUtil;
 import com.maoba.util.StringUtil;
 
 /**
- * 我的收藏的酒吧例表
+ * 附近酒吧列表
  * 
  * @author zhouyong
- * @data 创建时间：2013-10-27 下午10:16:13
+ * @data 创建时间：2013-11-4 下午8:32:15
  */
-public class CollectionOfBarListActivity extends BaseActivity implements OnClickListener {
+public class NearbyBarListActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
-	private Button btnRight;
 	private TextView tvTitle;
-	private ListView lvCollBarList;
+
+	private ListView lvNearbyBarList;
 	private Adapter adapter;
-	private ArrayList<BarBean> list;
-	private CommonApplication app;
+	private ArrayList<BarBean> barList;
+
+	private int pageIndex = 1;
 
 	private View vFooter;
 	private ProgressBar pbFooter;
 	private TextView tvFooterMore;
 
-	private int pageIndex = 1;
-	private ProgressDialog pd;
+	private boolean isFilter = false;
 
-	private int userId;
-
-	private boolean isLoadMore = false;
 	private boolean isLoad = false;// 是否正在加载数据
+	private boolean isLoadMore = false;
 	private boolean isComplete = false;// 是否加载完了；
-	
-	private boolean isFilter = false; //是否清除
+
+	private CommonApplication app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.collection_bar_list);
-		
-		userId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
+		setContentView(R.layout.nearby_bar_list);
+
 		findView();
 		fillData();
 		app = (CommonApplication) getApplication();
@@ -81,36 +77,39 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		btnRight = (Button) findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
-		lvCollBarList = (ListView) findViewById(R.id.lvCollBarList);
+		tvTitle.setText("附近酒吧");
+
+		lvNearbyBarList = (ListView) this.findViewById(R.id.lvNearbyBar);
+
+		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
 		// 加载更多footer
 		vFooter = getLayoutInflater().inflate(R.layout.footer, null);
 		pbFooter = (ProgressBar) vFooter.findViewById(R.id.progressBar);
 		tvFooterMore = (TextView) vFooter.findViewById(R.id.tvMore);
 
+		if (NetUtil.checkNet(NearbyBarListActivity.this)) {
+			new GetNearbyBarListTask().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
+
 	}
 
 	private void fillData() {
 		ibLeft.setOnClickListener(this);
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
-		tvTitle.setText("酒吧收藏");
 
-		list = new ArrayList<BarBean>();
+		barList = new ArrayList<BarBean>();
 		adapter = new Adapter();
-		lvCollBarList.addFooterView(vFooter);
-		lvCollBarList.setAdapter(adapter);
-		lvCollBarList.setOnScrollListener(LoadListener);
-		lvCollBarList.setOnItemClickListener(itemListener);
-		lvCollBarList.setDivider(null);
-		lvCollBarList.setFooterDividersEnabled(false);
+		lvNearbyBarList.addFooterView(vFooter);
+		lvNearbyBarList.setAdapter(adapter);
+		lvNearbyBarList.setOnScrollListener(LoadListener);
+		lvNearbyBarList.setOnItemClickListener(itemListener);
+		lvNearbyBarList.setDivider(null);
+		lvNearbyBarList.setFooterDividersEnabled(false);
 
-		if (NetUtil.checkNet(this)) {
-			new GetCollBarListTask().execute();
-		} else {
-			showShortToast(R.string.NoSignalException);
-		}
 	}
 
 	@Override
@@ -119,7 +118,6 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 		case R.id.ibLeft:
 			finish();
 			break;
-
 		default:
 			break;
 		}
@@ -128,44 +126,23 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 	/**
 	 * listview点击事件
 	 */
-
 	OnItemClickListener itemListener = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-			if (arg2 >= list.size()) {
+			if (arg2 >= barList.size()) {
 				return;
 			}
-
-			BarBean bean = list.get(arg2);
-			// Bundle类用来携带数据
+			BarBean bean = barList.get(arg2);
 			Bundle b = new Bundle();
 			b.putSerializable(Constants.EXTRA_DATA, bean);
 			openActivity(BarDetailActivity.class, b);
 		}
 	};
-
 	/**
 	 * 滚动监听器
 	 */
 	OnScrollListener LoadListener = new OnScrollListener() {
-
-		@Override
-		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			// 滚动到最后，默认加载下一页
-			if (scrollState == OnScrollListener.SCROLL_STATE_IDLE && isLoadMore) {
-				if (NetUtil.checkNet(CollectionOfBarListActivity.this)) {
-					if (!isLoad && !isComplete) {
-						new GetCollBarListTask().execute();
-					}
-				} else {
-					showShortToast(R.string.NoSignalException);
-				}
-			} else {
-
-			}
-		}
-
 		@Override
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 			if (firstVisibleItem + visibleItemCount == totalItemCount) {
@@ -174,9 +151,29 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 				isLoadMore = false;
 			}
 		}
+
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+			// 滚动到最后，默认加载下一页
+			if (scrollState == OnScrollListener.SCROLL_STATE_IDLE && isLoadMore) {
+				if (NetUtil.checkNet(NearbyBarListActivity.this)) {
+					if (!isLoad && !isComplete) {
+						new GetNearbyBarListTask().execute();
+					}
+				} else {
+					showShortToast(R.string.NoSignalException);
+				}
+			} else {
+
+			}
+		}
 	};
 
-	private class GetCollBarListTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
+	/**
+	 * 获取附近酒吧列表
+	 * 
+	 */
+	public class GetNearbyBarListTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -185,46 +182,42 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 				pbFooter.setVisibility(View.VISIBLE);
 				tvFooterMore.setText(R.string.loading);
 			} else {
-				if (pd == null) {
-					pd = new ProgressDialog(CollectionOfBarListActivity.this);
-				}
-				pd.setMessage(getString(R.string.loading));
-				pd.show();
+				showPd(getString(R.string.loading));
 			}
-
 		}
 
 		@Override
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
-			int uid = SharedPrefUtil.getUid(CollectionOfBarListActivity.this);
+			// app.getLastLocation().getLatitude(),
+			// app.getLastLocation().getLongitude()
+
 			try {
-				if (uid == userId) {
-					return new BusinessHelper().getcollectBar(uid, pageIndex);
-				} else {
-					return new BusinessHelper().getcollectBar(userId, pageIndex);
-				}
+				return new BusinessHelper().getNearbyBarList(121, 31);
 			} catch (SystemException e) {
 			}
-
 			return null;
 		}
 
+		@Override
 		protected void onPostExecute(ResponseBean<BarBean> result) {
 			super.onPostExecute(result);
-			if (pd != null) {
-				pd.dismiss();
-			}
+			dismissPd();
 			pbFooter.setVisibility(View.GONE);
+			if (isFilter) {
+				barList.clear();
+			}
 			if (result.getStatus() != Constants.REQUEST_FAILD) {
+				// 这里获取到十条数据
 				List<BarBean> tempList = result.getObjList();
+				if (pageIndex == 1) {
+				}
 				boolean isLastPage = false;
 				if (tempList.size() > 0) {
-					list.addAll(tempList);
-					// 通知ListView刷新界面
-					adapter.notifyDataSetChanged();
+					barList.addAll(tempList);
+					adapter.notifyDataSetChanged(); // 通知更新
 					pageIndex++;
 				} else {
-					showShortToast("还没有收藏哦！");
+					showShortToast("您附近没有酒吧");
 					isLastPage = true;
 				}
 				if (isLastPage) {
@@ -241,65 +234,67 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 						tvFooterMore.setText("上拉查看更多");
 					}
 				}
-				if (pageIndex == 1 && tempList.size() == 0) {
+				if ((pageIndex == 1 || pageIndex == 2) && tempList.size() < Constants.PAGE_SIZE) {
 					tvFooterMore.setText("");
 				}
 
 			} else {
 				showShortToast(result.getError());
+				tvFooterMore.setText("");
 			}
+			adapter.notifyDataSetChanged();
 			isLoad = false;
+			isFilter = false;
 		}
+
 	}
 
 	/**
-	 * 收藏列表适配器
+	 * 适配器
 	 * 
-	 * */
+	 **/
+
 	public class Adapter extends BaseAdapter {
 
 		@Override
 		public int getCount() {
-			return list.size();
+			return barList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return list.get(position);
+			return barList.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
 			return position;
+
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
-			BarBean bean = list.get(position);
+			BarBean bean = barList.get(position);
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = getLayoutInflater().inflate(R.layout.collection_bar_item, null);
-				holder.tvCollBarName = (TextView) convertView.findViewById(R.id.tvCollBarName);
-				holder.tvCollDistanceLabel = (TextView) convertView.findViewById(R.id.tvCollDistanceLabel);
-				holder.tvCollTime = (TextView) convertView.findViewById(R.id.tvCollTime);
-				holder.ivCollImage = (ImageView) convertView.findViewById(R.id.ivCollImage);
+				convertView = getLayoutInflater().inflate(R.layout.bar_item, null);
+				holder.tvBarName = (TextView) convertView.findViewById(R.id.tvBarName);
+				holder.tvAddress = (TextView) convertView.findViewById(R.id.tvAddress);
+				holder.tvDistanceLabel = (TextView) convertView.findViewById(R.id.tvDistanceLabel);
+				holder.tvContent = (TextView) convertView.findViewById(R.id.tvcontent);
+				holder.ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
 				convertView.setTag(holder);
-
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-
-			holder.tvCollBarName.setText(bean.getBar_Name());
-			holder.tvCollTime.setText(bean.getCollectTime());
-
 			String url = bean.getImageUrl();
-			holder.ivCollImage.setTag(url);
+			holder.ivImage.setTag(url);
 			Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(url, new ImageCallback() {
 
 				@Override
 				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-					ImageView image = (ImageView) lvCollBarList.findViewWithTag(imageUrl);
+					ImageView image = (ImageView) lvNearbyBarList.findViewWithTag(imageUrl);
 					if (image != null) {
 						if (imageDrawable != null) {
 							image.setImageDrawable(imageDrawable);
@@ -310,10 +305,13 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 				}
 			});
 			if (cacheDrawble != null) {
-				holder.ivCollImage.setImageDrawable(cacheDrawble);
+				holder.ivImage.setImageDrawable(cacheDrawble);
 			} else {
-				holder.ivCollImage.setImageResource(R.drawable.ic_default);
+				holder.ivImage.setImageResource(R.drawable.ic_default);
 			}
+			holder.tvBarName.setText(bean.getBar_Name());
+			holder.tvAddress.setText(bean.getBar_Address());
+			holder.tvContent.setText(bean.getBar_Intro());
 
 			double latitude;
 			try {
@@ -332,12 +330,12 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 						.getLongitude(), latitude, longitude);
 				if (distance > 1000) {
 					distance = distance / 1000;
-					holder.tvCollDistanceLabel.setText(String.format("%.1f", distance) + "km");
+					holder.tvDistanceLabel.setText(String.format("%.1f", distance) + "km");
 				} else {
-					holder.tvCollDistanceLabel.setText(String.format("%.0f", distance) + "m");
+					holder.tvDistanceLabel.setText(String.format("%.0f", distance) + "m");
 				}
 			} else {
-				holder.tvCollDistanceLabel.setText("");
+				holder.tvDistanceLabel.setText("");
 			}
 			return convertView;
 		}
@@ -345,8 +343,8 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 	}
 
 	class ViewHolder {
-		private TextView tvCollBarName, tvCollDistanceLabel, tvCollTime;
-		private ImageView ivCollImage;
+		private TextView tvBarName, tvDistanceLabel, tvAddress, tvContent;
+		private ImageView ivImage;
 	}
 
 }

@@ -36,6 +36,7 @@ import com.tencent.tauth.UiError;
 import com.umeng.analytics.MobclickAgent;
 
 /**
+ * 登录界面
  * 
  * @author zhouyong
  * @data 创建时间：2013-10-16 下午1:23:52
@@ -90,6 +91,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 		btn = (Button) this.findViewById(R.id.btn);
 		btn.setOnClickListener(this);
+
+		if (!SharedPrefUtil.isLogin(this)) {
+
+		} else {
+			openActivity(MainActivity.class);
+		}
 	}
 
 	private void fillData() {
@@ -109,6 +116,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			if (NetUtil.checkNet(LoginActivity.this)) {
 				logintype = Constants.LOGIN_COMMON;// 表示普通登陆
 				SharedPrefUtil.setLoginType(LoginActivity.this, logintype);
+				SharedPrefUtil.setPassword(LoginActivity.this, passWord);
 				new LoginTask(logintype, userName, passWord).execute();
 			} else {
 				showShortToast(R.string.NoSignalException);

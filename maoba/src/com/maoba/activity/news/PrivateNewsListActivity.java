@@ -146,6 +146,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 			break;
 		case R.id.btnRight:
 			if (NetUtil.checkNet(PrivateNewsListActivity.this)) {
+				isFilter = true;
 				new ClearTask().execute();
 			} else {
 				showShortToast(R.string.NoSignalException);
@@ -167,9 +168,8 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 				return;
 			}
 			NewsBean bean = newsListBean.get(arg2);
-
 			Bundle b = new Bundle();
-			b.putSerializable(Constants.EXTRA_DATA, bean);
+			b.putSerializable(Constants.EXTRA_DATA, bean.getFriendId());
 			openActivity(PrivateLetterActivity.class, b);
 		}
 	};
@@ -249,7 +249,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 					newsAdapter.notifyDataSetChanged(); // 通知更新
 					pageIndex++;
 				} else {
-
+                    showShortToast("你没有私信会话列表,快找好友聊天去吧");
 					isLastPage = true;
 				}
 				if (isLastPage) {
@@ -344,11 +344,10 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 			}
 
 			if (spannableString != null) {
-				 viewHolder.tvContent.setText(spannableString);
+				viewHolder.tvContent.setText(spannableString);
 			} else {
-				 viewHolder.tvContent.setText(contentStr);
+				viewHolder.tvContent.setText(contentStr);
 			}
-
 
 			String sendTime = DateUtil.getConversationTime(bean.getSendTime());
 			viewHolder.tvCreateTime.setText(sendTime);
@@ -399,18 +398,14 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (pd == null) {
-				pd = new ProgressDialog(PrivateNewsListActivity.this);
-			}
-			pd.setMessage("正在清除...");
-			pd.show();
+			showPd("正在删除...");
 		}
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(PrivateNewsListActivity.this);
 			try {
-				return new BusinessHelper().getClear(uid);
+				return new BusinessHelper().getClear(2);
 			} catch (SystemException e) {
 			}
 			return null;
@@ -419,9 +414,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			super.onPostExecute(result);
-			if (pd != null) {
-				pd.dismiss();
-			}
+			dismissPd();
 			if (result != null) {
 				if (result.has("status")) {
 					try {
@@ -437,6 +430,8 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 					showShortToast("Json解析错误");
 				}
 
+			} else {
+				showShortToast("没有信息可删除哦");
 			}
 
 		}

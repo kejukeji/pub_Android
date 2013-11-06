@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
+
 import com.maoba.helper.BusinessHelper;
 
 /**
@@ -24,7 +26,7 @@ public class BarBean implements Serializable {
 	private static final long serialVersionUID = 4617043918315208981L;
 	private int bar_id;
 	private int userId;
-	
+
 	private String bar_Name;
 	private String bar_Address;
 	private String imageUrl;
@@ -36,9 +38,19 @@ public class BarBean implements Serializable {
 	private String barType;
 	private String barEnviromentPhoto;
 	private String collectTime;
-	
+
+	private String screenAreaName;// 筛选的地区
+	private int cityId;// 筛选城市的id
+
 	private String latitude;// 纬度（跳转地图时，纬度放在前面）
 	private String longitude;// 经度
+
+	
+	private List<BarBean> list = new ArrayList<BarBean>();
+	public BarBean(int id, String screenAreaName) {
+		super();
+		this.screenAreaName = screenAreaName;
+	}
 
 	/**
 	 * @param obj
@@ -90,10 +102,25 @@ public class BarBean implements Serializable {
 		if (obj.has("pic_path")) {
 			this.barEnviromentPhoto = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
-		
+
 		if (obj.has("difference")) {
 			this.collectTime = obj.getString("difference");
 		}
+
+		// 筛选
+		if (obj.has("area_id")) {
+			this.cityId = obj.getInt("area_id");
+		}
+
+		if (obj.has("name")) {
+			this.screenAreaName = obj.getString("name");
+		}
+
+		if (obj.has("county") && !TextUtils.isEmpty(obj.getString("county"))) {// 政策里二级分类
+			this.list.add(new BarBean(0, this.screenAreaName));
+			this.list.addAll(BarBean.constractList(obj.getJSONArray("county")));
+		}
+
 	}
 
 	/**
@@ -115,7 +142,7 @@ public class BarBean implements Serializable {
 	public void setBar_id(int bar_id) {
 		this.bar_id = bar_id;
 	}
-	
+
 	public int getUserId() {
 		return userId;
 	}
@@ -227,6 +254,22 @@ public class BarBean implements Serializable {
 	public void setCollectTime(String collectTime) {
 		this.collectTime = collectTime;
 	}
-	
+
+	// 筛选
+	public String getScreenAreaName() {
+		return screenAreaName;
+	}
+
+	public void setScreenAreaName(String screenAreaName) {
+		this.screenAreaName = screenAreaName;
+	}
+
+	public int getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(int cityId) {
+		this.cityId = cityId;
+	}
 
 }

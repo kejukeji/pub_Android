@@ -37,4 +37,9 @@
         <item name="android:cacheColorHint" >@android:color/transparent</item>
         <item name="android:fadingEdge" >none</item>
     </style >
+    
+	<style name="PopupWindowAnimation">  
+        <item name="android:windowEnterAnimation">@anim/popshow_anim</item>  
+        <item name="android:windowExitAnimation">@anim/pophidden_anim</item>  
+    </style>
 </resources>

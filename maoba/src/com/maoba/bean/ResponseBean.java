@@ -17,11 +17,13 @@ public class ResponseBean<T> {
 	private String error;
 	private T obj;
 	private List<T> objList;
-
 	private Map<String, List<T>> objMap;
 
 	private List<T> objList1;
 	private Map<String, List<T>> objMap1;
+	
+	private List<T> objList2;
+	private Map<String, List<T>> objMap2;
 
 	private String jsonData;
 
@@ -137,5 +139,23 @@ public class ResponseBean<T> {
 	public void setObjMap1(Map<String, List<T>> objMap1) {
 		this.objMap1 = objMap1;
 	}
+
+	public List<T> getObjList2() {
+		return objList2;
+	}
+
+	public void setObjList2(List<T> objList2) {
+		this.objList2 = objList2;
+	}
+
+	public Map<String, List<T>> getObjMap2() {
+		return objMap2;
+	}
+
+	public void setObjMap2(Map<String, List<T>> objMap2) {
+		this.objMap2 = objMap2;
+	}
+	
+	
 
 }

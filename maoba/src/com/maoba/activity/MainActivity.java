@@ -44,6 +44,12 @@ import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
 import com.maoba.view.GridViewInScrollView;
 import com.maoba.view.slidingmenu.SlidingMenu;
+/**
+ * 首页
+ * 
+ * @author zhuoyong
+ * @data 创建时间：2013-10-15 下午2:52:49
+ */
 
 public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener {
 	private SlidingMenu sm;
@@ -145,7 +151,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		case R.id.rlCollect:
 			if (!SharedPrefUtil.isLogin(this)) {
 				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
-
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						openActivity(LoginActivity.class);

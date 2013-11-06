@@ -10,9 +10,10 @@ import android.view.animation.Animation.AnimationListener;
 
 import com.maoba.CommonApplication;
 import com.maoba.R;
+import com.maoba.activity.base.BaseActivity;
 import com.maoba.util.SharedPrefUtil;
 
-public class LogoActivity extends Activity {
+public class LogoActivity extends BaseActivity {
 	private View viewLogo;
 
 	@Override
@@ -31,17 +32,17 @@ public class LogoActivity extends Activity {
 		AlphaAnimation aa = new AlphaAnimation(1.0f, 1.0f);
 		aa.setDuration(2000);
 		viewLogo.startAnimation(aa);
-		aa.setAnimationListener(new AnimationListener() {
-			public void onAnimationEnd(Animation arg0) {
-				startActivity(new Intent(LogoActivity.this, MainActivity.class));
-				finish();
-			}
+			aa.setAnimationListener(new AnimationListener() {
+				public void onAnimationEnd(Animation arg0) {
+					startActivity(new Intent(LogoActivity.this, LoginActivity.class));
+					finish();
+				}
 
-			public void onAnimationRepeat(Animation animation) {
-			}
+				public void onAnimationRepeat(Animation animation) {
+				}
 
-			public void onAnimationStart(Animation animation) {
-			}
-		});
+				public void onAnimationStart(Animation animation) {
+				}
+			});
 	}
 }

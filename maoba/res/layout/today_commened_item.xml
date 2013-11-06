@@ -11,7 +11,7 @@
 
         <ImageView
             android:id="@+id/ivPhoto"
-            android:layout_width="130dp"
+            android:layout_width="100dp"
             android:layout_height="95dp"
             android:scaleType="centerCrop" />
     </LinearLayout>

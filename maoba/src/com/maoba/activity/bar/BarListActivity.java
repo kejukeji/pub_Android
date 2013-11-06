@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -51,11 +53,13 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
 	private Button btnRight;
 	private TextView tvTitle;
+	private View llCommon;
 
 	private ListView lvBarList;
 	private Adapter adapter;
 	private ArrayList<BarBean> barList;
 	private List<BarBean> hotList = new ArrayList<BarBean>();// 热门推荐酒吧
+	private List<BarBean> ScreenAreaList;// 地区
 
 	private LinearLayout viewMenuList;
 
@@ -76,6 +80,9 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private ProgressDialog pd;
 	private CommonApplication app;
 
+	private ImageView ivScreenArea;// 筛选地区
+	private TextView tvNearbyBar;// 附近酒啊
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,6 +98,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		btnRight = (Button) this.findViewById(R.id.btnRight);
+		llCommon = findViewById(R.id.llCommon);
 		lvBarList = (ListView) this.findViewById(R.id.lvBarList);
 
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
@@ -104,6 +112,9 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		// 今日推荐
 		viewMenuList = (LinearLayout) this.findViewById(R.id.viewMenuList);
 
+		ivScreenArea = (ImageView) this.findViewById(R.id.ivScreenArea);
+		tvNearbyBar = (TextView) this.findViewById(R.id.tvNearbyBar);
+
 	}
 
 	private void fillData() {
@@ -114,15 +125,20 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
 		btnRight.setText("搜索");
 
+		ivScreenArea.setOnClickListener(this);
+		tvNearbyBar.setOnClickListener(this);
+
 		barList = new ArrayList<BarBean>();
 		adapter = new Adapter();
 		lvBarList.addFooterView(vFooter);
 		lvBarList.setAdapter(adapter);
-		lvBarList.setDividerHeight(0);
 		lvBarList.setOnScrollListener(LoadListener);
 		lvBarList.setOnItemClickListener(itemListener);
 		lvBarList.setDivider(null);
 		lvBarList.setFooterDividersEnabled(false);
+
+		ScreenAreaList = new ArrayList<BarBean>();// 地区
+		ScreenAreaList.add(new BarBean(0, "全部地区"));
 
 		if (NetUtil.checkNet(BarListActivity.this)) {
 			new GetBarListTask().execute();
@@ -140,6 +156,13 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.btnRight:
 			openActivity(SearchActivity.class);
+			break;
+		case R.id.ivScreenArea:
+			showScreenAreaPopuWindow();
+			break;
+		case R.id.tvNearbyBar:
+			openActivity(NearbyBarListActivity.class);
+			break;
 		default:
 			break;
 		}
@@ -193,6 +216,213 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	};
 
 	/**
+	 * 显示筛选地区 使用的方法是PopuWindow
+	 * 
+	 */
+	private PopupWindow pw;
+	private int displayHeight;
+	private int displayWidth;
+	private ListView lvScreenArea;
+	private ScreenAreaAdapter screenAdapter;
+
+	private void showScreenAreaPopuWindow() {
+
+		displayWidth = (BarListActivity.this).getWindowManager().getDefaultDisplay().getWidth();
+		displayHeight = (BarListActivity.this).getWindowManager().getDefaultDisplay().getHeight();
+		int maxHeight = (int) (displayHeight * 0.8);
+		int maxWidth = (int) (displayWidth * 0.9);
+		// 获取左边按钮的x和y坐标
+		int[] location = new int[2];
+		llCommon.getLocationInWindow(location);
+		int x = location[0];
+		int y = location[1];
+
+		View view = LayoutInflater.from(this).inflate(R.layout.popu_data_picker_list, null);
+		lvScreenArea = (ListView) view.findViewById(R.id.lvScreenArea);
+		pw = new PopupWindow(view, maxWidth, maxHeight);
+		pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_date_picker));
+		pw.setAnimationStyle(R.style.PopupWindowAnimation);
+		// 设置焦点，必须设置，否则listView无法响应
+		pw.setFocusable(true);
+		// 设置点击其他地方 popupWindow消失
+		pw.setOutsideTouchable(true);
+		// pw.showAsDropDown(btnLeft);
+		pw.showAsDropDown(llCommon, x + 25, y - 35);
+		screenAdapter = new ScreenAreaAdapter();
+		lvScreenArea.setAdapter(screenAdapter);
+		lvScreenArea.addFooterView(vFooter);
+		lvScreenArea.setDivider(null);
+		lvScreenArea.setOnItemClickListener(ItemListener1);
+
+	}
+
+	/**
+	 * 筛选地区点击 listview点击事件
+	 */
+	OnItemClickListener ItemListener1 = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			if (arg2 >= ScreenAreaList.size()) {
+				return;
+			}
+			if (arg2 == 0) {
+				if (NetUtil.checkNet(BarListActivity.this)) {
+					isFilter = true;
+					new GetScreenAreaTask(0, bean.getId()).execute();
+				} else {
+					showShortToast(R.string.NoSignalException);
+				}
+			} else {
+				BarBean bean1 = ScreenAreaList.get(arg2);
+				if (NetUtil.checkNet(BarListActivity.this)) {
+					isFilter = true;
+					new GetScreenAreaTask(bean1.getCityId(), bean.getId()).execute();
+				} else {
+					showShortToast(R.string.NoSignalException);
+				}
+			}
+
+			pw.dismiss();
+		}
+	};
+
+	/**
+	 * 
+	 * 筛选地区适配器
+	 * 
+	 * */
+	private class ScreenAreaAdapter extends BaseAdapter {
+
+		@Override
+		public int getCount() {
+			return ScreenAreaList.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return screenAdapter.getItem(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			BarBean bean = ScreenAreaList.get(position);
+			ViewHolder holder = null;
+			if (convertView == null) {
+				holder = new ViewHolder();
+				convertView = getLayoutInflater().inflate(R.layout.popu_data_picker_item, null);
+				holder.tvScreenArea = (TextView) convertView.findViewById(R.id.tvScreenArea);
+				holder.creenArealine = (View) convertView.findViewById(R.id.creenArealine);
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+			if (position == 0) {
+				holder.tvScreenArea.setTextColor(0xFF2D9849);
+				holder.creenArealine.setBackgroundResource(R.drawable.bg_bar_details_line1);
+			} else{
+				holder.tvScreenArea.setTextColor(0xFF101010);
+				holder.creenArealine.setBackgroundResource(R.drawable.bg_bar_details_line);
+			}
+			holder.tvScreenArea.setText(bean.getScreenAreaName());
+			return convertView;
+		}
+
+		class ViewHolder {
+			private TextView tvScreenArea;
+			private View creenArealine;
+		}
+
+	}
+
+	/**
+	 * 地区酒吧筛选
+	 * 
+	 */
+	private class GetScreenAreaTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
+		private int cityId, barId;
+		private int pageIndex1 = 1;
+
+		/**
+		 * @param cityId
+		 * @param barId
+		 */
+		public GetScreenAreaTask(int cityId, int barId) {
+			this.cityId = cityId;
+			this.barId = barId;
+
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd(R.string.loading);
+
+		}
+
+		@Override
+		protected ResponseBean<BarBean> doInBackground(Void... params) {
+			try {
+				return new BusinessHelper().getScreenArea(cityId, pageIndex1, barId);
+			} catch (SystemException e) {
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(ResponseBean<BarBean> result) {
+			super.onPostExecute(result);
+			dismissPd();
+			pbFooter.setVisibility(View.GONE);
+			if (isFilter) {
+				barList.clear();
+			}
+			if (result.getStatus() != Constants.REQUEST_FAILD) {
+				List<BarBean> tempList = result.getObjList();
+				boolean isLastPage = false;
+				if (tempList.size() > 0) {
+					barList.addAll(tempList);
+					adapter.notifyDataSetChanged(); // 通知更新
+					pageIndex++;
+				} else {
+					showShortToast("该地区没有相应的酒吧...");
+					isLastPage = true;
+				}
+				if (isLastPage) {
+					pbFooter.setVisibility(View.GONE);
+					tvFooterMore.setText(R.string.load_all);
+					isComplete = true;
+				} else {
+					if (tempList.size() > 0 && tempList.size() < Constants.PAGE_SIZE) {
+						pbFooter.setVisibility(View.GONE);
+						tvFooterMore.setText(R.string.load_all);
+						isComplete = true;
+					} else {
+						pbFooter.setVisibility(View.GONE);
+						tvFooterMore.setText("上拉查看更多");
+					}
+				}
+				if ((pageIndex == 1 || pageIndex == 2) && tempList.size() < Constants.PAGE_SIZE) {
+					tvFooterMore.setText("");
+				}
+
+			} else {
+				showShortToast(result.getError());
+				tvFooterMore.setText("");
+			}
+			adapter.notifyDataSetChanged();
+			isLoad = false;
+			isFilter = false;
+		}
+
+	}
+
+	/**
 	 * 获取酒吧列表
 	 * 
 	 */
@@ -230,7 +460,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			}
 			pbFooter.setVisibility(View.GONE);
 			if (isFilter) {
-				barList.clear();
+				barList.clear(); // 就是如果是筛选 就清除listview数据
 			}
 			if (result.getStatus() != Constants.REQUEST_FAILD) {
 				// 这里获取到十条数据
@@ -238,6 +468,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				if (pageIndex == 1) {
 					hotList.addAll(result.getObjList1());
 					fillTodayRecommend(result.getObjList1());
+					ScreenAreaList.addAll(result.getObjList2());
 				}
 				boolean isLastPage = false;
 				if (tempList.size() > 0) {
@@ -261,7 +492,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 						tvFooterMore.setText("上拉查看更多");
 					}
 				}
-				if ((pageIndex == 1 || pageIndex == 2) && tempList.size() < Constants.PAGE_SIZE) {
+				if (pageIndex == 1 && tempList.size() == 0) {
 					tvFooterMore.setText("");
 				}
 
@@ -351,7 +582,9 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public long getItemId(int position) {
+
 			return position;
+
 		}
 
 		@Override

@@ -21,9 +21,10 @@
 
             <ImageView
                 android:id="@+id/ivSettingUserPhoto"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="fitCenter"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:scaleType="fitXY"
+               android:layout_marginTop="20dp"
                 android:src="@drawable/left_menu_userimage" />
 
             <TextView
@@ -42,7 +43,7 @@
                 android:id="@+id/tvsignaTure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textColor="#B4B4B4"

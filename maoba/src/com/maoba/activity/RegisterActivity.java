@@ -96,6 +96,8 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 			}
 			if (NetUtil.checkNet(this)) {
 				logintype = Constants.LOGIN_COMMON;
+				SharedPrefUtil.setLoginType(RegisterActivity.this, logintype);
+				SharedPrefUtil.setPassword(RegisterActivity.this, passWord);
 				new RegisterTask(logintype, userName, eMail, passWord).execute();
 			} else {
 				showShortToast(R.string.NoSignalException);
@@ -193,7 +195,8 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 		protected JSONObject doInBackground(Void... params) {
 			try {
 				if (isThirdLogin) {
-				//	return new BusinessHelper().thirdLogin(logintype, openId);
+					// return new BusinessHelper().thirdLogin(logintype,
+					// openId);
 				} else {
 					return new BusinessHelper().register(logintype, userName, eMail, passWord);
 				}
@@ -217,6 +220,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 						int uid = userJson.getInt("id");
 						SharedPrefUtil.setUid(RegisterActivity.this, uid);
 						setResult(RESULT_OK);
+						openActivity(MainActivity.class);
 						finish();
 					} else {
 						showShortToast(result.getString("message"));
