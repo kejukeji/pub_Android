@@ -2,6 +2,8 @@ package com.maoba.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -21,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +32,7 @@ import com.maoba.Constants;
 import com.maoba.R;
 import com.maoba.SystemException;
 import com.maoba.activity.bar.BarListActivity;
-import com.maoba.activity.base.BaseActivity;
+import com.maoba.activity.base.BaseSlidingFragmentActivity;
 import com.maoba.activity.my.CollectionOfBarListActivity;
 import com.maoba.activity.news.NewsActivity;
 import com.maoba.activity.personalcenter.PersonalCenter;
@@ -43,22 +43,18 @@ import com.maoba.util.AndroidUtil;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
 import com.maoba.view.GridViewInScrollView;
-import com.maoba.view.MyHorizontalScrollView;
-import com.maoba.view.MyHorizontalScrollView.SizeCallback;
+import com.maoba.view.slidingmenu.SlidingMenu;
 
-public class MainActivity extends BaseActivity implements OnClickListener {
-	private MyHorizontalScrollView scrollView; // 水平滑动控件按钮
-	private static View settingView;// 设置界面
-	private static View homeView;// 主界
-	private static View currentView;// 当前显示的view
-
+public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener {
+	private SlidingMenu sm;
+	//侧边栏
 	private LinearLayout rlCollect;// 收藏
 	private LinearLayout rlInfromation;// 信息
 	private LinearLayout rlSetting;// 设置
 	private LinearLayout viewSettingTitle;
-
 	private ImageView ivSettingUserPhoto;
 	private TextView tvsignaTure;
+	//主页
 	private Button btnLeftMenu;
 	private int screenWidth;
 	private ImageView ivTop;
@@ -68,29 +64,44 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private Adapter adapter;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Display display = this.getWindowManager().getDefaultDisplay();
 		screenWidth = display.getWidth();
+		initSlidingMenu();
 		findView();
 		fillData();
 	}
 
+	/**
+	 * 初始化SlidingMenu
+	 */
+	private void initSlidingMenu() {
+		setBehindContentView(R.layout.left_menu);
+		// customize the SlidingMenu
+		sm = getSlidingMenu();
+		sm.setShadowWidthRes(R.dimen.shadow_width);
+		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		// sm.setFadeDegree(0.35f);
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+		sm.setShadowDrawable(R.drawable.slidingmenu_shadow);
+		// sm.setShadowWidth(20);
+		sm.setBehindScrollScale(0);
+	}
+
 	private void findView() {
-		// 设置界面
-		LayoutInflater inflater = LayoutInflater.from(this);
-		scrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.main, null);// 加载水平滑动控件按钮
-		setContentView(scrollView);
 
-		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界
-		setContentView(scrollView);
+		btnLeftMenu = (Button) findViewById(R.id.btnLeftMenu);// 头部界面左边按钮控件
+		btnLeftMenu.setOnClickListener(this);
+		ivTop = (ImageView) findViewById(R.id.ivTop);
+		gvBarType = (GridViewInScrollView) findViewById(R.id.gvBarType);
+		tvTop = (TextView) findViewById(R.id.tvTop);
 
-		/************************** 侧边栏 **********************/
-		settingView = inflater.inflate(R.layout.left_menu, null);// 加载左边菜单栏界
-
+		
+		View settingView = getLayoutInflater().inflate(R.layout.left_menu, null);
 		ivSettingUserPhoto = (ImageView) settingView.findViewById(R.id.ivSettingUserPhoto);
-		tvsignaTure = (TextView)settingView.findViewById(R.id.tvsignaTure);
+		tvsignaTure = (TextView) settingView.findViewById(R.id.tvsignaTure);
 		rlCollect = (LinearLayout) settingView.findViewById(R.id.rlCollect);
 		rlInfromation = (LinearLayout) settingView.findViewById(R.id.rlInfromation);
 		rlSetting = (LinearLayout) settingView.findViewById(R.id.rlSetting);
@@ -100,19 +111,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		rlInfromation.setOnClickListener(this);
 		rlSetting.setOnClickListener(this);
 		viewSettingTitle.setOnClickListener(this);
-		/************************** 主页 **********************/
-
-		homeView = inflater.inflate(R.layout.home, null);// 加载头部按钮界面
-		btnLeftMenu = (Button) homeView.findViewById(R.id.btnLeftMenu);// 头部界面左边按钮控件
-		btnLeftMenu.setOnClickListener(new ClickListenerForScrolling(scrollView, settingView));
-		ivTop = (ImageView) homeView.findViewById(R.id.ivTop);
-		gvBarType = (GridViewInScrollView) homeView.findViewById(R.id.gvBarType);
-		tvTop = (TextView) homeView.findViewById(R.id.tvTop);
-
-		final View[] children = new View[] { settingView, homeView };
-		int scrollToViewIdx = 1;
-		scrollView.initViews(children, scrollToViewIdx, new SizeCallbackForMenu(btnLeftMenu));
-		currentView = homeView;
 
 	}
 
@@ -143,6 +141,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.btnLeftMenu:
+			showMenu();
+			break;
 		case R.id.rlCollect:
 			if (!SharedPrefUtil.isLogin(this)) {
 				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
@@ -196,103 +197,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				}, null, null);
 				return;
 			}
-			
+
 			openActivity(PersonalCenter.class);
 			break;
 		default:
 			break;
 		}
 
-	}
-
-	static int left = 0;
-	static boolean leftMenuOut = false;
-
-	/**
-	 * Menu must NOT be out/shown to start with.
-	 */
-	public static class ClickListenerForScrolling implements OnClickListener {
-		private View view;
-		private HorizontalScrollView scrollView;
-
-		/**
-		 * @param scrollView
-		 * @param settingView
-		 * 
-		 */
-		public ClickListenerForScrolling(HorizontalScrollView scrollView, View settingView) {
-			super();
-			this.view = settingView;
-			this.scrollView = scrollView;
-		}
-
-		@Override
-		public void onClick(View v) {
-			// Log.i(TAG, "menu---onClick");
-			if (v.getId() != R.id.btnLeftMenu && left > 0) {
-				return;
-			}
-			int viewWidth = view.getMeasuredWidth();
-			// Ensure menu is visible
-			view.setVisibility(View.VISIBLE);
-			if (v.getId() == R.id.btnLeftMenu) {
-				if (!leftMenuOut) {
-					/* 根据分辨来辨�?偏移 各种分辨率偏移是不一样的 */
-					int offset = 0;
-					left = 0;
-					if (viewWidth <= 320) {
-						offset = 20;
-					} else if (viewWidth <= 480) {
-						offset = 30;
-					} else {
-						offset = 40;
-					}
-
-					scrollView.smoothScrollTo(left + offset, 0);
-					currentView = settingView;// 将左侧菜单栏给当前的view
-				} else {
-					left = viewWidth;
-					scrollView.smoothScrollTo(left, 0);
-					currentView = homeView;// 将主界面给当前的view
-				}
-				leftMenuOut = !leftMenuOut;
-			}
-		}
-
-	}
-
-	/**
-	 * Helper that remembers the width of the 'slide' button, so that the
-	 * 'slide' button remains in view, even when the menu is showing.
-	 */
-	static class SizeCallbackForMenu implements SizeCallback {
-		int btnWidth;
-		View btnLeftMenu;
-
-		public SizeCallbackForMenu(View btnSlide) {
-			super();
-			this.btnLeftMenu = btnSlide;
-		}
-
-		@Override
-		public void onGlobalLayout() {
-			btnWidth = btnLeftMenu.getMeasuredWidth();
-			System.out.println("btnWidth=" + btnWidth);
-		}
-
-		@Override
-		public void getViewSize(int idx, int w, int h, int[] dims) {
-			dims[0] = w;
-			dims[1] = h;
-			// final int menuIdx = 0;
-			// if (idx == menuIdx) {
-			// dims[0] = w - btnWidth;
-			// }
-			if (idx != 1) {
-				// 当视图不是中间的视图
-				dims[0] = w - btnWidth;
-			}
-		}
 	}
 
 	/**
@@ -367,7 +278,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					showShortToast(R.string.json_exception);
 				}
 			} else {
-				
+
 				ivSettingUserPhoto.setImageResource(R.drawable.bg_show11);
 				tvsignaTure.setText("未设置");
 			}
@@ -444,7 +355,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 		}
 	}
-
+	
 	/**
 	 * 酒吧类型适配
 	 * 
@@ -512,19 +423,39 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			private TextView tvBarType;
 		}
 	}
+	/**
+	 * 连续按两次返回键就退出
+	 */
+	private int keyBackClickCount=0;
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		keyBackClickCount=0;
+	}
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-			showAlertDialog(R.string.msg, R.string.logout, new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			switch (keyBackClickCount++) {
+				case 0:
+					showShortToast("请再按次返回键退出");
+					Timer timer = new Timer();
+					timer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							keyBackClickCount=0;
+						}
+					}, 3000);
+					break;
+				case 1:
+					defaultFinish();
 					AndroidUtil.exitApp(MainActivity.this);
-				}
-			}, null, null);
+					break;
+				default:
+					break;
+			}
 			return true;
-		}
+		} 
 		return super.onKeyDown(keyCode, event);
 	}
 }
