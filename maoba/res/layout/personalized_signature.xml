@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#E3E4E8">
+    <include layout="@layout/common_title_bar"/>
+	<EditText 
+	    android:layout_height="150dp"
+	    android:layout_width="match_parent"
+	    android:id="@+id/edpersonalsignature"
+	    android:layout_marginTop="20dp"
+	    android:layout_marginLeft="30dp"
+	    android:layout_marginRight="30dp"
+	    android:hint="还可以输入30个字..."
+	    android:gravity="top"
+	    
+	    android:maxLength="30"
+	    android:background="@drawable/bg_input"
+	    android:paddingTop="10dp"
+	    android:paddingLeft="10dp"
+	    android:textSize="@dimen/SmallTextSize"
+	    />    
+
+</LinearLayout>

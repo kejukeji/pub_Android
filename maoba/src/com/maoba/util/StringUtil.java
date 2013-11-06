@@ -196,4 +196,9 @@ public class StringUtil {
 
         return Math.rint(distance);
     }
+
+	public static String getExceptionInfo(Exception e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

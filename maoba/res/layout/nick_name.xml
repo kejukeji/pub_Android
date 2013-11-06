@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#E3E4E8">
+    <include layout="@layout/common_title_bar"/>
+	<EditText 
+	    android:layout_height="wrap_content"
+	    android:layout_width="match_parent"
+	    android:id="@+id/ednickname"
+	    android:layout_marginTop="20dp"
+	    android:layout_marginLeft="30dp"
+	    android:layout_marginRight="30dp"
+	    android:hint="请输入您的昵称..."
+	    android:gravity="center_vertical"
+	    android:maxLines="1"
+	    android:lines="1"
+	    android:maxLength="10"
+	    android:background="@drawable/bg_input"
+	    android:textSize="@dimen/BasicTextSize"
+	    android:paddingLeft="10dp"
+	    android:paddingTop="5dp"
+	    android:paddingBottom="5dp"
+		
+	    />
+	<TextView 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	     android:layout_marginLeft="30dp"
+	    android:layout_marginRight="30dp"
+	    android:layout_marginTop="10dp"
+	    android:text="响亮的名字更容易让好友记住你哦！"
+	    android:textSize="@dimen/SmallTextSize"
+	    android:textColor="@color/dark_text"
+	    />    
+</LinearLayout>

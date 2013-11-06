@@ -1,19 +1,21 @@
 package com.maoba.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -142,6 +144,25 @@ public class ImageUtil {
 		opts.inJustDecodeBounds = false;
 		Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), drawableId, opts);
 		return bitmap;
+	}
+	/**
+	 * 头像文件名
+	 * 
+	 * @param sid
+	 * @return
+	 */
+	public static String createAvatarFileName(String sid) {
+		return "avatar_" + sid + ".jpg";
+	}
+
+	/**
+	 * 用当前时间给取得的图片命名
+	 * 
+	 */
+	public static String getPhotoFileName() {
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmsss");
+		return dateFormat.format(date) + ".jpg";
 	}
 
 }
