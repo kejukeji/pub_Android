@@ -242,6 +242,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		pw = new PopupWindow(view, maxWidth, maxHeight);
 		pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_date_picker));
 		pw.setAnimationStyle(R.style.PopupWindowAnimation);
+		pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_lightransparent));
 		// 设置焦点，必须设置，否则listView无法响应
 		pw.setFocusable(true);
 		// 设置点击其他地方 popupWindow消失

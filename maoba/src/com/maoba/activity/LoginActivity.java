@@ -63,7 +63,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		MobclickAgent.onError(this);
-		MobclickAgent.onEvent(this, "login");
 		findView();
 		fillData();
 	}
@@ -92,11 +91,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		btn = (Button) this.findViewById(R.id.btn);
 		btn.setOnClickListener(this);
 
-		if (!SharedPrefUtil.isLogin(this)) {
-
-		} else {
-			openActivity(MainActivity.class);
-		}
 	}
 
 	private void fillData() {

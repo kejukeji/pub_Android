@@ -1,6 +1,5 @@
 package com.maoba.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +21,6 @@ public class LogoActivity extends BaseActivity {
 		setContentView(R.layout.logo);
 		viewLogo = findViewById(R.id.viewLogo);
 		animation();
-		((CommonApplication) getApplication()).addActivity(this);
 	}
 
 	/**
@@ -34,7 +32,11 @@ public class LogoActivity extends BaseActivity {
 		viewLogo.startAnimation(aa);
 			aa.setAnimationListener(new AnimationListener() {
 				public void onAnimationEnd(Animation arg0) {
-					startActivity(new Intent(LogoActivity.this, LoginActivity.class));
+					if(SharedPrefUtil.isLogin(LogoActivity.this)){
+						startActivity(new Intent(LogoActivity.this, MainActivity.class));
+					}else{
+						startActivity(new Intent(LogoActivity.this, LoginActivity.class));
+					}
 					finish();
 				}
 

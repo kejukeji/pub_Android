@@ -92,7 +92,7 @@
                 android:layout_marginTop="2dp"
                 android:gravity="center"
                 android:layout_marginBottom="2dp"
-                android:textSize="14sp" />
+                android:textSize="@dimen/BasicTextSize" />
 
             <HorizontalScrollView
                 android:layout_width="fill_parent"
