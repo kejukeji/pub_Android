@@ -5,36 +5,19 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/viewPopuBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:clickable="true" >
-
-        <TextView
-            android:id="@+id/tvPopuDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:padding="2dp"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:id="@+id/ivDateArrow"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="2dp"
-            android:src="@drawable/ic_filter_up_arrow"
-            android:visibility="gone" />
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/lvScreenArea"
-        style="@style/listviewStyle"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_popu_area"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/lvScreenArea"
+            style="@style/listviewStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </LinearLayout>
 
 </LinearLayout>

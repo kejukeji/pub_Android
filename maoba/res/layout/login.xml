@@ -54,7 +54,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
                 android:paddingTop="6dp" >
 
                 <TextView
@@ -63,18 +62,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="忘记密码"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/BasicTextSize"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/tvRegisterMaoMao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="120dp"
                     android:text="还没账号注册一个"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/BasicTextSize" />
             </LinearLayout>
 
             <Button

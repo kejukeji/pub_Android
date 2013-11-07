@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -80,7 +81,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private ProgressDialog pd;
 	private CommonApplication app;
 
-	private ImageView ivScreenArea;// 筛选地区
 	private TextView tvNearbyBar;// 附近酒啊
 
 	@Override
@@ -103,6 +103,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		tvTitle.setText(bean.getName());
+		tvTitle.setOnClickListener(this);
 
 		// 加载更多footer
 		vFooter = getLayoutInflater().inflate(R.layout.footer, null);
@@ -112,7 +113,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		// 今日推荐
 		viewMenuList = (LinearLayout) this.findViewById(R.id.viewMenuList);
 
-		ivScreenArea = (ImageView) this.findViewById(R.id.ivScreenArea);
 		tvNearbyBar = (TextView) this.findViewById(R.id.tvNearbyBar);
 
 	}
@@ -125,7 +125,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
 		btnRight.setText("搜索");
 
-		ivScreenArea.setOnClickListener(this);
 		tvNearbyBar.setOnClickListener(this);
 
 		barList = new ArrayList<BarBean>();
@@ -157,7 +156,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		case R.id.btnRight:
 			openActivity(SearchActivity.class);
 			break;
-		case R.id.ivScreenArea:
+		case R.id.tvTitle:
 			showScreenAreaPopuWindow();
 			break;
 		case R.id.tvNearbyBar:
@@ -221,42 +220,62 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	 */
 	private PopupWindow pw;
 	private int displayHeight;
-	private int displayWidth;
 	private ListView lvScreenArea;
 	private ScreenAreaAdapter screenAdapter;
 
 	private void showScreenAreaPopuWindow() {
+		tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_filter_up_arrow), null);
 
-		displayWidth = (BarListActivity.this).getWindowManager().getDefaultDisplay().getWidth();
 		displayHeight = (BarListActivity.this).getWindowManager().getDefaultDisplay().getHeight();
 		int maxHeight = (int) (displayHeight * 0.8);
-		int maxWidth = (int) (displayWidth * 0.9);
-		// 获取左边按钮的x和y坐标
-		int[] location = new int[2];
-		llCommon.getLocationInWindow(location);
-		int x = location[0];
-		int y = location[1];
 
-		View view = LayoutInflater.from(this).inflate(R.layout.popu_data_picker_list, null);
+		View view =  LayoutInflater.from(this).inflate(R.layout.popu_data_picker_list, null);
 		lvScreenArea = (ListView) view.findViewById(R.id.lvScreenArea);
-		pw = new PopupWindow(view, maxWidth, maxHeight);
+		LayoutParams p = new LayoutParams(LayoutParams.MATCH_PARENT, maxHeight);
+		view.setLayoutParams(p);
+		LinearLayout layout = new LinearLayout(this);
+		layout.addView(view, p);
+		pw = new PopupWindow(layout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT );
 		pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_date_picker));
 		pw.setAnimationStyle(R.style.PopupWindowAnimation);
 		pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_lightransparent));
 		// 设置焦点，必须设置，否则listView无法响应
-		pw.setFocusable(true);
+		pw.setFocusable(false);
 		// 设置点击其他地方 popupWindow消失
 		pw.setOutsideTouchable(true);
 		// pw.showAsDropDown(btnLeft);
-		pw.showAsDropDown(llCommon, x + 25, y - 35);
+		pw.showAsDropDown(llCommon);
 		screenAdapter = new ScreenAreaAdapter();
 		lvScreenArea.setAdapter(screenAdapter);
 		lvScreenArea.addFooterView(vFooter);
 		lvScreenArea.setDivider(null);
 		lvScreenArea.setOnItemClickListener(ItemListener1);
+		layout.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				onPressBack();
+			}
+		});
+	}
+	/**
+	 * 如果菜单成展开状态，则让菜单收回去
+	 */
+	public boolean onPressBack() {
+		if (pw != null && pw.isShowing()) {
+			pw.dismiss();
+			tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_filter_down_arrow), null);
+			return true;
+		} else {
+			return false;
+		}
 
 	}
-
+	public void onBackPressed() {
+		if(!onPressBack()){
+			finish();
+		}
+	};
 	/**
 	 * 筛选地区点击 listview点击事件
 	 */
@@ -324,10 +343,10 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				holder = (ViewHolder) convertView.getTag();
 			}
 			if (position == 0) {
-				holder.tvScreenArea.setTextColor(0xFF2D9849);
+				holder.tvScreenArea.setTextColor(getResources().getColor(R.color.blue));
 				holder.creenArealine.setBackgroundResource(R.drawable.bg_bar_details_line1);
 			} else{
-				holder.tvScreenArea.setTextColor(0xFF101010);
+				holder.tvScreenArea.setTextColor(getResources().getColor(R.color.black));
 				holder.creenArealine.setBackgroundResource(R.drawable.bg_bar_details_line);
 			}
 			holder.tvScreenArea.setText(bean.getScreenAreaName());
