@@ -88,24 +88,24 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		ivUserImage = (ImageView) this.findViewById(R.id.ivUserImage);
 		tvNickName = (TextView) this.findViewById(R.id.tvNickName);
 		if (tvNickName.getText() == "") {
-			tvNickName.setText("未填写");
+		//	tvNickName.setText("未填写");
 		}
 		tvBirthday = (TextView) this.findViewById(R.id.tvBirthday);
 		if (tvBirthday.getText() == "") {
-			tvBirthday.setText("未填写");
+			//tvBirthday.setText("未填写");
 		}
 		tvSex = (TextView) this.findViewById(R.id.tvSex);
 		if (tvSex.getText() == "") {
-			tvSex.setText("未填写");
+		//	tvSex.setText("未填写");
 		}
 		tvSignature = (TextView) this.findViewById(R.id.tvSignature);
 		if (tvSignature.getText() == "") {
-			tvSignature.setText("未填写");
+	//		tvSignature.setText("未填写");
 		}
 		tvDistrict = (TextView) this.findViewById(R.id.tvDistrict);
 		tvModificationPassword = (TextView) this.findViewById(R.id.tvModificationPassword);
 		if (tvModificationPassword.getText() == "") {
-			tvModificationPassword.setText("未填写");
+		//	tvModificationPassword.setText("修改密码");
 		}
 		viewBirthday = (LinearLayout) this.findViewById(R.id.viewBirthday);
 		viewSex = (LinearLayout) this.findViewById(R.id.viewSex);
@@ -199,10 +199,28 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			break;
 		case R.id.btnRight:
 			String nickName = tvNickName.getText().toString().trim();
+//			if(nickName.equals("未填写")){
+//				nickName =null;
+//			}
 			String birthday = tvBirthday.getText().toString().trim();
+//			if(birthday.equals("未填写")){
+//				birthday=null;
+//			}
 			String sex = tvSex.getText().toString().trim();
+//			if(sex.equals("未填写")){
+//				sex=null;
+//			}
 			String signature = tvSignature.getText().toString().trim();
+//			if(signature.equals("未填写")){
+//				signature=null;
+//			}
 			String address = tvDistrict.getText().toString().trim();
+//			if(address.equals("未填写")){
+//				address=null;
+//			}
+//			if(newPassword.equals("修改密码")){
+//				newPassword=null;
+//			}
 			if (NetUtil.checkNet(PersonalInfoActivity.this)) {
 				new personInfoAddTask(nickName, birthday, sex, signature, address, newPassword).execute();
 			}
@@ -270,6 +288,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 					} else {
 						showShortToast("请检查SD卡是否正常");
 					}
+					dialog.dismiss();
 				}
 			});
 			tvGetPicture.setOnClickListener(new OnClickListener() {
@@ -286,7 +305,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 					intent.putExtra("outputY", 200);
 					intent.putExtra("return-data", true);
 					startActivityForResult(intent, Constants.PHOTO_PICKED_WITH_DATA);
-
+					dialog.dismiss();
 				}
 			});
 			break;
@@ -397,8 +416,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		 * @param nickName昵称
 		 * @param birthday生日
 		 * @param sex性别
-		 * @param signature
-		 *            个性签名
+		 * @param signature 个性签名
 		 * @param address地址
 		 * @param newPassword密码
 		 * 
@@ -484,7 +502,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 				}
 
 			} else {
-				showShortToast("服务器连接失败");
+//					showShortToast(result.getString("message"));
+					showShortToast("服务连接失败");
 			}
 		}
 	}

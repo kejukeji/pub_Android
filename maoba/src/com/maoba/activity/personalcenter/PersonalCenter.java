@@ -3,6 +3,8 @@
  */
 package com.maoba.activity.personalcenter;
 
+import java.util.Calendar;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,10 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.maoba.AsyncImageLoader;
+import com.maoba.AsyncImageLoader.ImageCallback;
 import com.maoba.Constants;
 import com.maoba.R;
 import com.maoba.SystemException;
-import com.maoba.AsyncImageLoader.ImageCallback;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.my.CollectionOfBarListActivity;
 import com.maoba.activity.news.PrivateNewsListActivity;
@@ -154,23 +156,23 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 						} else {
 							tvNickName.setText(NickName);
 						}
-						if (birthday == null) {
+						if (birthday.equals("null")) {
 							tvAge.setText("未设置");
 						} else {
-							// Calendar calendar = Calendar.getInstance();
-							// int year = calendar.get(Calendar.YEAR);
-							// SimpleDateFormat format = new
-							// SimpleDateFormat("yyyy");
-							// String year1 = format.format(birthday);
-							// int age = year - Integer.parseInt(year1);
-							tvAge.setText("");
+							Calendar calendar = Calendar.getInstance();
+							int currentYear = calendar.get(Calendar.YEAR);// 当前年份
+							String[] Num = birthday.split("-");// 去掉“——”
+							int birthYear = Integer.valueOf(Num[0]);// 取出年份值
+							int age = currentYear - birthYear;// 算出年龄
+							String ageString = String.valueOf(age);// 转换
+							tvAge.setText(ageString);
 						}
 						if (address.equals("null")) {
 							tvAddress.setText("未设置");
 						} else {
 							tvAddress.setText(address + "");
 						}
-						String photoUrl = BusinessHelper.BASE_URL + userJson.getString("pic_name");
+						String photoUrl = BusinessHelper.PIC_BASE_URL +userJson.getString("pic_path");
 						ivUserPhoto.setTag(photoUrl);
 						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
 								new ImageCallback() {

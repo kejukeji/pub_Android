@@ -4,7 +4,10 @@
 package com.maoba.activity.bar;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -31,7 +34,6 @@ import com.maoba.R;
 import com.maoba.SystemException;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.bean.BarBean;
-import com.maoba.bean.ResponseBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.StringUtil;
@@ -102,9 +104,9 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 
 		barList = new ArrayList<BarBean>();
-		adapter = new Adapter();
+
 		lvNearbyBarList.addFooterView(vFooter);
-		lvNearbyBarList.setAdapter(adapter);
+
 		lvNearbyBarList.setOnScrollListener(LoadListener);
 		lvNearbyBarList.setOnItemClickListener(itemListener);
 		lvNearbyBarList.setDivider(null);
@@ -173,7 +175,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 	 * 获取附近酒吧列表
 	 * 
 	 */
-	public class GetNearbyBarListTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
+	public class GetNearbyBarListTask extends AsyncTask<Void, Void, JSONObject> {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -187,66 +189,76 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 		}
 
 		@Override
-		protected ResponseBean<BarBean> doInBackground(Void... params) {
-			// app.getLastLocation().getLatitude(),
-			// app.getLastLocation().getLongitude()
+		protected JSONObject doInBackground(Void... params) {
 
 			try {
-				return new BusinessHelper().getNearbyBarList(121, 31);
+				return new BusinessHelper().getNearbyBarList(app.getLastLocation().getLatitude(), app.getLastLocation().getLongitude());
 			} catch (SystemException e) {
 			}
 			return null;
 		}
 
 		@Override
-		protected void onPostExecute(ResponseBean<BarBean> result) {
+		protected void onPostExecute(JSONObject result) {
 			super.onPostExecute(result);
 			dismissPd();
 			pbFooter.setVisibility(View.GONE);
 			if (isFilter) {
 				barList.clear();
 			}
-			if (result.getStatus() != Constants.REQUEST_FAILD) {
-				// 这里获取到十条数据
-				List<BarBean> tempList = result.getObjList();
-				if (pageIndex == 1) {
-				}
-				boolean isLastPage = false;
-				if (tempList.size() > 0) {
-					barList.addAll(tempList);
-					adapter.notifyDataSetChanged(); // 通知更新
-					pageIndex++;
-				} else {
-					showShortToast("您附近没有酒吧");
-					isLastPage = true;
-				}
-				if (isLastPage) {
-					pbFooter.setVisibility(View.GONE);
-					tvFooterMore.setText(R.string.load_all);
-					isComplete = true;
-				} else {
-					if (tempList.size() > 0 && tempList.size() < Constants.PAGE_SIZE) {
-						pbFooter.setVisibility(View.GONE);
-						tvFooterMore.setText(R.string.load_all);
-						isComplete = true;
-					} else {
-						pbFooter.setVisibility(View.GONE);
-						tvFooterMore.setText("上拉查看更多");
+			if (result != null) {
+				if (result.has("status")) {
+					try {
+						int status = result.getInt("status");
+						if (status == Constants.REQUEST_SUCCESS) {
+							String address = result.getString("county");
+							adapter = new Adapter(address);
+							lvNearbyBarList.setAdapter(adapter);
+							if (result.has("pub_list")) {
+								JSONArray arr = result.getJSONArray("pub_list");
+								if (arr != null) {
+									ArrayList<BarBean> nearBean = (ArrayList<BarBean>) BarBean.constractList(arr);
+									boolean isLastPage = false;
+									if (nearBean.size() > 0) {
+										barList.addAll(nearBean);
+										adapter.notifyDataSetChanged(); // 通知更新
+										pageIndex++;
+									} else {
+										showShortToast("您附近没有酒吧");
+										isLastPage = true;
+									}
+									if (isLastPage) {
+										pbFooter.setVisibility(View.GONE);
+										tvFooterMore.setText(R.string.load_all);
+										isComplete = true;
+									} else {
+										if (nearBean.size() > 0 && nearBean.size() < Constants.PAGE_SIZE) {
+											pbFooter.setVisibility(View.GONE);
+											tvFooterMore.setText(R.string.load_all);
+											isComplete = true;
+										} else {
+											pbFooter.setVisibility(View.GONE);
+											tvFooterMore.setText("上拉查看更多");
+										}
+									}
+									if ((pageIndex == 1 || pageIndex == 2) && nearBean.size() < Constants.PAGE_SIZE) {
+										tvFooterMore.setText("");
+									}
+									adapter.notifyDataSetChanged();
+									isLoad = false;
+									isFilter = false;
+								}
+							}
+						} else {
+							tvFooterMore.setText("");
+						}
+					} catch (JSONException e) {
 					}
 				}
-				if ((pageIndex == 1 || pageIndex == 2) && tempList.size() < Constants.PAGE_SIZE) {
-					tvFooterMore.setText("");
-				}
-
 			} else {
-				showShortToast(result.getError());
-				tvFooterMore.setText("");
+				showShortToast("服务器连接失败");
 			}
-			adapter.notifyDataSetChanged();
-			isLoad = false;
-			isFilter = false;
 		}
-
 	}
 
 	/**
@@ -255,6 +267,14 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 	 **/
 
 	public class Adapter extends BaseAdapter {
+		private String address;
+
+		/**
+		 * @param address
+		 */
+		public Adapter(String address) {
+			this.address = address;
+		}
 
 		@Override
 		public int getCount() {
@@ -310,7 +330,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 				holder.ivImage.setImageResource(R.drawable.ic_default);
 			}
 			holder.tvBarName.setText(bean.getBar_Name());
-			holder.tvAddress.setText(bean.getBar_Address());
+			holder.tvAddress.setText(address);
 			holder.tvContent.setText(bean.getBar_Intro());
 
 			double latitude;

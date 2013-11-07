@@ -251,7 +251,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 						} else {
 							tvsignaTure.setText(signaTure);
 						}
-						String photoUrl = BusinessHelper.BASE_URL + userJson.getString("pic_name");
+						String photoUrl = BusinessHelper.PIC_BASE_URL +userJson.getString("pic_path");
 						ivSettingUserPhoto.setTag(photoUrl);
 						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
 								new ImageCallback() {

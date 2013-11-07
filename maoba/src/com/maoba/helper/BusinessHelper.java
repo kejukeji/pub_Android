@@ -463,7 +463,7 @@ public class BusinessHelper {
 			p.add(new PostParameter("sender_id", ""));
 		}
 		if (friendId > 0) {
-			p.add(new PostParameter("receiver_id", uid));
+			p.add(new PostParameter("receiver_id", friendId));
 		} else {
 			p.add(new PostParameter("receiver_id", ""));
 		}
@@ -686,7 +686,7 @@ public class BusinessHelper {
 		params.add(new PostParameter("sex", sex));
 		params.add(new PostParameter("signature", signature));
 		params.add(new PostParameter("company", address));
-		return httpClient.multPartURL("upload_name",
+		return httpClient.multPartURL("head_picture",
 				BASE_URL + "user/user_info/" + uid,
 				params.toArray(new PostParameter[params.size()]), avatarFile)
 				.asJSONObject();
@@ -718,7 +718,7 @@ public class BusinessHelper {
 		params.add(new PostParameter("sex", sex));
 		params.add(new PostParameter("signature", signature));
 		params.add(new PostParameter("company", address));
-		return httpClient.multPartURL("upload_name",
+		return httpClient.multPartURL("head_picture",
 				BASE_URL + "user/user_info/" + userId,
 				params.toArray(new PostParameter[params.size()]), avatarFile)
 				.asJSONObject();
@@ -733,37 +733,11 @@ public class BusinessHelper {
 	 * @throws SystemException
 	 */
 
-	public ResponseBean<BarBean> getNearbyBarList( double longitude,double latitude) throws SystemException{
-		
-		List<PostParameter> p = new ArrayList<PostParameter>();
-		p.add(new PostParameter("longitude", longitude));
-		p.add(new PostParameter("latitude", latitude));
+	public JSONObject getNearbyBarList( double longitude,double latitude) throws SystemException{
 	//	p.add(new PostParameter("page", pageIndex));
-		ResponseBean<BarBean> response;
-		try {
-			JSONObject obj;
-			obj = httpClient.get(BASE_URL + "near/pub", p.toArray(new PostParameter[p.size()])).asJSONObject();
-			int status = obj.getInt("status");
-			if (status == Constants.REQUEST_SUCCESS) {
-				response = new ResponseBean<BarBean>(obj);
-				List<BarBean> list = null;
-				if (!TextUtils.isEmpty(obj.getString("pub_list"))) {
-					list = BarBean.constractList(obj.getJSONArray("pub_list"));// 附近酒吧列表
-				} else {
-					list = new ArrayList<BarBean>();
-				}
-				response.setObjList(list);
-
-			} else {
-				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
-			}
-		} catch (SystemException e1) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
-		} catch (JSONException e) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
-		}
-		return response;
-
+		return httpClient.get(BASE_URL + "near/pub",
+				new PostParameter[] { new PostParameter("longitude", longitude), new PostParameter("latitude", latitude)})
+				.asJSONObject();
 	}
 	
 	

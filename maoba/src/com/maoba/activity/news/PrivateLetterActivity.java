@@ -77,7 +77,6 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	private EditText edtLetter; // 编辑私信
 	private Button btnSend; // 发送私信
 
-	private int userId;
 	private LetterAdapter letterAdapter;
 
 	private Handler iLetterHandler;
@@ -86,7 +85,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 	private List<LetterBean> letterBeans;
 
-//	private NewsBean newsbean;// 私信列表传递的bean
+	private int userId;
+
+	// private NewsBean newsbean;// 私信列表传递的bean
 
 	private String dateLine = "";
 
@@ -96,7 +97,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	private ProgressDialog pd;
 
 	private final static int HANDLER_DATA = 11;
-	
+
 	private int friendId;
 
 	// 表情
@@ -114,7 +115,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	//	newsbean = (NewsBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
+		// newsbean = (NewsBean)
+		// getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
+		userId = SharedPrefUtil.getUid(PrivateLetterActivity.this);
 		friendId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		setContentView(R.layout.private_news_layoute);
 		findView();
@@ -159,7 +162,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		btnRight.setOnClickListener(this);
 		btnRight.setVisibility(View.GONE);
 
-	//	tvTitle.setText(newsbean.getNickName());
+		// tvTitle.setText(newsbean.getNickName());
 
 		scrollViewFace = (ScrollView) this.findViewById(R.id.scroll_view_face);
 		ivEmoticon.setOnClickListener(this);
@@ -281,7 +284,6 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		@Override
 		protected ResponseBean<LetterBean> doInBackground(Void... params) {
-			int userId = SharedPrefUtil.getUid(PrivateLetterActivity.this);
 			try {
 				return new BusinessHelper().getLetterList(userId, friendId);
 			} catch (SystemException e) {
@@ -370,7 +372,6 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
-			int userId= SharedPrefUtil.getUid(PrivateLetterActivity.this);
 			try {
 				return new BusinessHelper().getSendLetter(userId, friendId, letterStr);
 			} catch (SystemException e) {
@@ -452,9 +453,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LetterBean bean = letterBeans.get(position);
-			int sender = bean.getSender();
+			// int sender = bean.getSender();
 			ViewHolder viewHolder = null;
-			if (sender == userId) {
+			if (userId == friendId) {
 				convertView = getLayoutInflater().inflate(R.layout.private_letter_right_item, null);
 			} else {
 				convertView = getLayoutInflater().inflate(R.layout.private_letter_left_item, null);
@@ -493,35 +494,31 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 			viewHolder.tvSendTime.setText(bean.getSendTime());
 
 			String photoUrl = null;
-			if (sender == userId) {
+			if (userId == friendId) {
 				photoUrl = bean.getUserUrl();
 			} else {
 				photoUrl = bean.getFriendUrl();
 			}
-			if (!StringUtil.isBlank(photoUrl)) {
-				viewHolder.ivUserPhoto.setTag(photoUrl);
-				Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(photoUrl, new ImageCallback() {
-					@Override
-					public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-						ImageView ivPhoto = (ImageView) lvPersonalLetter.findViewWithTag(imageUrl);
-						if (ivPhoto != null) {
-							if (imageDrawable != null) {
+			viewHolder.ivUserPhoto.setTag(photoUrl);
+			Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(photoUrl, new ImageCallback() {
+				@Override
+				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+					ImageView ivPhoto = (ImageView) lvPersonalLetter.findViewWithTag(imageUrl);
+					if (ivPhoto != null) {
+						if (imageDrawable != null) {
 
-								ivPhoto.setImageDrawable(imageDrawable);
-								LetterAdapter.this.notifyDataSetChanged();
-							} else {
-								ivPhoto.setImageResource(R.drawable.ic_default);
-							}
+							ivPhoto.setImageDrawable(imageDrawable);
+							LetterAdapter.this.notifyDataSetChanged();
+						} else {
+							ivPhoto.setImageResource(R.drawable.bg_photo_left);
 						}
 					}
-				});
-				if (cacheDrawable != null) {
-					viewHolder.ivUserPhoto.setImageDrawable(cacheDrawable);
-				} else {
-					viewHolder.ivUserPhoto.setImageResource(R.drawable.ic_default);
 				}
+			});
+			if (cacheDrawable != null) {
+				viewHolder.ivUserPhoto.setImageDrawable(cacheDrawable);
 			} else {
-				viewHolder.ivUserPhoto.setImageResource(R.drawable.ic_default);
+				viewHolder.ivUserPhoto.setImageResource(R.drawable.bg_photo_right);
 			}
 			return convertView;
 		}
@@ -579,9 +576,8 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 							if (!isLoaded) {
 								isLoaded = true;
 								BusinessHelper businessHelper = new BusinessHelper();
-								int userId = SharedPrefUtil.getUid(PrivateLetterActivity.this);
-								ResponseBean<LetterBean> result = businessHelper.getLetterList(userId,
-										friendId);
+
+								ResponseBean<LetterBean> result = businessHelper.getLetterList(userId, friendId);
 								if (result != null) {
 									if (result.getStatus() != Constants.REQUEST_FAILD) {
 										List<LetterBean> letterList = result.getObjList();

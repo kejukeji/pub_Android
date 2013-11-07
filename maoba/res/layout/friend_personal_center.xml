@@ -54,16 +54,15 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="5dp"
                 android:layout_marginBottom="5dp"
-                 >
+                android:orientation="vertical" >
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="30dp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_personal_center" />
 
                 <TextView
@@ -72,7 +71,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="20dp"
-                    android:text="23"
                     android:textColor="@color/white"
                     android:textSize="@dimen/SmallerTextSize" />
 
@@ -82,7 +80,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:text="上海"
                     android:textColor="@color/white"
                     android:textSize="@dimen/SmallerTextSize" />
 
@@ -92,15 +89,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="100dp"
+                    android:background="#404040"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="4dp"
                     android:text="发私信"
                     android:textColor="@color/white"
-                    android:background="#404040" 
-                    android:paddingLeft="15dp"
-                	android:paddingRight="15dp"
-                	android:paddingTop="4dp"
-                	android:paddingBottom="4dp"
-                	android:textSize="@dimen/SmallerTextSize"
-                   />
+                    android:textSize="@dimen/SmallerTextSize" />
             </LinearLayout>
 
             <LinearLayout
@@ -129,7 +125,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="试着开心"
                         android:textColor="@color/white"
                         android:textSize="@dimen/SmallTextSize" />
                 </LinearLayout>
