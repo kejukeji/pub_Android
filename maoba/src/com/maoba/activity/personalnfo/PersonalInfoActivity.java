@@ -494,6 +494,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_SUCCESS) {
 						showShortToast("个人资料设置成功");
+						finish();
 					} else {
 						showShortToast("个人资料设置失败");
 					}

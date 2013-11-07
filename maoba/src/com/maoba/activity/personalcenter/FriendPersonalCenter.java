@@ -247,5 +247,26 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		}
 
 	}
+	//Activity从后台重新回到前台时被调用  
+    @Override  
+    protected void onRestart() {  
+        super.onRestart();  
+        if (NetUtil.checkNet(this)) {
+			new GetUserInfor().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
+        
+    }  
+    @Override
+	protected void onResume() {
+		super.onResume();
+		   if (NetUtil.checkNet(this)) {
+				new GetUserInfor().execute();
+			} else {
+				showShortToast(R.string.NoSignalException);
+			}
+	}
+
 
 }

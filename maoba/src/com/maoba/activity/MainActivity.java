@@ -79,6 +79,20 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		findView();
 		fillData();
 	}
+	
+	//Activity从后台重新回到前台时被调用  
+    @Override  
+    protected void onRestart() {  
+        super.onRestart();  
+        if (NetUtil.checkNet(this)) {
+			new GetUserInfor().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
+        
+    }  
+      
+    //Activity创建或者从被覆盖、后台重新回到前台时被调用  
 
 	/**
 	 * 初始化SlidingMenu
@@ -435,6 +449,11 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	@Override
 	protected void onResume() {
 		super.onResume();
+		   if (NetUtil.checkNet(this)) {
+				new GetUserInfor().execute();
+			} else {
+				showShortToast(R.string.NoSignalException);
+			}
 		keyBackClickCount = 0;
 	}
 
@@ -463,4 +482,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
+	
 }
+
