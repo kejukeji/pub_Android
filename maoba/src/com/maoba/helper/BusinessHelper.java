@@ -660,7 +660,7 @@ public class BusinessHelper {
 	}
 	
 	/**
-	 * 修改用户资料
+	 * 修改用户资料  图片上传
 	 * 
 	 * @param loginWay
 	 * @param openId
@@ -676,13 +676,21 @@ public class BusinessHelper {
 	 * @return
 	 * @throws SystemException
 	 */
-	public JSONObject addUserInfor(int uid,int loginWay, String passWord, String nickName, String birthday, int sex, String signature, String address) throws SystemException {
-		return httpClient.post(BASE_URL + "user/user_info/" + uid,
-				new PostParameter[] { new PostParameter("login_type", loginWay),
-				new PostParameter("password", passWord), new PostParameter("nick_name", nickName), 
-				new PostParameter("birthday", birthday),new PostParameter("sex", sex),
-				new PostParameter("signature", signature),new PostParameter("company", address)
-		       }).asJSONObject();
+	public JSONObject addUserInfor(int uid,int loginWay, String passWord, String nickName, String birthday, int sex, 
+			String signature, String address,File avatarFile) throws SystemException {
+		List<PostParameter> params = new ArrayList<PostParameter>();
+		params.add(new PostParameter("login_type", loginWay));
+		params.add(new PostParameter("password", passWord));
+		params.add(new PostParameter("nick_name", nickName));
+		params.add(new PostParameter("birthday", birthday));
+		params.add(new PostParameter("sex", sex));
+		params.add(new PostParameter("signature", signature));
+		params.add(new PostParameter("company", address));
+		return httpClient.multPartURL("upload_name",
+				BASE_URL + "user/user_info/" + uid,
+				params.toArray(new PostParameter[params.size()]), avatarFile)
+				.asJSONObject();
+		
 	}
 	
 	
@@ -701,13 +709,19 @@ public class BusinessHelper {
 	 * @return
 	 */
 	public JSONObject thirdAddUserInfor(int userId, int loginType, String openId, String nickName, String birthday,
-			int sex, String signature, String address, String newPassword)throws SystemException {
-		return httpClient.post(BASE_URL + "user/user_info/" + userId,
-				new PostParameter[] { new PostParameter("login_type", loginType),
-				new PostParameter("open_id", openId), new PostParameter("nick_name", nickName), 
-				new PostParameter("birthday", birthday),new PostParameter("sex", sex),
-				new PostParameter("signature", signature),new PostParameter("company", address)
-		       }).asJSONObject();
+			int sex, String signature, String address, String newPassword,File avatarFile)throws SystemException {
+		List<PostParameter> params = new ArrayList<PostParameter>();
+		params.add(new PostParameter("login_type", loginType));
+		params.add(new PostParameter("open_id", openId));
+		params.add(new PostParameter("nick_name", nickName));
+		params.add(new PostParameter("birthday", birthday));
+		params.add(new PostParameter("sex", sex));
+		params.add(new PostParameter("signature", signature));
+		params.add(new PostParameter("company", address));
+		return httpClient.multPartURL("upload_name",
+				BASE_URL + "user/user_info/" + userId,
+				params.toArray(new PostParameter[params.size()]), avatarFile)
+				.asJSONObject();
 	}
 	/**
 	 * 获取附近酒吧

@@ -432,14 +432,14 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 				if (loginType == 0) {
 					try {
 						return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
-								signature, address);
+								signature, address,avatarFile);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
 				} else {
 					try {
 						return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday,
-								sex, signature, address, newPassword);
+								sex, signature, address, newPassword,avatarFile);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
@@ -449,14 +449,14 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 				if (loginType == 0) {
 					try {
 						return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
-								signature, address);
+								signature, address,avatarFile);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
 				} else {
 					try {
 						return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday,
-								sex, signature, address, newPassword);
+								sex, signature, address, newPassword,avatarFile);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}

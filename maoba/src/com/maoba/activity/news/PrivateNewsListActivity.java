@@ -223,7 +223,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		protected ResponseBean<NewsBean> doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(PrivateNewsListActivity.this);
 			try {
-				return new BusinessHelper().getPrivateNews(2, pageIndex);
+				return new BusinessHelper().getPrivateNews(uid, pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}

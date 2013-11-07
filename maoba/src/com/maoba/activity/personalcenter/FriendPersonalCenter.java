@@ -170,7 +170,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						} else {
 							tvAddress.setText(address + "");
 						}
-						String photoUrl = BusinessHelper.BASE_URL + userJson.getString("pic_name");
+						String photoUrl = BusinessHelper.BASE_URL +userJson.getString("rel_path")+ userJson.getString("pic_name");
 						ivUserPhoto.setTag(photoUrl);
 						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
 								new ImageCallback() {
