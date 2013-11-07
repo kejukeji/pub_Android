@@ -140,9 +140,10 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_SUCCESS) {
 						JSONObject userJson = result.getJSONObject("user_info");
+						JSONObject user = result.getJSONObject("user");
 						String signaTure = userJson.getString("signature");
 						String birthday = userJson.getString("birthday");
-						String NickName = userJson.getString("upload_name");
+						String NickName = user.getString("nick_name");
 						String address = userJson.getString("county_id");
 						if (signaTure.equals("null")) {
 							tvSignature.setText("未设置");
