@@ -44,6 +44,7 @@ import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
 import com.maoba.view.GridViewInScrollView;
 import com.maoba.view.slidingmenu.SlidingMenu;
+
 /**
  * 首页
  * 
@@ -79,20 +80,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		findView();
 		fillData();
 	}
-	
-	//Activity从后台重新回到前台时被调用  
-    @Override  
-    protected void onRestart() {  
-        super.onRestart();  
-        if (NetUtil.checkNet(this)) {
-			new GetUserInfor().execute();
-		} else {
-			showShortToast(R.string.NoSignalException);
-		}
-        
-    }  
-      
-    //Activity创建或者从被覆盖、后台重新回到前台时被调用  
 
 	/**
 	 * 初始化SlidingMenu
@@ -139,7 +126,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		gvBarType.setOnItemClickListener(itemListener);
 		if (NetUtil.checkNet(this)) {
 			new GetHomeTask().execute();
-			new GetUserInfor().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
@@ -229,31 +215,20 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	 * 
 	 * */
 	private class GetUserInfor extends AsyncTask<Void, Void, JSONObject> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			showPd("正在加载...");
-		}
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(MainActivity.this);
-			if (uid == 0) {
-			} else {
-				try {
-					return new BusinessHelper().getUserInfor(uid);
-				} catch (SystemException e) {
-					e.printStackTrace();
-				}
+			try {
+				return new BusinessHelper().getUserInfor(uid);
+			} catch (SystemException e) {
+				return null;
 			}
-
-			return null;
 		}
 
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			super.onPostExecute(result);
-			dismissPd();
 			if (result != null) {
 				try {
 					int status = result.getInt("status");
@@ -265,7 +240,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 						} else {
 							tvsignaTure.setText(signaTure);
 						}
-						String photoUrl = BusinessHelper.PIC_BASE_URL +userJson.getString("pic_path");
+						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 						ivSettingUserPhoto.setTag(photoUrl);
 						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
 								new ImageCallback() {
@@ -449,11 +424,13 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	@Override
 	protected void onResume() {
 		super.onResume();
-		   if (NetUtil.checkNet(this)) {
+		if(SharedPrefUtil.isLogin(this)){
+			if (NetUtil.checkNet(this)) {
 				new GetUserInfor().execute();
 			} else {
 				showShortToast(R.string.NoSignalException);
 			}
+		}
 		keyBackClickCount = 0;
 	}
 
@@ -482,7 +459,5 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	
-}
 
+}
