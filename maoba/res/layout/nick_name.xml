@@ -17,7 +17,7 @@
 	    android:maxLines="1"
 	    android:lines="1"
 	    android:maxLength="10"
-	    android:background="@drawable/bg_input"
+	    android:background="@drawable/bg_nickname_input"
 	    android:textSize="@dimen/BasicTextSize"
 	    android:paddingLeft="10dp"
 	    android:paddingTop="5dp"

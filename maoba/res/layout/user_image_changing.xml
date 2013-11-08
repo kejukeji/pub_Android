@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/btn_style_alert_dialog_background" >
+    android:background="@drawable/bg_avatar_dialog" >
     <TextView 
     	android:id="@+id/tvtakephoto"
     	android:layout_height="45dp"

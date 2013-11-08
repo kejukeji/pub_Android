@@ -16,7 +16,7 @@
 	    android:gravity="top"
 	    
 	    android:maxLength="30"
-	    android:background="@drawable/bg_input"
+	    android:background="@drawable/bg_signature_input"
 	    android:paddingTop="10dp"
 	    android:paddingLeft="10dp"
 	    android:textSize="@dimen/SmallTextSize"
