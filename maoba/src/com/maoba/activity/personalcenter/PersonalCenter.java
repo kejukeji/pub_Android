@@ -27,6 +27,7 @@ import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.my.CollectionOfBarListActivity;
 import com.maoba.activity.news.PrivateNewsListActivity;
 import com.maoba.activity.personalnfo.PersonalInfoActivity;
+import com.maoba.bean.BarBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
@@ -45,6 +46,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 	private TextView tvAge, tvAddress, tvNickName, tvSignature;
 
 	private Button btnLeftMenu;
+	private BarBean bean;
 
 	private ImageView ivPersonalSetting;// 个人资料设置或修改
 
@@ -52,6 +54,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.personal_center);
+		bean = (BarBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
 		findView();
 		fillData();
 	}
@@ -123,9 +126,9 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
-			int uid = SharedPrefUtil.getUid(PersonalCenter.this);
+			//int uid = SharedPrefUtil.getUid(PersonalCenter.this);
 			try {
-				return new BusinessHelper().getUserInfor(uid);
+				return new BusinessHelper().getUserInfor(bean.getUserId());
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}

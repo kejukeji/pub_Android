@@ -32,7 +32,10 @@ import com.maoba.SystemException;
 import com.maoba.activity.LoginActivity;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.personalcenter.FriendPersonalCenter;
+import com.maoba.activity.personalcenter.PersonalCenter;
+import com.maoba.activity.personalnfo.PersonalInfoActivity;
 import com.maoba.bean.BarBean;
+import com.maoba.bean.PersonalCentre;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
@@ -368,25 +371,41 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			ivPhoto.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (!SharedPrefUtil.isLogin(BarDetailActivity.this)) {
-						showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								openActivity(LoginActivity.class);
-							}
-						}, null, null);
-						return;
+					Bundle b = new Bundle();
+					b.putSerializable(Constants.EXTRA_DATA, showBean);
+					if (showBean.getUserId() == SharedPrefUtil.getUid(BarDetailActivity.this)) {
+						openActivity(PersonalCenter.class, b);
 					} else {
-						Bundle b = new Bundle();
-						b.putSerializable(Constants.EXTRA_DATA, showBean);
 						openActivity(FriendPersonalCenter.class, b);
 					}
+
 				}
 			});
 			viewShowList.addView(view);
 		}
 
+	}
+
+	// Activity从后台重新回到前台时被调用
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		if (NetUtil.checkNet(this)) {
+			new GetBarDetailTask().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (NetUtil.checkNet(this)) {
+			new GetBarDetailTask().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
 	}
 
 }
