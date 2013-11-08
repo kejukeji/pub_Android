@@ -234,7 +234,6 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			// builder.setIcon(android.R.drawable.ic_dialog_info);
 			builder.setTitle("性别");
-
 			builder.setSingleChoiceItems(items, sexStatus, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
 					switch (item) {

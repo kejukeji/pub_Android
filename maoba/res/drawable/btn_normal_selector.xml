@@ -3,8 +3,8 @@
     	
 	<item
 		android:state_pressed="true"
-		android:drawable="@drawable/btn_style_alert_dialog_button_pressed" />
+		android:drawable="@drawable/btn_avatar_dialog_button_pressed" />
 	<item
-		android:drawable="@drawable/btn_style_alert_dialog_button_normal" />
+		android:drawable="@drawable/btn_avatar_dialog_button_normal" />
 
 </selector>
