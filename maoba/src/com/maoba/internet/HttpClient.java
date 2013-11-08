@@ -113,7 +113,7 @@ public class HttpClient implements java.io.Serializable {
                     "RetryInterval cannot be negative.");
         }
     }
-    
+    //这个方案是上传文件的  就是文件必须要上传的  如果即可穿文件 也可以传别的内容  不可用此方案
     public Response multPartURL(String url,  PostParameter[] params,ImageItem item) throws SystemException{
   		PostMethod post = new PostMethod(url);
     	try {
@@ -167,6 +167,7 @@ public class HttpClient implements java.io.Serializable {
       				parts[i++]=new StringPart( entry.getName(),(String)entry.getValue(),"UTF-8");
     			}
       		}
+
     		FilePart filePart=new FilePart(fileParamName,file.getName(), file,"multipart/form-data","UTF-8");
     		filePart.setTransferEncoding("binary");
     		parts[parts.length-1]= filePart;

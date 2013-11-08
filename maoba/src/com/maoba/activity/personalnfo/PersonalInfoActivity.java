@@ -92,7 +92,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		}
 		tvBirthday = (TextView) this.findViewById(R.id.tvBirthday);
 		if (tvBirthday.getText() == "") {
-			//tvBirthday.setText("未填写");
+		//	tvBirthday.setText("未填写");
 		}
 		tvSex = (TextView) this.findViewById(R.id.tvSex);
 		if (tvSex.getText() == "") {
@@ -100,7 +100,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		}
 		tvSignature = (TextView) this.findViewById(R.id.tvSignature);
 		if (tvSignature.getText() == "") {
-	//		tvSignature.setText("未填写");
+		//	tvSignature.setText("未填写");
 		}
 		tvDistrict = (TextView) this.findViewById(R.id.tvDistrict);
 		tvModificationPassword = (TextView) this.findViewById(R.id.tvModificationPassword);
@@ -450,7 +450,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 				if (loginType == 0) {
 					try {
 						return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
-								signature, address,avatarFile);
+								signature,address,newPassword,avatarFile);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
@@ -467,7 +467,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 				if (loginType == 0) {
 					try {
 						return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
-								signature, address,avatarFile);
+								signature, address,newPassword,avatarFile);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}

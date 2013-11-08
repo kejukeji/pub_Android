@@ -661,7 +661,7 @@ public class BusinessHelper {
 	
 	/**
 	 * 修改用户资料  图片上传
-	 * 
+	 * 此方案即可上传文件  又可以不传
 	 * @param loginWay
 	 * @param openId
 	 * @param uid
@@ -677,19 +677,34 @@ public class BusinessHelper {
 	 * @throws SystemException
 	 */
 	public JSONObject addUserInfor(int uid,int loginWay, String passWord, String nickName, String birthday, int sex, 
-			String signature, String address,File avatarFile) throws SystemException {
-		List<PostParameter> params = new ArrayList<PostParameter>();
-		params.add(new PostParameter("login_type", loginWay));
-		params.add(new PostParameter("password", passWord));
-		params.add(new PostParameter("nick_name", nickName));
-		params.add(new PostParameter("birthday", birthday));
-		params.add(new PostParameter("sex", sex));
-		params.add(new PostParameter("signature", signature));
-		params.add(new PostParameter("company", address));
-		return httpClient.multPartURL("head_picture",
-				BASE_URL + "user/user_info/" + uid,
-				params.toArray(new PostParameter[params.size()]), avatarFile)
-				.asJSONObject();
+			String signature, String address,String newPassword,File avatarFile) throws SystemException {
+		
+		if(avatarFile!=null){
+			List<PostParameter> params = new ArrayList<PostParameter>();
+			params.add(new PostParameter("login_type", loginWay));
+			params.add(new PostParameter("password", passWord));
+			params.add(new PostParameter("nick_name", nickName));
+			params.add(new PostParameter("birthday", birthday));
+			params.add(new PostParameter("sex", sex));
+			params.add(new PostParameter("signature", signature));
+			params.add(new PostParameter("company", address));
+			params.add(new PostParameter("new_password", newPassword));
+			return httpClient.multPartURL("head_picture",
+					BASE_URL + "user/user_info/" + uid,
+					params.toArray(new PostParameter[params.size()]), avatarFile)
+					.asJSONObject();
+		}else{
+			return httpClient.post(
+					BASE_URL + "user/user_info/"+ uid,
+					new PostParameter[] {new PostParameter("login_type", loginWay),
+							new PostParameter("password", passWord), new PostParameter("nick_name", nickName),
+							new PostParameter("birthday", birthday),new PostParameter("sex", sex),
+							new PostParameter("signature", signature),new PostParameter("company", address),
+							new PostParameter("new_password", newPassword),new PostParameter("head_picture", avatarFile)})
+							
+					.asJSONObject();
+		}
+		
 		
 	}
 	
