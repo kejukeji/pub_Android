@@ -167,6 +167,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		btnSend.setOnClickListener(this);
 
 		// PullService.isCurrActivity = true;
+		initNotifyHandler();
 
 		letterBeans = new ArrayList<LetterBean>();
 		letterAdapter = new LetterAdapter();
@@ -304,10 +305,10 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 				if (result.getStatus() != Constants.REQUEST_FAILD) {
 					List<LetterBean> letterList = result.getObjList();
 					if (letterList.size() > 0) {
+						letterBeans.clear();
 						letterBeans.addAll(letterList);
-
 						// 安时间排序
-						sortNotifyListByTime(letterBeans);
+//						sortNotifyListByTime(letterBeans);
 						letterAdapter.notifyDataSetChanged();
 						lvPersonalLetter.onRefreshComplete();
 						lvPersonalLetter.setSelection(letterBeans.size() - 1);
@@ -584,6 +585,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 				case HANDLER_DATA:
 					List<LetterBean> beans = (List<LetterBean>) msg.obj;
 					if (beans != null) {
+						letterBeans.clear();
 						letterBeans.addAll(beans);
 						sortNotifyListByTime(letterBeans);
 						letterAdapter.notifyDataSetChanged();
@@ -613,7 +615,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 								isLoaded = true;
 								BusinessHelper businessHelper = new BusinessHelper();
 
-								ResponseBean<LetterBean> result = businessHelper.getLetterList(userId, friendId);
+								ResponseBean<LetterBean> result = businessHelper.getLetterList(friendId, userId);
 								if (result != null) {
 									if (result.getStatus() != Constants.REQUEST_FAILD) {
 										List<LetterBean> letterList = result.getObjList();
@@ -635,7 +637,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 				}
 			};
 			letterTimer = new Timer();
-			letterTimer.schedule(letterTimerTask, 0, 2 * 1000);
+			letterTimer.schedule(letterTimerTask, 0, 5 * 1000);
 		}
 	}
 

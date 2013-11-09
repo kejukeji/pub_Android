@@ -58,8 +58,8 @@ public class LetterBean implements Serializable {
 		if (obj.has("time")) {
 			this.sendTime = obj.getString("time");
 		}
-		if (obj.has("sender_path")) {
-			this.friendUrl = BusinessHelper.PIC_BASE_URL + obj.getString("sender_path");
+		if (obj.has("pic_path")) {
+			this.friendUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
 	}
 
