@@ -79,11 +79,14 @@ public class NewsActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.viewSystemNews:
-			openActivity(SystemNewsListActivity.class);
-			
+			Bundle b = new Bundle();
+			b.putInt(Constants.EXTRA_DATA, 0);
+			openActivity(SystemNewsListActivity.class,b);
 			break;
 		case R.id.viewPrivateNews:
-			openActivity(PrivateNewsListActivity.class);
+			Bundle b1 = new Bundle();
+			b1.putInt(Constants.EXTRA_DATA, 1);
+			openActivity(PrivateNewsListActivity.class,b1);
 			break;
 		default:
 			break;

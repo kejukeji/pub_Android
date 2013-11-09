@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,13 +28,9 @@ import com.maoba.CommonApplication;
 import com.maoba.Constants;
 import com.maoba.R;
 import com.maoba.SystemException;
-import com.maoba.activity.LoginActivity;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.personalcenter.FriendPersonalCenter;
-import com.maoba.activity.personalcenter.PersonalCenter;
-import com.maoba.activity.personalnfo.PersonalInfoActivity;
 import com.maoba.bean.BarBean;
-import com.maoba.bean.PersonalCentre;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
@@ -55,6 +50,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 
 	private TextView tvName, tvDistanceLabel, tvAddress, tvBarType, tvIntro, tvHot;
 	private ImageView ivImage;
+	private ImageView ivNext;//签到
 
 	private LinearLayout viewShowList;
 
@@ -96,6 +92,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		ivImage = (ImageView) this.findViewById(R.id.ivImage);
 
 		viewShowList = (LinearLayout) this.findViewById(R.id.viewShowList);// 签到
+		ivNext = (ImageView)this.findViewById(R.id.ivNext);
 
 	}
 
@@ -105,12 +102,11 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
 		btnRight.setOnClickListener(this);
 		ivImage.setOnClickListener(this);
+		ivNext.setOnClickListener(this);
 		tvTitle.setText("酒吧详情");
 
 		tvName.setText(bean.getBar_Name());// 酒吧名字
 		tvBarType.setText(bean.getBarType());// 酒吧类型
-		tvAddress.setText(bean.getBar_Address());// 酒吧地址
-
 		tvIntro.setText(bean.getBar_Intro());// 酒吧内容
 		tvHot.setText(bean.getHot());// 酒吧人气
 
@@ -202,7 +198,8 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 				showShortToast(R.string.NoSignalException);
 			}
 			break;
-
+		case R.id.ivNext:
+			break;
 		default:
 			break;
 		}
@@ -260,6 +257,12 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 						int status = result.getInt("status");
 						if (status == Constants.REQUEST_SUCCESS) {
 							btnRight.setText(result.getString("is_collect"));
+							String address = result.getString("county");
+							String[] add = address.split(address, '$');
+							for (int i = 0; i < add.length; i++) {
+								tvAddress.setText(add[i]);// 酒吧地址
+							}
+
 							if (result.has("picture_list")) {
 								JSONArray showArrList = result.getJSONArray("picture_list");
 								if (showArrList != null) {
@@ -373,11 +376,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 				public void onClick(View v) {
 					Bundle b = new Bundle();
 					b.putSerializable(Constants.EXTRA_DATA, showBean);
-					if (showBean.getUserId() == SharedPrefUtil.getUid(BarDetailActivity.this)) {
-						openActivity(PersonalCenter.class, b);
-					} else {
-						openActivity(FriendPersonalCenter.class, b);
-					}
+					openActivity(FriendPersonalCenter.class, b);
 
 				}
 			});

@@ -23,33 +23,32 @@ public class LetterBean implements Serializable {
 
 	private static final long serialVersionUID = -6190204637500449066L;
 	private int id;
-	private int userId;
-	private int friendId;
-	private int sender;// 发送者
-	private int receiver;// 接受者
+	private int senderId;// 发送者
+	private int receiverId;// 接受者
+	private int sender;
+	private int receiver;
 	private String content;// 内容
 	private int status;// 状态NewsBean
 	private String sendTime;// 发送时间
 
-	private String userUrl;
 	private String friendUrl;
 
 	public LetterBean(JSONObject obj) throws JSONException {
 		if (obj.has("id")) {
 			this.id = obj.getInt("id");
 		}
-		if (obj.has("userId")) {
-			this.userId = obj.getInt("userId");
+		if (obj.has("sender_id")) {
+			this.senderId = obj.getInt("sender_id");
 		}
-		if (obj.has("friendId")) {
-			this.friendId = obj.getInt("friendId");
+		if (obj.has("receiver_id")) {
+			this.receiverId = obj.getInt("receiver_id");
 		}
-		if (obj.has("sender")) {
-			this.sender = obj.getInt("sender");
-		}
-		if (obj.has("receiver")) {
-			this.receiver = obj.getInt("receiver");
-		}
+//		if (obj.has("sender")) {
+//			this.sender = obj.getInt("sender");
+//		}
+//		if (obj.has("receiver")) {
+//			this.receiver = obj.getInt("receiver");
+//		}
 		if (obj.has("content")) {
 			this.content = obj.getString("content");
 		}
@@ -59,11 +58,8 @@ public class LetterBean implements Serializable {
 		if (obj.has("time")) {
 			this.sendTime = obj.getString("time");
 		}
-		if (obj.has("pic_path")) {
-			this.userUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
-		}
-		if (obj.has("receiver_path")) {
-			this.friendUrl = BusinessHelper.PIC_BASE_URL + obj.getString("receiver_path");
+		if (obj.has("sender_path")) {
+			this.friendUrl = BusinessHelper.PIC_BASE_URL + obj.getString("sender_path");
 		}
 	}
 
@@ -99,31 +95,31 @@ public class LetterBean implements Serializable {
 	/**
 	 * @return the userId
 	 */
-	public int getUserId() {
-		return userId;
+	public int getSenderId() {
+		return senderId;
 	}
 
 	/**
 	 * @param userId the userId to set
 	 *            
 	 */
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setSenderId(int senderId) {
+		this.senderId = senderId;
 	}
 
 	/**
 	 * @return the friendId
 	 */
-	public int getFriendId() {
-		return friendId;
+	public int getreceiverId() {
+		return receiverId;
 	}
 
 	/**
 	 * @param friendId the friendId to set
 	 *            
 	 */
-	public void setFriendId(int friendId) {
-		this.friendId = friendId;
+	public void setreceiverId(int receiverId) {
+		this.receiverId = receiverId;
 	}
 
 	/**
@@ -199,14 +195,6 @@ public class LetterBean implements Serializable {
 	 */
 	public void setSendTime(String sendTime) {
 		this.sendTime = sendTime;
-	}
-
-	public String getUserUrl() {
-		return userUrl;
-	}
-
-	public void setUserUrl(String userUrl) {
-		this.userUrl = userUrl;
 	}
 
 	public String getFriendUrl() {

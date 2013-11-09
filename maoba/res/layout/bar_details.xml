@@ -192,11 +192,11 @@
                         android:textSize="@dimen/LargeTextSize" />
                 </LinearLayout>
 
-                <LinearLayout
+                  <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
@@ -205,7 +205,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:scrollbarAlwaysDrawVerticalTrack="false"
-                        android:scrollbars="none" >
+                        android:scrollbars="none"
+                        android:layout_weight="1" 
+                        android:layout_marginRight="15dp">
 
                         <LinearLayout
                             android:id="@+id/viewShowList"
@@ -214,14 +216,24 @@
                             android:orientation="horizontal" >
                         </LinearLayout>
                     </HorizontalScrollView>
+                    <ImageView 
+                        android:id="@+id/ivNext"
+                        android:layout_width="10dp"
+                        android:layout_height="17dp"
+                        android:background="@drawable/ic_grey_right_arrow"
+                        android:layout_gravity="center_vertical"
+                       android:paddingLeft="20dp"
+                       android:paddingRight="30dp"
+                       android:scaleType="fitXY"
+                       android:layout_marginRight="8dp"
+                       android:layout_marginLeft="5dp"
+                        />
                 </LinearLayout>
             </LinearLayout>
-
-            <View
+			     <View
                 android:layout_width="fill_parent"
                 android:layout_height="4dp"
                 android:background="@drawable/bg_bar_details_line" />
-
             <LinearLayout
                 android:id="@+id/viewIntro"
                 android:layout_width="fill_parent"
@@ -233,7 +245,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="酒吧简介："
-                    android:textSize="@dimen/LargeTextSize" />
+                    android:textSize="@dimen/TitleTextSize" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -249,10 +261,9 @@
                         android:ellipsize="end"
                         android:maxLines="3"
                         android:textColor="@color/dark_text"
-                        android:textSize="@dimen/SmallTextSize" />
+                        android:textSize="@dimen/BasicTextSize" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

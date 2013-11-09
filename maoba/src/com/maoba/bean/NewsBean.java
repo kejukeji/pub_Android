@@ -48,14 +48,14 @@ public class NewsBean implements Serializable {
 		if (obj.has("nick_name")) {
 			this.nickName = obj.getString("nick_name");
 		}
-		if (obj.has("time")) {
-			this.sendTime = obj.getString("time");
+		if (obj.has("sender_time")) {
+			this.sendTime = obj.getString("sender_time");
 		}
 		if (obj.has("content")) {
 			this.content = obj.getString("content");
 		}
-		if (obj.has("pic_path")) {
-			this.userUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
+		if (obj.has("receiver_path")) {
+			this.userUrl = BusinessHelper.PIC_BASE_URL + obj.getString("receiver_path");
 		}
 	}
 

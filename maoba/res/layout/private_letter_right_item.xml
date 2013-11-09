@@ -36,13 +36,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:paddingLeft="70dp" >
+        android:paddingLeft="80dp" >
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginRight="10dp"
-            android:scaleType="fitCenter"
+            android:scaleType="fitXY"
             android:src="@drawable/bg_letter_tiem" />
 
         <TextView

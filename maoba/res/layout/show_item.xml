@@ -11,8 +11,8 @@
 
         <ImageView
             android:id="@+id/ivPhoto"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:scaleType="centerCrop" />
     </LinearLayout>
 

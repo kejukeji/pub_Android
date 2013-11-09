@@ -98,5 +98,6 @@ public class Constants {
 	public static final int NICKNAMENUM = 6;
 	public static final int PASSWORDNUMBER=7;
 	public static final int DISTRICT=8;
+	
 
 }

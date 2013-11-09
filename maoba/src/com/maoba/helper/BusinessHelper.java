@@ -139,7 +139,7 @@ public class BusinessHelper {
 			p.add(new PostParameter("type_id", bar_id));
 		}
 		p.add(new PostParameter("page", pageIndex));
-		ResponseBean<BarBean> response;
+		ResponseBean<BarBean> response = null;
 		try {
 			JSONObject obj;
 			obj = httpClient.get(BASE_URL + "pub/list/detail", p.toArray(new PostParameter[p.size()])).asJSONObject();
@@ -149,7 +149,6 @@ public class BusinessHelper {
 				List<BarBean> list = null;
 				List<BarBean> list1 = null;
 			    List<BarBean> list2 = null;
-				
 				if (!TextUtils.isEmpty(obj.getString("pub_list"))) {
 					list = BarBean.constractList(obj.getJSONArray("pub_list"));// 酒吧列表
 					list1 = BarBean.constractList(obj.getJSONArray("picture_list"));// 推荐酒吧列表
@@ -166,9 +165,11 @@ public class BusinessHelper {
 				response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, obj.getString("message"));
 			}
 		} catch (SystemException e1) {
+			e1.printStackTrace();
 			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
 		} catch (JSONException e) {
-			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
+			e.printStackTrace();
+		//	response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
 		}
 		return response;
 
@@ -407,10 +408,11 @@ public class BusinessHelper {
 	 * 
 	 * @param uid
 	 * @param pageIndex
+	 * @param newType 
 	 * @return
 	 * @throws SystemException
 	 * */
-	public ResponseBean<NewsBean> getPrivateNews(int uid, int pageIndex) throws SystemException {
+	public ResponseBean<NewsBean> getPrivateNews(int uid, int pageIndex, int newType) throws SystemException {
 		List<PostParameter> p = new ArrayList<PostParameter>();
 		if (uid > 0) {
 			p.add(new PostParameter("user_id", uid));
@@ -418,20 +420,31 @@ public class BusinessHelper {
 			p.add(new PostParameter("user_id", ""));
 		}
 		p.add(new PostParameter("page", pageIndex));
+		p.add(new PostParameter("types", newType));
 		ResponseBean<NewsBean> response;
 		JSONObject obj;
 		try {
-			obj = httpClient.get(BASE_URL + "user/direct/message", p.toArray(new PostParameter[p.size()]))
+			obj = httpClient.get(BASE_URL + "message/by/type/info", p.toArray(new PostParameter[p.size()]))
 					.asJSONObject();
 			int status = obj.getInt("status");
 			if (status == Constants.REQUEST_SUCCESS) {
 				response = new ResponseBean<NewsBean>(obj);
 				List<NewsBean> list;
-				if (!TextUtils.isEmpty(obj.getString("list"))) {
-					list = NewsBean.constractList(obj.getJSONArray("list"));
+				if(newType==0){
+					if (!TextUtils.isEmpty(obj.getString("system_message_list"))) {
+						list = NewsBean.constractList(obj.getJSONArray("system_message_list"));
 
-				} else {
-					list = new ArrayList<NewsBean>();
+					} else {
+						list = new ArrayList<NewsBean>();
+					}
+				}else{
+					if (!TextUtils.isEmpty(obj.getString("sender_list"))) {
+						list = NewsBean.constractList(obj.getJSONArray("sender_list"));
+
+					} else {
+						list = new ArrayList<NewsBean>();
+					}
+					
 				}
 				response.setObjList(list);
 			} else {
@@ -455,15 +468,15 @@ public class BusinessHelper {
 	 * @return
 	 * @throws SystemException
 	 * */
-	public ResponseBean<LetterBean> getLetterList(int uid, int friendId) throws SystemException {
+	public ResponseBean<LetterBean> getLetterList(int friendId,int uid) throws SystemException {
 		List<PostParameter> p = new ArrayList<PostParameter>();
-		if (uid > 0) {
-			p.add(new PostParameter("sender_id", uid));
+		if (friendId > 0) {
+			p.add(new PostParameter("sender_id", friendId));
 		} else {
 			p.add(new PostParameter("sender_id", ""));
 		}
-		if (friendId > 0) {
-			p.add(new PostParameter("receiver_id", friendId));
+		if (uid > 0) {
+			p.add(new PostParameter("receiver_id", uid));
 		} else {
 			p.add(new PostParameter("receiver_id", ""));
 		}

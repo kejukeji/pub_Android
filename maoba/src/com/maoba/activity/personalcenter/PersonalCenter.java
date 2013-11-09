@@ -46,7 +46,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 	private TextView tvAge, tvAddress, tvNickName, tvSignature;
 
 	private Button btnLeftMenu;
-	private BarBean bean;
+	//private BarBean bean;
 
 	private ImageView ivPersonalSetting;// 个人资料设置或修改
 
@@ -54,7 +54,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.personal_center);
-		bean = (BarBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
+		//bean = (BarBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
 		findView();
 		fillData();
 	}
@@ -102,7 +102,9 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 			openActivity(CollectionOfBarListActivity.class, b);
 			break;
 		case R.id.viewMyNews:
-			openActivity(PrivateNewsListActivity.class);
+			Bundle b1 = new Bundle();
+			b1.putInt(Constants.EXTRA_DATA, 1);
+			openActivity(PrivateNewsListActivity.class,b1);
 			break;
 		case R.id.ivPersonalSetting:
 			openActivity(PersonalInfoActivity.class);
@@ -126,9 +128,9 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
-			//int uid = SharedPrefUtil.getUid(PersonalCenter.this);
+			int uid = SharedPrefUtil.getUid(PersonalCenter.this);
 			try {
-				return new BusinessHelper().getUserInfor(bean.getUserId());
+				return new BusinessHelper().getUserInfor(uid);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}

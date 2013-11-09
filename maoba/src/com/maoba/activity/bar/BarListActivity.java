@@ -224,18 +224,19 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private ScreenAreaAdapter screenAdapter;
 
 	private void showScreenAreaPopuWindow() {
-		tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_filter_up_arrow), null);
+		tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,
+				getResources().getDrawable(R.drawable.ic_filter_up_arrow), null);
 
 		displayHeight = (BarListActivity.this).getWindowManager().getDefaultDisplay().getHeight();
 		int maxHeight = (int) (displayHeight * 0.8);
 
-		View view =  LayoutInflater.from(this).inflate(R.layout.popu_data_picker_list, null);
+		View view = LayoutInflater.from(this).inflate(R.layout.popu_data_picker_list, null);
 		lvScreenArea = (ListView) view.findViewById(R.id.lvScreenArea);
 		LayoutParams p = new LayoutParams(LayoutParams.MATCH_PARENT, maxHeight);
 		view.setLayoutParams(p);
 		LinearLayout layout = new LinearLayout(this);
 		layout.addView(view, p);
-		pw = new PopupWindow(layout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT );
+		pw = new PopupWindow(layout, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_date_picker));
 		pw.setAnimationStyle(R.style.PopupWindowAnimation);
 		pw.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_lightransparent));
@@ -251,31 +252,35 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		lvScreenArea.setDivider(null);
 		lvScreenArea.setOnItemClickListener(ItemListener1);
 		layout.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				onPressBack();
 			}
 		});
 	}
+
 	/**
 	 * 如果菜单成展开状态，则让菜单收回去
 	 */
 	public boolean onPressBack() {
 		if (pw != null && pw.isShowing()) {
 			pw.dismiss();
-			tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_filter_down_arrow), null);
+			tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,
+					getResources().getDrawable(R.drawable.ic_filter_down_arrow), null);
 			return true;
 		} else {
 			return false;
 		}
 
 	}
+
 	public void onBackPressed() {
-		if(!onPressBack()){
+		if (!onPressBack()) {
 			finish();
 		}
 	};
+
 	/**
 	 * 筛选地区点击 listview点击事件
 	 */
@@ -345,7 +350,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			if (position == 0) {
 				holder.tvScreenArea.setTextColor(getResources().getColor(R.color.blue));
 				holder.creenArealine.setBackgroundResource(R.drawable.bg_bar_details_line1);
-			} else{
+			} else {
 				holder.tvScreenArea.setTextColor(getResources().getColor(R.color.black));
 				holder.creenArealine.setBackgroundResource(R.drawable.bg_bar_details_line);
 			}
@@ -465,10 +470,13 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
+
 			try {
 				return new BusinessHelper().getBarList(bean.getId(), pageIndex);
 			} catch (SystemException e) {
+				e.printStackTrace();
 			}
+
 			return null;
 		}
 

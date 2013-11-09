@@ -3,7 +3,6 @@
  */
 package com.maoba.activity.personalcenter;
 
-
 import java.util.Calendar;
 
 import org.json.JSONException;
@@ -41,12 +40,13 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 	private ImageButton ibLeft;
 	private TextView tvSignature;// 个性签名
 	private TextView tvAge, tvAddress, tvNickName, tvCollectNum;
-	private TextView tvSendPrivateNews; //发私信
-	
+	private TextView tvSendPrivateNews; // 发私信
+
 	private ImageView ivUserPhoto;
 	private LinearLayout viewMyCollect;
-	
+
 	private BarBean bean;
+	private String NickName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		tvNickName = (TextView) this.findViewById(R.id.tvNickName);
 		tvCollectNum = (TextView) this.findViewById(R.id.tvCollectNum);
 		ivUserPhoto = (ImageView) this.findViewById(R.id.ivUserPhoto);
-		tvSendPrivateNews = (TextView)this.findViewById(R.id.tvSendPrivateNews);
+		tvSendPrivateNews = (TextView) this.findViewById(R.id.tvSendPrivateNews);
 
 		viewMyCollect = (LinearLayout) this.findViewById(R.id.viewMyCollect);
 
@@ -83,7 +83,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 	private void fillData() {
 		ibLeft.setOnClickListener(this);
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
-		
+
 		tvSendPrivateNews.setOnClickListener(this);
 
 		viewMyCollect.setOnClickListener(this);
@@ -104,7 +104,8 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		case R.id.tvSendPrivateNews:
 			Bundle b1 = new Bundle();
 			b1.putInt(Constants.EXTRA_DATA, bean.getUserId());
-			openActivity(PrivateLetterActivity.class,b1);
+			b1.putString("NICK_NAME", NickName);
+			openActivity(PrivateLetterActivity.class, b1);
 		default:
 			break;
 		}
@@ -145,7 +146,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						JSONObject user = result.getJSONObject("user");
 						String signaTure = userJson.getString("signature");
 						String birthday = userJson.getString("birthday");
-						String NickName = user.getString("nick_name");
+						NickName = user.getString("nick_name");
 						String address = userJson.getString("county_id");
 						if (signaTure.equals("null")) {
 							tvSignature.setText("未设置");
@@ -167,14 +168,14 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 							int age = currentYear - birthYear;// 算出年龄
 							String ageString = String.valueOf(age);// 转换
 							tvAge.setText(ageString);
-							
+
 						}
 						if (address.equals("null")) {
 							tvAddress.setText("未设置");
 						} else {
 							tvAddress.setText(address + "");
 						}
-						String photoUrl = BusinessHelper.PIC_BASE_URL +userJson.getString("pic_path");
+						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 						ivUserPhoto.setTag(photoUrl);
 						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
 								new ImageCallback() {
@@ -234,9 +235,9 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 				try {
 					status = result.getInt("status");
 					if (status == Constants.REQUEST_SUCCESS) {
-                           String collectNum =result.getString("count");
-                           tvCollectNum.setText("("+collectNum+")");
-					} 
+						String collectNum = result.getString("count");
+						tvCollectNum.setText("(" + collectNum + ")");
+					}
 				} catch (JSONException e) {
 					showShortToast(R.string.json_exception);
 				}
@@ -247,26 +248,27 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		}
 
 	}
-	//Activity从后台重新回到前台时被调用  
-    @Override  
-    protected void onRestart() {  
-        super.onRestart();  
-        if (NetUtil.checkNet(this)) {
+
+	// Activity从后台重新回到前台时被调用
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		if (NetUtil.checkNet(this)) {
 			new GetUserInfor().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
-        
-    }  
-    @Override
-	protected void onResume() {
-		super.onResume();
-		   if (NetUtil.checkNet(this)) {
-				new GetUserInfor().execute();
-			} else {
-				showShortToast(R.string.NoSignalException);
-			}
+
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (NetUtil.checkNet(this)) {
+			new GetUserInfor().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
+	}
 
 }

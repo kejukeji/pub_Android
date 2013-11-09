@@ -72,6 +72,8 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 	private ListView ivPrivateList;
 	private List<NewsBean> newsListBean = new ArrayList<NewsBean>();
 	private NewsListAdapter newsAdapter;
+	
+	private int nesType;//信息类型
 
 	private Map<String, Integer> faceMap = new HashMap<String, Integer>();
 	private int[] faceRes = new int[] { R.drawable.ic_face_001, R.drawable.ic_face_002, R.drawable.ic_face_003,
@@ -86,6 +88,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.piavate_news_list);
+		nesType = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		for (int i = 0; i < faceRes.length; i++) {
 			String j;
 			int k = i + 1;
@@ -170,6 +173,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 			NewsBean bean = newsListBean.get(arg2);
 			Bundle b = new Bundle();
 			b.putSerializable(Constants.EXTRA_DATA, bean.getFriendId());
+			b.putSerializable("NICK_NAME", bean.getNickName());
 			openActivity(PrivateLetterActivity.class, b);
 		}
 	};
@@ -223,7 +227,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		protected ResponseBean<NewsBean> doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(PrivateNewsListActivity.this);
 			try {
-				return new BusinessHelper().getPrivateNews(uid, pageIndex);
+				return new BusinessHelper().getPrivateNews(uid,nesType,pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -237,9 +241,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 				pd.dismiss();
 			}
 			pbFooter.setVisibility(View.GONE);
-			if (isFilter) {
-				newsListBean.clear();
-			}
+			
 			if (result.getStatus() != Constants.REQUEST_FAILD) {
 				// 这里获取到十条数据
 				List<NewsBean> tempList = result.getObjList();
@@ -304,7 +306,6 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder = null;
-			// NewsBean bean = newsListBean.get(position);
 			if (convertView == null) {
 				holder = new ViewHolder();
 				convertView = getLayoutInflater().inflate(R.layout.private_news_item, null);
@@ -324,7 +325,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		private void fillData(View convertView, int position, ViewHolder viewHolder) {
 			NewsBean bean = newsListBean.get(position);
 			setImageByUrl(viewHolder.ivUserPhoto, bean.getUserUrl());
-
+        
 			if (position % 2 == 0) {
 				// convertView.setBackgroundResource(R.drawable.bg_repeat);
 			} else {
@@ -363,21 +364,20 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 
 		private void setImageByUrl(ImageView imageView, String url) {
 			if (null == url) {
+				imageView.setImageResource(R.drawable.ic_default);
 				return;
 			}
-			String img = url.replace("\\", "");
-			imageView.setTag(img);
-			final Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(img, new ImageCallback() {
+			imageView.setTag(url);
+			Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(url, new ImageCallback() {
 				@Override
 				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-					ImageView image = null;
-					image = (ImageView) ivPrivateList.findViewWithTag(imageUrl);
-
-					if (image != null) {
+					ImageView ivPhoto = (ImageView) ivPrivateList.findViewWithTag(imageUrl);
+					if (ivPhoto != null) {
 						if (imageDrawable != null) {
-							image.setImageDrawable(imageDrawable);
+							ivPhoto.setImageDrawable(imageDrawable);
+							NewsListAdapter.this.notifyDataSetChanged();
 						} else {
-							image.setImageResource(R.drawable.ic_default);
+							ivPhoto.setImageResource(R.drawable.ic_default);
 						}
 					}
 				}
@@ -405,7 +405,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		protected JSONObject doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(PrivateNewsListActivity.this);
 			try {
-				return new BusinessHelper().getClear(2);
+				return new BusinessHelper().getClear(uid);
 			} catch (SystemException e) {
 			}
 			return null;
@@ -421,6 +421,9 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 						int status = result.getInt("status");
 						if (status == Constants.REQUEST_SUCCESS) {
 							showShortToast("清除成功");
+							if (isFilter) {
+								newsListBean.clear();
+							}
 							newsAdapter.notifyDataSetChanged();
 						}
 					} catch (JSONException e) {

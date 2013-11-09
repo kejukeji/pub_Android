@@ -69,6 +69,8 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	private GridViewInScrollView gvBarType;
 	private List<BarTypeBean> barTypeList;
 	private Adapter adapter;
+	
+   
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

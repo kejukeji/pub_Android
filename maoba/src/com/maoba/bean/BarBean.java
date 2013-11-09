@@ -68,8 +68,8 @@ public class BarBean implements Serializable {
 			this.bar_Name = obj.getString("name");
 
 		}
-		if (obj.has("city_county")) {
-			this.bar_Address = obj.getString("city_county");
+		if (obj.has("area")) {
+			this.bar_Address = obj.getString("area");
 		}
 		if (obj.has("pic_path")) {
 			this.imageUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
@@ -116,7 +116,7 @@ public class BarBean implements Serializable {
 			this.screenAreaName = obj.getString("name");
 		}
 
-		if (obj.has("county") && !TextUtils.isEmpty(obj.getString("county"))) {// 政策里二级分类
+		if (obj.has("county") && !TextUtils.isEmpty(obj.getString("county"))) {
 			this.list.add(new BarBean(0, this.screenAreaName));
 			this.list.addAll(BarBean.constractList(obj.getJSONArray("county")));
 		}
