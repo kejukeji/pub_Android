@@ -412,7 +412,7 @@ public class BusinessHelper {
 	 * @return
 	 * @throws SystemException
 	 * */
-	public ResponseBean<NewsBean> getPrivateNews(int uid, int pageIndex, int newType) throws SystemException {
+	public ResponseBean<NewsBean> getPrivateNews(int uid, int pageIndex) throws SystemException {
 		List<PostParameter> p = new ArrayList<PostParameter>();
 		if (uid > 0) {
 			p.add(new PostParameter("user_id", uid));
@@ -420,32 +420,22 @@ public class BusinessHelper {
 			p.add(new PostParameter("user_id", ""));
 		}
 		p.add(new PostParameter("page", pageIndex));
-		p.add(new PostParameter("types", newType));
 		ResponseBean<NewsBean> response;
 		JSONObject obj;
 		try {
-			obj = httpClient.get(BASE_URL + "message/by/type/info", p.toArray(new PostParameter[p.size()]))
+			obj = httpClient.get(BASE_URL + "user/direct/message", p.toArray(new PostParameter[p.size()]))
 					.asJSONObject();
 			int status = obj.getInt("status");
 			if (status == Constants.REQUEST_SUCCESS) {
 				response = new ResponseBean<NewsBean>(obj);
 				List<NewsBean> list;
-				if(newType==0){
-					if (!TextUtils.isEmpty(obj.getString("system_message_list"))) {
-						list = NewsBean.constractList(obj.getJSONArray("system_message_list"));
-
-					} else {
-						list = new ArrayList<NewsBean>();
-					}
-				}else{
-					if (!TextUtils.isEmpty(obj.getString("sender_list"))) {
-						list = NewsBean.constractList(obj.getJSONArray("sender_list"));
+					if (!TextUtils.isEmpty(obj.getString("list"))) {
+						list = NewsBean.constractList(obj.getJSONArray("list"));
 
 					} else {
 						list = new ArrayList<NewsBean>();
 					}
 					
-				}
 				response.setObjList(list);
 			} else {
 				response = new ResponseBean<NewsBean>(Constants.REQUEST_FAILD, obj.getString(""));
@@ -718,10 +708,7 @@ public class BusinessHelper {
 					.asJSONObject();
 		}
 		
-		
 	}
-	
-	
 	/**
 	 * 第三方登陆的用户设置资料
 	 * @param userId
@@ -756,15 +743,17 @@ public class BusinessHelper {
 	 * 
 	 * @param latitude   经度
 	 * @param longitude  纬度
+	 * @param pageIndex 
 	 * @param page   页数
 	 * @return
 	 * @throws SystemException
 	 */
 
-	public JSONObject getNearbyBarList( double longitude,double latitude) throws SystemException{
-	//	p.add(new PostParameter("page", pageIndex));
+	public JSONObject getNearbyBarList( double longitude,double latitude, int pageIndex) throws SystemException{
 		return httpClient.get(BASE_URL + "near/pub",
-				new PostParameter[] { new PostParameter("longitude", longitude), new PostParameter("latitude", latitude)})
+				new PostParameter[] { new PostParameter("longitude", longitude), 
+				new PostParameter("latitude", latitude),
+				new PostParameter("page", pageIndex)})
 				.asJSONObject();
 	}
 	

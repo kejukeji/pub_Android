@@ -190,9 +190,9 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
-
+ //
 			try {
-				return new BusinessHelper().getNearbyBarList(app.getLastLocation().getLatitude(), app.getLastLocation().getLongitude());
+				return new BusinessHelper().getNearbyBarList(app.getLastLocation().getLatitude(), app.getLastLocation().getLongitude(),pageIndex);
 			} catch (SystemException e) {
 			}
 			return null;

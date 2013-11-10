@@ -102,9 +102,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 			openActivity(CollectionOfBarListActivity.class, b);
 			break;
 		case R.id.viewMyNews:
-			Bundle b1 = new Bundle();
-			b1.putInt(Constants.EXTRA_DATA, 1);
-			openActivity(PrivateNewsListActivity.class,b1);
+			openActivity(PrivateNewsListActivity.class);
 			break;
 		case R.id.ivPersonalSetting:
 			openActivity(PersonalInfoActivity.class);

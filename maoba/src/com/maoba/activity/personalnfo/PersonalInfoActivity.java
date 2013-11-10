@@ -198,29 +198,34 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			finish();
 			break;
 		case R.id.btnRight:
-			String nickName = tvNickName.getText().toString().trim();
-//			if(nickName.equals("未填写")){
+			String nickName=null;
+			String birthday=null;
+			String sex=null;
+			String signature=null;
+			String address=null;
+			nickName = tvNickName.getText().toString().trim();
+//			if(nickName.equals("")){
 //				nickName =null;
 //			}
-			String birthday = tvBirthday.getText().toString().trim();
-//			if(birthday.equals("未填写")){
+			 birthday = tvBirthday.getText().toString().trim();
+//			if(birthday.equals("")){
 //				birthday=null;
 //			}
-			String sex = tvSex.getText().toString().trim();
-//			if(sex.equals("未填写")){
+			 sex = tvSex.getText().toString().trim();
+//			if(sex.equals("")){
 //				sex=null;
 //			}
-			String signature = tvSignature.getText().toString().trim();
-//			if(signature.equals("未填写")){
+			 signature = tvSignature.getText().toString().trim();
+//			if(signature.equals("")){
 //				signature=null;
 //			}
-			String address = tvDistrict.getText().toString().trim();
-//			if(address.equals("未填写")){
+			 address = tvDistrict.getText().toString().trim();
+//			if(address.equals("")){
 //				address=null;
 //			}
-//			if(newPassword.equals("修改密码")){
-//				newPassword=null;
-//			}
+			if(newPassword==null){
+				newPassword="";
+			}
 			if (NetUtil.checkNet(PersonalInfoActivity.this)) {
 				new personInfoAddTask(nickName, birthday, sex, signature, address, newPassword).execute();
 			}

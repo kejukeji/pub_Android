@@ -113,7 +113,7 @@ public class HttpClient implements java.io.Serializable {
                     "RetryInterval cannot be negative.");
         }
     }
-    //这个方案是上传文件的  就是文件必须要上传的  如果即可穿文件 也可以传别的内容  不可用此方案
+   
     public Response multPartURL(String url,  PostParameter[] params,ImageItem item) throws SystemException{
   		PostMethod post = new PostMethod(url);
     	try {
@@ -150,6 +150,7 @@ public class HttpClient implements java.io.Serializable {
     		post.releaseConnection();
     	}
   	}
+    //这个方案是上传文件的  就是文件必须要上传的  如果即可穿文件 也可以传别的内容  不可用此方案
     public Response multPartURL(String fileParamName,String url,  PostParameter[] params,File file) throws SystemException{
   		PostMethod post = new PostMethod(url);
   		org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();

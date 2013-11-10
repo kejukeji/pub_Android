@@ -73,8 +73,6 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 	private List<NewsBean> newsListBean = new ArrayList<NewsBean>();
 	private NewsListAdapter newsAdapter;
 	
-	private int nesType;//信息类型
-
 	private Map<String, Integer> faceMap = new HashMap<String, Integer>();
 	private int[] faceRes = new int[] { R.drawable.ic_face_001, R.drawable.ic_face_002, R.drawable.ic_face_003,
 			R.drawable.ic_face_004, R.drawable.ic_face_005, R.drawable.ic_face_006, R.drawable.ic_face_007,
@@ -88,7 +86,6 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.piavate_news_list);
-		nesType = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		for (int i = 0; i < faceRes.length; i++) {
 			String j;
 			int k = i + 1;
@@ -227,7 +224,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		protected ResponseBean<NewsBean> doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(PrivateNewsListActivity.this);
 			try {
-				return new BusinessHelper().getPrivateNews(uid,nesType,pageIndex);
+				return new BusinessHelper().getPrivateNews(uid,pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
