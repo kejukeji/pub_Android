@@ -703,7 +703,7 @@ public class BusinessHelper {
 							new PostParameter("password", passWord), new PostParameter("nick_name", nickName),
 							new PostParameter("birthday", birthday),new PostParameter("sex", sex),
 							new PostParameter("signature", signature),new PostParameter("company", address),
-							new PostParameter("new_password", newPassword),new PostParameter("head_picture", avatarFile)})
+							new PostParameter("new_password", newPassword)})
 							
 					.asJSONObject();
 		}
