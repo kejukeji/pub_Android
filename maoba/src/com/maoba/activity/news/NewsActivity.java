@@ -79,7 +79,9 @@ public class NewsActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.viewSystemNews:
-			openActivity(SystemNewsListActivity.class);
+			Bundle b = new Bundle();
+			b.putSerializable(Constants.EXTRA_DATA, 0);
+			openActivity(SystemNewsListActivity.class,b);
 			break;
 		case R.id.viewPrivateNews:
 			openActivity(PrivateNewsListActivity.class);
@@ -109,7 +111,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener {
 		protected JSONObject doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(NewsActivity.this);
 			try {
-				return new BusinessHelper().getSysLetter1(uid);
+				return new BusinessHelper().getSysLetter1(uid,0);
 			} catch (SystemException e) {
 			}
 			return null;

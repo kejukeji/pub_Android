@@ -519,22 +519,24 @@ public class BusinessHelper {
 
 	/**
 	 * 系统信息
+	 * @param newsType 
 	 * 
 	 * @param user_id
 	 * @return
 	 * @throws SystemException
 	 */
-	public ResponseBean<NewsBean> getSysLetter(int uid) throws SystemException {
+	public ResponseBean<NewsBean> getSysLetter(int uid, int newsType) throws SystemException {
 		List<PostParameter> p = new ArrayList<PostParameter>();
 		if (uid > 0) {
 			p.add(new PostParameter("user_id", uid));
 		} else {
-			p.add(new PostParameter("user_id", ""));
+			p.add(new PostParameter("user_id", newsType));
 		}
+		p.add(new PostParameter("types", ""));
 		ResponseBean<NewsBean> response;
 		JSONObject obj;
 		try {
-			obj = httpClient.get(BASE_URL + "user/message", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			obj = httpClient.get(BASE_URL + "message/by/type/info", p.toArray(new PostParameter[p.size()])).asJSONObject();
 			int status = obj.getInt("status");
 			if (status == Constants.REQUEST_SUCCESS) {
 				response = new ResponseBean<NewsBean>(obj);
@@ -561,14 +563,15 @@ public class BusinessHelper {
 
 	/**
 	 * 获取系统信息和私信信息的条数
+	 * @param newsType 
 	 * 
 	 * @param user_id
 	 * @return
 	 * @throws SystemException
 	 */
-	public JSONObject getSysLetter1(int uid) throws SystemException {
-
-		return httpClient.get(BASE_URL + "user/message", new PostParameter[] { new PostParameter("user_id", uid), })
+	public JSONObject getSysLetter1(int uid, int newsType) throws SystemException {
+		return httpClient.get(BASE_URL + "message/by/type/info", new PostParameter[] { 
+				new PostParameter("user_id", uid),new PostParameter("types", newsType),})
 				.asJSONObject();
 
 	}
@@ -724,19 +727,31 @@ public class BusinessHelper {
 	 * @return
 	 */
 	public JSONObject thirdAddUserInfor(int userId, int loginType, String openId, String nickName, String birthday,
-			int sex, String signature, String address, String newPassword,File avatarFile)throws SystemException {
-		List<PostParameter> params = new ArrayList<PostParameter>();
-		params.add(new PostParameter("login_type", loginType));
-		params.add(new PostParameter("open_id", openId));
-		params.add(new PostParameter("nick_name", nickName));
-		params.add(new PostParameter("birthday", birthday));
-		params.add(new PostParameter("sex", sex));
-		params.add(new PostParameter("signature", signature));
-		params.add(new PostParameter("company", address));
-		return httpClient.multPartURL("head_picture",
-				BASE_URL + "user/user_info/" + userId,
-				params.toArray(new PostParameter[params.size()]), avatarFile)
-				.asJSONObject();
+			int sex, String signature, String address,File avatarFile)throws SystemException {
+	      if(avatarFile!=null){
+	    	  List<PostParameter> params = new ArrayList<PostParameter>();
+	  		params.add(new PostParameter("login_type", loginType));
+	  		params.add(new PostParameter("open_id", openId));
+	  		params.add(new PostParameter("nick_name", nickName));
+	  		params.add(new PostParameter("birthday", birthday));
+	  		params.add(new PostParameter("sex", sex));
+	  		params.add(new PostParameter("signature", signature));
+	  		params.add(new PostParameter("company", address));
+	  		return httpClient.multPartURL("head_picture",
+	  				BASE_URL + "user/user_info/" + userId,
+	  				params.toArray(new PostParameter[params.size()]), avatarFile)
+	  				.asJSONObject();
+	      }else{
+	    	  return httpClient.post(
+						BASE_URL + "user/user_info/"+ userId,
+						new PostParameter[] {new PostParameter("login_type", loginType),
+								new PostParameter("open_id", openId), new PostParameter("nick_name", nickName),
+								new PostParameter("birthday", birthday),new PostParameter("sex", sex),
+								new PostParameter("signature", signature),new PostParameter("company", address)
+								})
+						.asJSONObject();
+	      }
+		
 	}
 	/**
 	 * 获取附近酒吧

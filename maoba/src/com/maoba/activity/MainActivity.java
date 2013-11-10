@@ -192,17 +192,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			openActivity(SettingActivity.class);
 			break;
 		case R.id.viewSettingTitle:
-			if (!SharedPrefUtil.isLogin(this)) {
-				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						openActivity(LoginActivity.class);
-					}
-				}, null, null);
-				return;
-			}
-
+            
 			openActivity(PersonalCenter.class);
 			break;
 		default:

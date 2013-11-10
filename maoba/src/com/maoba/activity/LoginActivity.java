@@ -134,6 +134,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				if (NetUtil.checkNet(this)) {
 					Intent authorizeIntent = new Intent(this, AuthorizeActivity.class);
 					authorizeIntent.putExtra(Constants.EXTRA_BIND_FROM, Constants.BIND_WEIBO);
+					logintype = Constants.LOGIN_SINA;// 表示新浪微博登陆
+					SharedPrefUtil.setLoginType(LoginActivity.this, logintype);
 					startActivityForResult(authorizeIntent, Constants.REQUEST_CODE_BIND_WEIBO);
 				} else {
 					showShortToast(R.string.NoSignalException);

@@ -43,12 +43,14 @@ public class SystemNewsListActivity extends BaseActivity implements OnClickListe
 	private int pageIndex;
 
 	private ProgressDialog pd;
+	private int newsType;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.system_news_list);
+		newsType = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		findView();
 		fillData();
 	}
@@ -107,7 +109,7 @@ public class SystemNewsListActivity extends BaseActivity implements OnClickListe
 		protected ResponseBean<NewsBean> doInBackground(Void... params) {
 			int userId = SharedPrefUtil.getUid(SystemNewsListActivity.this);
 			try {
-				return new BusinessHelper().getPrivateNews(userId,pageIndex);
+				return new BusinessHelper().getSysLetter(userId,newsType);
 			} catch (SystemException e) {
 			}
 			return null;

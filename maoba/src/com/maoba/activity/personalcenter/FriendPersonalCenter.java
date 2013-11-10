@@ -45,7 +45,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 	private ImageView ivUserPhoto;
 	private LinearLayout viewMyCollect;
 
-	private BarBean bean;
+	private int userId;
 	private String NickName;
 
 	@Override
@@ -53,7 +53,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_personal_center);
 
-		bean = (BarBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
+		userId =(int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);;
 		findView();
 		fillData();
 	}
@@ -98,12 +98,12 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 			break;
 		case R.id.viewMyCollect:
 			Bundle b = new Bundle();
-			b.putInt(Constants.EXTRA_DATA, bean.getUserId());
+			b.putInt(Constants.EXTRA_DATA, userId);
 			openActivity(CollectionOfBarListActivity.class, b);
 			break;
 		case R.id.tvSendPrivateNews:
 			Bundle b1 = new Bundle();
-			b1.putInt(Constants.EXTRA_DATA, bean.getUserId());
+			b1.putInt(Constants.EXTRA_DATA, userId);
 			b1.putString("NICK_NAME", NickName);
 			openActivity(PrivateLetterActivity.class, b1);
 		default:
@@ -127,7 +127,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		@Override
 		protected JSONObject doInBackground(Void... params) {
 			try {
-				return new BusinessHelper().getUserInfor(bean.getUserId());
+				return new BusinessHelper().getUserInfor(userId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -221,7 +221,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		@Override
 		protected JSONObject doInBackground(Void... params) {
 			try {
-				return new BusinessHelper().getContentNum(bean.getUserId(), 1);
+				return new BusinessHelper().getContentNum(userId, 1);
 			} catch (SystemException e) {
 			}
 			return null;
@@ -243,7 +243,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 				}
 
 			} else {
-				showShortToast(R.string.connect_server_exception);
+				//showShortToast(R.string.connect_server_exception);
 			}
 		}
 

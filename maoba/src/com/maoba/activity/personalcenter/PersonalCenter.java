@@ -27,7 +27,6 @@ import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.my.CollectionOfBarListActivity;
 import com.maoba.activity.news.PrivateNewsListActivity;
 import com.maoba.activity.personalnfo.PersonalInfoActivity;
-import com.maoba.bean.BarBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 import com.maoba.util.SharedPrefUtil;
@@ -86,7 +85,6 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		viewMyNews.setOnClickListener(this);
 
 		ivPersonalSetting.setOnClickListener(this);
-
 	}
 
 	@Override
@@ -202,7 +200,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 
 					}
 				} catch (JSONException e) {
-					showShortToast(R.string.json_exception);
+				//	showShortToast(R.string.json_exception);
 				}
 			} else {
 				showShortToast(R.string.connect_server_exception);

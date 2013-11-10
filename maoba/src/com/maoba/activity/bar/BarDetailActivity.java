@@ -30,6 +30,7 @@ import com.maoba.R;
 import com.maoba.SystemException;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.personalcenter.FriendPersonalCenter;
+import com.maoba.activity.personalcenter.PersonalCenter;
 import com.maoba.bean.BarBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
@@ -50,7 +51,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 
 	private TextView tvName, tvDistanceLabel, tvAddress, tvBarType, tvIntro, tvHot;
 	private ImageView ivImage;
-	private ImageView ivNext;//签到
+	private ImageView ivNext;// 签到
 
 	private LinearLayout viewShowList;
 
@@ -92,7 +93,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		ivImage = (ImageView) this.findViewById(R.id.ivImage);
 
 		viewShowList = (LinearLayout) this.findViewById(R.id.viewShowList);// 签到
-		ivNext = (ImageView)this.findViewById(R.id.ivNext);
+		ivNext = (ImageView) this.findViewById(R.id.ivNext);
 
 	}
 
@@ -374,10 +375,14 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			ivPhoto.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Bundle b = new Bundle();
-					b.putSerializable(Constants.EXTRA_DATA, showBean);
-					openActivity(FriendPersonalCenter.class, b);
-
+					int uid = SharedPrefUtil.getUid(BarDetailActivity.this);
+					if (uid == showBean.getUserId()) {
+						openActivity(PersonalCenter.class);
+					} else {
+						Bundle b = new Bundle();
+						b.putSerializable(Constants.EXTRA_DATA, showBean.getUserId());
+						openActivity(FriendPersonalCenter.class, b);
+					}
 				}
 			});
 			viewShowList.addView(view);

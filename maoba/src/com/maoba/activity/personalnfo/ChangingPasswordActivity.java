@@ -3,7 +3,6 @@ package com.maoba.activity.personalnfo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -73,14 +72,21 @@ public class ChangingPasswordActivity extends BaseActivity implements OnClickLis
 			passWord = edPassword.getText().toString().trim();
 			newPassword = edNewPassword.getText().toString().trim();
 			String userPassWord = SharedPrefUtil.getPassword(ChangingPasswordActivity.this);
-			if (passWord.equals(userPassWord)) {
-				Intent changingPasswordIntent = new Intent();
-				changingPasswordIntent.putExtra("NEWPASSWORD", newPassword);
-				setResult(Activity.RESULT_OK, changingPasswordIntent);
-				finish();
-			} else {
-				showShortToast("你输入的旧密码不正确，请重新输入");
+			int loginType = SharedPrefUtil.getLoginType(ChangingPasswordActivity.this);{
+				if(loginType==0){
+					if (passWord.equals(userPassWord)) {
+						Intent changingPasswordIntent = new Intent();
+						changingPasswordIntent.putExtra("NEWPASSWORD", newPassword);
+						setResult(Activity.RESULT_OK, changingPasswordIntent);
+						finish();
+					} else {
+						showShortToast("你输入的旧密码不正确，请重新输入");
+					}
+				}else{
+					showShortToast("您非普通登录不可修改密码");
+				}
 			}
+			
 		default:
 			break;
 		}

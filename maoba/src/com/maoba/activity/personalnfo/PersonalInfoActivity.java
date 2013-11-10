@@ -59,7 +59,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 	private TextView tvBirthday, tvSex, tvSignature, tvNickName, tvDistrict;
 	private ImageView ivUserImage;
 	private TextView tvModificationPassword;
-	public String newPassword;
+	
 	private LinearLayout viewBirthday, viewSex, viewSignature, viewNickname, viewChangingPassword;
 	private File mCurrentPhotoFile;// 照相机拍照得到的图片，临时文件
 	private File avatarFile;// 头像文件
@@ -88,24 +88,24 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		ivUserImage = (ImageView) this.findViewById(R.id.ivUserImage);
 		tvNickName = (TextView) this.findViewById(R.id.tvNickName);
 		if (tvNickName.getText() == "") {
-		//	tvNickName.setText("未填写");
+			tvNickName.setText("未填写");
 		}
 		tvBirthday = (TextView) this.findViewById(R.id.tvBirthday);
 		if (tvBirthday.getText() == "") {
-		//	tvBirthday.setText("未填写");
+			tvBirthday.setText("未填写");
 		}
 		tvSex = (TextView) this.findViewById(R.id.tvSex);
 		if (tvSex.getText() == "") {
-		//	tvSex.setText("未填写");
+			tvSex.setText("未填写");
 		}
 		tvSignature = (TextView) this.findViewById(R.id.tvSignature);
 		if (tvSignature.getText() == "") {
-		//	tvSignature.setText("未填写");
+			tvSignature.setText("未填写");
 		}
 		tvDistrict = (TextView) this.findViewById(R.id.tvDistrict);
 		tvModificationPassword = (TextView) this.findViewById(R.id.tvModificationPassword);
 		if (tvModificationPassword.getText() == "") {
-		//	tvModificationPassword.setText("修改密码");
+			tvModificationPassword.setText("修改密码");
 		}
 		viewBirthday = (LinearLayout) this.findViewById(R.id.viewBirthday);
 		viewSex = (LinearLayout) this.findViewById(R.id.viewSex);
@@ -184,8 +184,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 				tvNickName.setText(data.getStringExtra("NICKNAMEINPUT"));
 				break;
 			case Constants.PASSWORDNUMBER:
-				newPassword = new String(data.getStringExtra("NEWPASSWORD"));
-				tvModificationPassword.setText("修改密码");
+				tvModificationPassword.setText(data.getStringExtra("NEWPASSWORD"));
+			//	.(data.getStringExtra("NEWPASSWORD"));
 
 			}
 		}
@@ -203,27 +203,29 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			String sex=null;
 			String signature=null;
 			String address=null;
+		    String newPassword=null;
 			nickName = tvNickName.getText().toString().trim();
-//			if(nickName.equals("")){
-//				nickName =null;
-//			}
+			if(nickName.equals("未填写")){
+				nickName ="";
+			}
 			 birthday = tvBirthday.getText().toString().trim();
-//			if(birthday.equals("")){
-//				birthday=null;
-//			}
+			if(birthday.equals("未填写")){
+				birthday="";
+			}
 			 sex = tvSex.getText().toString().trim();
-//			if(sex.equals("")){
-//				sex=null;
-//			}
+			if(sex.equals("未填写")){
+				sex="";
+			}
 			 signature = tvSignature.getText().toString().trim();
-//			if(signature.equals("")){
-//				signature=null;
-//			}
+			if(signature.equals("未填写")){
+				signature="";
+			}
 			 address = tvDistrict.getText().toString().trim();
-//			if(address.equals("")){
-//				address=null;
-//			}
-			if(newPassword==null){
+			if(address.equals("未填写")){
+				address="";
+			}
+			newPassword=tvModificationPassword.getText().toString().trim();
+			if(newPassword.equals("修改密码")){
 				newPassword="";
 			}
 			if (NetUtil.checkNet(PersonalInfoActivity.this)) {
@@ -447,7 +449,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		protected JSONObject doInBackground(Void... params) {
 			int loginType = SharedPrefUtil.getLoginType(PersonalInfoActivity.this);
 			int userId = SharedPrefUtil.getUid(PersonalInfoActivity.this);
-			String openId = SharedPrefUtil.getOpenId(PersonalInfoActivity.this);
+			String openId = SharedPrefUtil.getWeiboUid(PersonalInfoActivity.this);
 			String password = SharedPrefUtil.getPassword(PersonalInfoActivity.this);
 			if (sex.equals("男")) {
 				int sex = 0;
@@ -461,7 +463,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 				} else {
 					try {
 						return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday,
-								sex, signature, address, newPassword,avatarFile);
+								sex, signature, address,avatarFile);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
@@ -478,7 +480,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 				} else {
 					try {
 						return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday,
-								sex, signature, address, newPassword,avatarFile);
+								sex, signature, address,avatarFile);
 					} catch (SystemException e) {
 						e.printStackTrace();
 					}
