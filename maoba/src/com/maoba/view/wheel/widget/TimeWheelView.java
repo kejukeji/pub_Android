@@ -25,7 +25,7 @@ public class TimeWheelView extends WheelView {
 	}
 	
 	private void init() {
-		centerDrawable = getContext().getResources().getDrawable(R.drawable.wheel_center_highlight);
+		
 	
 	}
 	
