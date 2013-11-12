@@ -23,7 +23,14 @@ import android.widget.Toast;
 import com.maoba.Constants;
 import com.maoba.R;
 import com.maoba.activity.base.BaseActivity;
+import com.maoba.view.wheel.adapters.DayTimeNumericWheelAdapter;
+import com.maoba.view.wheel.adapters.DayTimeNumericWheelAdapter.DayMidTextInterface;
+import com.maoba.view.wheel.adapters.MonthTimeNumericWheelAdapter;
+import com.maoba.view.wheel.adapters.MonthTimeNumericWheelAdapter.MonthMidTextInterface;
 import com.maoba.view.wheel.adapters.TimeNumericWheelAdapter;
+import com.maoba.view.wheel.adapters.TimeNumericWheelAdapter.MidTextInterface;
+import com.maoba.view.wheel.adapters.YearTimeNumericWheelAdapter;
+import com.maoba.view.wheel.adapters.YearTimeNumericWheelAdapter.YearMidTextInterface;
 import com.maoba.view.wheel.widget.OnWheelScrollListener;
 import com.maoba.view.wheel.widget.TimeWheelView;
 import com.maoba.view.wheel.widget.WheelView;
@@ -40,8 +47,10 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 	DateModel model = new DateModel();// 实例化日期类。
 	Calendar calendar;
 	TimeWheelView year, month, day;// 年滚轮，月滚轮，日滚轮。
-	TimeNumericWheelAdapter yearAdapter, monthAdapter, dayAdapter;// 年月日滚轮适配器。
-
+	
+	YearTimeNumericWheelAdapter yearAdapter;
+	MonthTimeNumericWheelAdapter monthAdapter;
+	DayTimeNumericWheelAdapter dayAdapter;// 年月日滚轮适配器。
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,10 +73,11 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 
 		// 实现年滚轮
 		year = (TimeWheelView) this.findViewById(R.id.yearwheel);
-		yearAdapter = new TimeNumericWheelAdapter(this, model.year - 120, model.year + 120);
+		yearAdapter = new YearTimeNumericWheelAdapter(this, model.year - 120, model.year + 120);
 		yearAdapter.setItemResource(R.layout.wheel_nemeric_text_item);
 		yearAdapter.setItemTextResource(R.id.numeric_text);
 		yearAdapter.setSuffix("  年");
+		yearAdapter.setYearTextInterface(yearMidTextInterface);
 		year.setViewAdapter(yearAdapter);
 		year.setVisibleItems(Constants.TIME_LIST_NUMBER);
 		year.setCurrentItem(120);
@@ -86,16 +96,18 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 			@Override
 			public void onScrollingFinished(WheelView wheel) {
 				model.year = calendar.get(Calendar.YEAR) + wheel.getCurrentItem() - 120;
+				year.invalidateWheel(true);
 				freshDayWheel();
 
 			}
 		});
 		// 实现月滚轮。
 		month = (TimeWheelView) this.findViewById(R.id.monthwheel);
-		monthAdapter = new TimeNumericWheelAdapter(this, 1, 12);
+		monthAdapter = new MonthTimeNumericWheelAdapter(this, 1, 12);
 		monthAdapter.setItemResource(R.layout.wheel_nemeric_text_item);
 		monthAdapter.setItemTextResource(R.id.numeric_text);
 		monthAdapter.setSuffix("  月");
+		monthAdapter.setMonthTextInterface(monthMidTextInterface);
 		month.setVisibleItems(Constants.TIME_LIST_NUMBER);
 		month.setViewAdapter(monthAdapter);
 		month.setCurrentItem(model.month);
@@ -110,16 +122,18 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 			@Override
 			public void onScrollingFinished(WheelView wheel) {
 				model.month = wheel.getCurrentItem() + 1;
+				month.invalidateWheel(true);
 				freshDayWheel();
 
 			}
 		});
 		// 实现日滚轮。
 		day = (TimeWheelView) this.findViewById(R.id.daywheel);
-		dayAdapter = new TimeNumericWheelAdapter(this, 1, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		dayAdapter = new DayTimeNumericWheelAdapter(this, 1, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		dayAdapter.setItemResource(R.layout.wheel_nemeric_text_item);
 		dayAdapter.setItemTextResource(R.id.numeric_text);
 		dayAdapter.setSuffix("  日");
+		dayAdapter.setDayTextInterface(dayMidTextInterface);
 		day.setVisibleItems(Constants.TIME_LIST_NUMBER);
 		day.setViewAdapter(dayAdapter);
 		day.setCyclic(true);
@@ -134,7 +148,7 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 			@Override
 			public void onScrollingFinished(WheelView wheel) {
 				model.day = wheel.getCurrentItem() + 1;
-
+				day.invalidateWheel(true);
 			}
 		});
 
@@ -145,11 +159,12 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, model.year);
 		calendar.set(Calendar.MONTH, model.month - 1);
-		int maxDays = calendar.getMaximum(Calendar.DATE);
-		dayAdapter = new TimeNumericWheelAdapter(BirthdaySetActivity.this, 1, maxDays);
+		int maxDays = calendar.getActualMaximum(Calendar.DATE);
+		dayAdapter = new DayTimeNumericWheelAdapter(BirthdaySetActivity.this, 1, maxDays);
 		dayAdapter.setItemResource(R.layout.wheel_nemeric_text_item);
 		dayAdapter.setItemTextResource(R.id.numeric_text);
 		dayAdapter.setSuffix("  日");
+		dayAdapter.setDayTextInterface(dayMidTextInterface);
 		day.setViewAdapter(dayAdapter);
 		int curDay = Math.min(maxDays, day.getCurrentItem() + 1);
 		day.setCurrentItem(curDay - 1, true);
@@ -191,7 +206,60 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 		default:
 			break;
 		}
+		
 	}
+	YearMidTextInterface yearMidTextInterface=new YearMidTextInterface() {
+		
+		@Override
+		public void changeYearText(int index, TextView textView) {
+			// TODO Auto-generated method stub
+			if (index == year.getCurrentItem()) {
+
+				textView.setTextColor(0xFF3A788B);
+				textView.setBackgroundColor(0xFFFFFFFF);
+				textView.setHeight(40);
+
+			} else {
+				textView.setTextColor(0xFF000000);
+				textView.setBackgroundColor(0x00FFFFFF);
+			}
+		}
+	};
+	MonthMidTextInterface monthMidTextInterface=new MonthMidTextInterface() {
+		
+		@Override
+		public void changeMonthText(int index, TextView textView) {
+			// TODO Auto-generated method stub
+			if (index == month.getCurrentItem()) {
+
+				textView.setTextColor(0xFF3A788B);
+				textView.setBackgroundColor(0xFFFFFFFF);
+				textView.setHeight(40);
+
+			} else {
+				textView.setTextColor(0xFF000000);
+				textView.setBackgroundColor(0x00FFFFFF);
+			}
+		}
+	};
+	DayMidTextInterface dayMidTextInterface=new DayMidTextInterface() {
+		
+		@Override
+		public void changeDayText(int index, TextView textView) {
+			if (index == day.getCurrentItem()) {
+
+				textView.setTextColor(0xFF3A788B);
+				textView.setBackgroundColor(0xFFFFFFFF);
+				textView.setHeight(40);
+
+			} else {
+				textView.setTextColor(0xFF000000);
+				textView.setBackgroundColor(0x00FFFFFF);
+			}
+			
+		}
+	};
+	
 	/*
 	 * @Override protected void onActivityResult(int requestCode, int
 	 * resultCode, Intent data) { if (resultCode == RESULT_OK) { switch
