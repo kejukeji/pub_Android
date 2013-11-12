@@ -146,7 +146,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 						String signaTure = userJson.getString("signature");
 						String birthday = userJson.getString("birthday");
 						String NickName = user.getString("nick_name");
-						String address = userJson.getString("county_id");
+						String address = userJson.getString("county");
 						if (signaTure.equals("null")) {
 							tvSignature.setText("主人很懒未设置哦");
 						} else {

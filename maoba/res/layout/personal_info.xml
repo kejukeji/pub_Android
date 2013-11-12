@@ -196,7 +196,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@drawable/personal_line_repeat"
-                android:visibility="gone"
                  />
 
             <LinearLayout
@@ -206,7 +205,6 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="10dp"
-                android:visibility="gone"
                  >
 
                 <TextView

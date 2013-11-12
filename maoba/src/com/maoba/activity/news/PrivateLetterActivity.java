@@ -46,6 +46,7 @@ import com.maoba.Constants;
 import com.maoba.R;
 import com.maoba.SystemException;
 import com.maoba.activity.base.BaseActivity;
+import com.maoba.activity.personalcenter.FriendPersonalCenter;
 import com.maoba.bean.LetterBean;
 import com.maoba.bean.ResponseBean;
 import com.maoba.helper.BusinessHelper;
@@ -158,7 +159,6 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		btnRight.setText("资料");
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
 		btnRight.setOnClickListener(this);
-		btnRight.setVisibility(View.GONE);
 
 		tvTitle.setText(nick_Name);
 
@@ -197,6 +197,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 			}
 			break;
 		case R.id.btnRight:
+			Bundle b = new Bundle();
+			b.putSerializable(Constants.EXTRA_DATA, friendId);
+		    openActivity(FriendPersonalCenter.class,b);
 			break;
 		case R.id.btnSend:// 发送
 			try {

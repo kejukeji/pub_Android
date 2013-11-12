@@ -99,5 +99,5 @@ public class Constants {
 	public static final int PASSWORDNUMBER=7;
 	public static final int DISTRICT=8;
 	
-
+	public static final int REQUEST_CODE_CHOOSE_AREA = 9;//选择地区
 }

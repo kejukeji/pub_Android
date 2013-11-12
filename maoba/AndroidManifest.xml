@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.1" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.maoba"
     android:versionCode="3"
@@ -90,6 +90,8 @@
                 <action android:name="com.maoba.intent.action.ChangingPasswordActivity" /> <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name="com.maoba.activity.personalnfo.ProvinceAcitvity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
+         <activity android:name="com.maoba.activity.personalnfo.CityActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
          <!-- 消息 -->
          <activity android:name="com.maoba.activity.news.NewsActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
          <activity android:name="com.maoba.activity.news.SystemNewsListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>      
@@ -114,7 +116,7 @@
     	 android:exported="true"
     	 android:process=":DownloadingService" >
 		 </service>
-         <meta-data android:value="5271f31956240b904d10d2b1" android:name="UMENG_APPKEY"/>
+         <meta-data android:value="527a10b556240b89fc033613" android:name="UMENG_APPKEY"/>
         <meta-data android:value="360" android:name="UMENG_CHANNEL"/>
     </application>
 </manifest>

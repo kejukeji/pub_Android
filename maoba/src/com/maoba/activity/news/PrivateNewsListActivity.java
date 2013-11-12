@@ -347,10 +347,10 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 				viewHolder.tvContent.setText(contentStr);
 			}
 
-			String sendTime = DateUtil.getConversationTime(bean.getSendTime());
-			viewHolder.tvCreateTime.setText(sendTime);
+		//	String sendTime = DateUtil.getConversationTime(bean.getSendTime());
+			viewHolder.tvCreateTime.setText(bean.getSendTime());
 			viewHolder.tvNickName.setText(bean.getNickName());
-			viewHolder.tvAge.setText(bean.getAge());
+			viewHolder.tvAge.setText(bean.getAge()+"岁");
 			viewHolder.tvContent.setText(bean.getContent());
 		}
 

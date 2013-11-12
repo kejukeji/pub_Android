@@ -26,7 +26,6 @@ import com.maoba.SystemException;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.activity.my.CollectionOfBarListActivity;
 import com.maoba.activity.news.PrivateLetterActivity;
-import com.maoba.bean.BarBean;
 import com.maoba.helper.BusinessHelper;
 import com.maoba.util.NetUtil;
 
@@ -53,7 +52,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_personal_center);
 
-		userId =(int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);;
+		userId =(int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		findView();
 		fillData();
 	}
@@ -147,9 +146,9 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						String signaTure = userJson.getString("signature");
 						String birthday = userJson.getString("birthday");
 						NickName = user.getString("nick_name");
-						String address = userJson.getString("county_id");
+						String address = userJson.getString("county");
 						if (signaTure.equals("null")) {
-							tvSignature.setText("未设置");
+							tvSignature.setText("主人很懒还未设置哦");
 						} else {
 							tvSignature.setText(signaTure);
 						}
@@ -202,7 +201,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 
 					}
 				} catch (JSONException e) {
-					showShortToast(R.string.json_exception);
+				//	showShortToast(R.string.json_exception);
 				}
 			} else {
 				showShortToast(R.string.connect_server_exception);

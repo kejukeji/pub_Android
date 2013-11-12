@@ -259,7 +259,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 
 					}
 				} catch (JSONException e) {
-					showShortToast(R.string.json_exception);
+			//		showShortToast(R.string.json_exception);
 				}
 			} else {
 
@@ -451,5 +451,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
 
 }

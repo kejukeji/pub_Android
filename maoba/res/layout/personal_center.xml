@@ -51,7 +51,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="260dp"
             android:layout_gravity="center_vertical"
             android:background="@color/bg_home"
             android:orientation="horizontal" >
@@ -62,8 +62,8 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:paddingBottom="110dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:paddingTop="30dp" >
 
                 <ImageView
@@ -82,10 +82,11 @@
 
                 <TextView
                     android:id="@+id/tvAddress"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/white"
+                    android:text="黑龙江省 哈尔滨市"
                     android:textSize="@dimen/SmallTextSize" />
             </LinearLayout>
 

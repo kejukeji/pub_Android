@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.maoba.Constants;
 import com.maoba.SystemException;
 import com.maoba.bean.BarBean;
+import com.maoba.bean.ProvinceBean;
 import com.maoba.bean.EventBean;
 import com.maoba.bean.LetterBean;
 import com.maoba.bean.NewsBean;
@@ -683,34 +684,27 @@ public class BusinessHelper {
 	 * @throws SystemException
 	 */
 	public JSONObject addUserInfor(int uid,int loginWay, String passWord, String nickName, String birthday, int sex, 
-			String signature, String address,String newPassword,File avatarFile) throws SystemException {
-		
+			String signature, String address,String newPassword,String provinceId,String cityId,File avatarFile) throws SystemException {
+		List<PostParameter> params = new ArrayList<PostParameter>();
+		params.add(new PostParameter("login_type", loginWay));
+		params.add(new PostParameter("password", passWord));
+		params.add(new PostParameter("nick_name", nickName));
+		params.add(new PostParameter("birthday", birthday));
+		params.add(new PostParameter("sex", sex));
+		params.add(new PostParameter("signature", signature));
+		params.add(new PostParameter("company", address));
+		params.add(new PostParameter("new_password", newPassword));
+		params.add(new PostParameter("province_id", provinceId));
+		params.add(new PostParameter("city_id", cityId));
 		if(avatarFile!=null){
-			List<PostParameter> params = new ArrayList<PostParameter>();
-			params.add(new PostParameter("login_type", loginWay));
-			params.add(new PostParameter("password", passWord));
-			params.add(new PostParameter("nick_name", nickName));
-			params.add(new PostParameter("birthday", birthday));
-			params.add(new PostParameter("sex", sex));
-			params.add(new PostParameter("signature", signature));
-			params.add(new PostParameter("company", address));
-			params.add(new PostParameter("new_password", newPassword));
 			return httpClient.multPartURL("head_picture",
 					BASE_URL + "user/user_info/" + uid,
 					params.toArray(new PostParameter[params.size()]), avatarFile)
 					.asJSONObject();
 		}else{
 			return httpClient.post(
-					BASE_URL + "user/user_info/"+ uid,
-					new PostParameter[] {new PostParameter("login_type", loginWay),
-							new PostParameter("password", passWord), new PostParameter("nick_name", nickName),
-							new PostParameter("birthday", birthday),new PostParameter("sex", sex),
-							new PostParameter("signature", signature),new PostParameter("company", address),
-							new PostParameter("new_password", newPassword)})
-							
-					.asJSONObject();
+					BASE_URL + "user/user_info/"+ uid,params.toArray(new PostParameter[params.size()])).asJSONObject();
 		}
-		
 	}
 	/**
 	 * 第三方登陆的用户设置资料
@@ -817,6 +811,77 @@ public class BusinessHelper {
 
 
 
+	/**
+	 * 省份选择接口
+	 *  
+	 * @param 
+	 * @param 
+	 * @return
+	 * @throws SystemException
+	 */
 
+	public ResponseBean<ProvinceBean> getProvince() throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		ResponseBean<ProvinceBean> response;
+		try {
+			JSONObject obj;
+			obj = httpClient.get(BASE_URL + "area", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<ProvinceBean>(obj);
+				List<ProvinceBean> list = null;
+				if (!TextUtils.isEmpty(obj.getString("list"))) {
+					list = ProvinceBean.constractList(obj.getJSONArray("list"));//省
+				} else {
+					list = new ArrayList<ProvinceBean>();
+				}
+				response.setObjList(list);
+			} else {
+				response = new ResponseBean<ProvinceBean>(Constants.REQUEST_FAILD, obj.getString("message"));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<ProvinceBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e) {
+			response = new ResponseBean<ProvinceBean>(Constants.REQUEST_FAILD, "json解析错误");
+		}
+		return response;
+
+	}
+	
+	/**
+	 * 获取地区信息
+	 *  
+	 * @param 
+	 * @param 
+	 * @return
+	 * @throws SystemException
+	 */
+
+	public ResponseBean<ProvinceBean> getArea() throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		ResponseBean<ProvinceBean> response;
+		try {
+			JSONObject obj;
+			obj = httpClient.get(BASE_URL + "area", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<ProvinceBean>(obj);
+				List<ProvinceBean> list = null;
+				if (!TextUtils.isEmpty(obj.getString("list"))) {
+					list = ProvinceBean.constractList(obj.getJSONArray("list"));//省
+				} else {
+					list = new ArrayList<ProvinceBean>();
+				}
+				response.setObjList(list);
+			} else {
+				response = new ResponseBean<ProvinceBean>(Constants.REQUEST_FAILD, obj.getString("message"));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<ProvinceBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e) {
+			response = new ResponseBean<ProvinceBean>(Constants.REQUEST_FAILD, "json解析错误");
+		}
+		return response;
+	}
 
 }

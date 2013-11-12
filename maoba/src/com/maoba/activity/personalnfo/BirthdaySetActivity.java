@@ -1,15 +1,15 @@
 package com.maoba.activity.personalnfo;
 
-/**
- * 生日设置界面
- * 
- * @author ZhouYongJian
- * @data 创建时间：2013-10-27 18:00
- */
+
+import java.io.File;
 import java.util.Calendar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,11 +22,18 @@ import android.widget.Toast;
 
 import com.maoba.Constants;
 import com.maoba.R;
+import com.maoba.SystemException;
 import com.maoba.activity.base.BaseActivity;
+<<<<<<< Updated upstream
 import com.maoba.view.wheel.adapters.DayTimeNumericWheelAdapter;
 import com.maoba.view.wheel.adapters.DayTimeNumericWheelAdapter.DayMidTextInterface;
 import com.maoba.view.wheel.adapters.MonthTimeNumericWheelAdapter;
 import com.maoba.view.wheel.adapters.MonthTimeNumericWheelAdapter.MonthMidTextInterface;
+=======
+import com.maoba.helper.BusinessHelper;
+import com.maoba.util.NetUtil;
+import com.maoba.util.SharedPrefUtil;
+>>>>>>> Stashed changes
 import com.maoba.view.wheel.adapters.TimeNumericWheelAdapter;
 import com.maoba.view.wheel.adapters.TimeNumericWheelAdapter.MidTextInterface;
 import com.maoba.view.wheel.adapters.YearTimeNumericWheelAdapter;
@@ -35,6 +42,12 @@ import com.maoba.view.wheel.widget.OnWheelScrollListener;
 import com.maoba.view.wheel.widget.TimeWheelView;
 import com.maoba.view.wheel.widget.WheelView;
 
+/**
+ * 生日设置界面
+ * 
+ * @author ZhouYongJian
+ * @data 创建时间：2013-10-27 18:00
+ */
 public class BirthdaySetActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout timeWheels;
 
@@ -199,8 +212,19 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 				// 把年，月，日，传递给上层界面。
 				Intent birthdayintent = new Intent();
 				birthdayintent.putExtra("BRITHDAYSELECTED", dateSelected);
+				// 将日期转换为string类型
+				String birthday = String.valueOf(dateSelected[0]) + "-"
+						+ String.valueOf(dateSelected[1] + "-" + String.valueOf(dateSelected[2]));
 				setResult(Activity.RESULT_OK, birthdayintent);
-				finish();
+				String nickName = "";
+				String sex = "";
+				String signature = "";
+				String address = "";
+				String newPassword = "";
+				if (NetUtil.checkNet(BirthdaySetActivity.this)) {
+					new personInfoAddTask(nickName, birthday, sex, signature, address, newPassword).execute();
+				}
+				
 			}
 			break;
 		default:
@@ -208,6 +232,7 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 		}
 		
 	}
+<<<<<<< Updated upstream
 	YearMidTextInterface yearMidTextInterface=new YearMidTextInterface() {
 		
 		@Override
@@ -264,8 +289,96 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 	 * @Override protected void onActivityResult(int requestCode, int
 	 * resultCode, Intent data) { if (resultCode == RESULT_OK) { switch
 	 * (requestCode) { case Constants.PERSONALINFONUM:
+=======
+
+	/**
+	 * 用户修改或添加个人资料
+>>>>>>> Stashed changes
 	 * 
-	 * } } }
-	 */
+	 * */
+	private class personInfoAddTask extends AsyncTask<Void, Void, JSONObject> {
+		private String nickName;
+		private String birthday;
+		private String sex;
+		private String signature;
+		private String address;
+		private String newPassword;
+		private String provinceId;
+		private String cityId;
+		private File avatarFile = null;
+
+		/**
+		 * @param nickName
+		 * @param birthday
+		 * @param sex
+		 * @param signature
+		 * @param address
+		 * @param newPassword
+		 */
+		public personInfoAddTask(String nickName, String birthday, String sex, String signature, String address,
+				String newPassword) {
+
+			this.nickName = nickName;
+			this.birthday = birthday;
+			this.sex = sex;
+			this.signature = signature;
+			this.address = address;
+			this.newPassword = newPassword;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd(R.string.loading);
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			int loginType = SharedPrefUtil.getLoginType(BirthdaySetActivity.this);
+			int userId = SharedPrefUtil.getUid(BirthdaySetActivity.this);
+			String openId = SharedPrefUtil.getWeiboUid(BirthdaySetActivity.this);
+			String password = SharedPrefUtil.getPassword(BirthdaySetActivity.this);
+			int sex = 0;
+			if (loginType == 0) {
+				try {
+					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
+							signature, address, newPassword,provinceId,cityId, avatarFile);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, sex,
+							signature, address, avatarFile);
+				} catch (SystemException e) {
+					e.printStackTrace();
+				}
+			}
+			return null;
+
+		}
+
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			dismissPd();
+			if (result != null) {
+				try {
+					int status = result.getInt("status");
+					if (status == Constants.REQUEST_SUCCESS) {
+						showShortToast("个人资料设置成功");
+						finish();
+					} else {
+						showShortToast("个人资料设置失败");
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+			} else {
+				// showShortToast(result.getString("message"));
+				showShortToast("服务连接失败");
+			}
+		}
+	}
 
 }

@@ -7,7 +7,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 
-import com.maoba.CommonApplication;
 import com.maoba.R;
 import com.maoba.activity.base.BaseActivity;
 import com.maoba.util.SharedPrefUtil;
