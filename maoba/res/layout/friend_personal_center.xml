@@ -125,7 +125,7 @@
                         android:id="@+id/ivUserPhoto"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:scaleType="fitXY" />
+                         />
 
                     <TextView
                         android:id="@+id/tvNickName"
