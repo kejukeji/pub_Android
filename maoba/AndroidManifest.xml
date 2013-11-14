@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.keju.maomao"
     android:versionCode="1"
-    android:versionName="0.997" >
+    android:versionName="v1.0beta" >
 
     <uses-sdk  android:minSdkVersion="7"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="10" />
      <uses-permission android:name="android.permission.READ_PHONE_STATE" />
      <!-- 定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -99,4 +99,10 @@
          <meta-data android:value="527a10b556240b89fc033613" android:name="UMENG_APPKEY"/>
         <meta-data android:value="360" android:name="UMENG_CHANNEL"/>
     </application>
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="false"
+        android:resizeable="true"
+        android:smallScreens="true" />
 </manifest>

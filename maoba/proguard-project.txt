@@ -42,7 +42,7 @@
 -keep class vi.com.gdi.bgl.android.**{*;}
 -dontwarn com.baidu.mapapi.**
 -dontwarn com.weibo.net.**
--keep class org.apache.commons.logging.impl.** { *;}
+-keep class org.apache.commons.** { *;}
 -keep class org.apache.avalon.framework.logger.** { *;}
 -dontwarn org.apache.avalon.framework.logger.**
 -keep class org.apache.log4j.** { *;}
