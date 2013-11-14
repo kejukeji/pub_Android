@@ -9,7 +9,7 @@
         android:id="@+id/personalLetterTitle"
         layout="@layout/common_title_bar" />
 
-    <com.maoba.view.PullToRefreshListView
+    <com.keju.maomao.view.PullToRefreshListView
         android:id="@+id/lvPersonalLetter"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

@@ -18,3 +18,43 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontskipnonpubliclibraryclassmembers
+
+-dontwarn javax.servlet.**
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+-libraryjars libs/Android_SDK_v1.2.jar
+-libraryjars libs/android-support-v13.jar
+-libraryjars libs/baidumapapi.jar
+-libraryjars libs/commons-codec.jar
+-libraryjars libs/commons-httpclient-3.1.jar
+-libraryjars libs/commons-logging-1.1.jar 
+-libraryjars libs/httpmime-4.1.3.jar
+-libraryjars libs/open_sdk.jar
+-libraryjars libs/umeng_sdk.jar
+-libraryjars libs/weibo_sdk.jar
+
+-keep class com.baidu.** { *; }
+-keep class vi.com.gdi.bgl.android.**{*;}
+-dontwarn com.baidu.mapapi.**
+-dontwarn com.weibo.net.**
+-keep class org.apache.commons.logging.impl.** { *;}
+-keep class org.apache.avalon.framework.logger.** { *;}
+-dontwarn org.apache.avalon.framework.logger.**
+-keep class org.apache.log4j.** { *;}
+-dontwarn org.apache.log4j.**
+-keep class org.apache.log.** { *;}
+-dontwarn org.apache.log.**
+-keep class javax.servlet.** { *;}
+-dontwarn android.webkit.**
+-keepclassmembers class * {
+   public <init>(org.json.JSONObject);
+}
+
+-keep public class * extends com.umeng.**
+-keep class com.umeng.** { *; }
+-dontwarn com.umeng.update.**

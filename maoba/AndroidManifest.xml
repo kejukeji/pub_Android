@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.maoba"
+    package="com.keju.maomao"
     android:versionCode="3"
     android:versionName="0.997beta" >
 
@@ -28,7 +28,7 @@
         android:allowBackup="true"
         android:label="@string/app_name" 
         android:theme="@android:style/Theme.Light.NoTitleBar"
-        android:name="com.maoba.CommonApplication">
+        android:name=".CommonApplication">
         <activity
             android:name=".activity.LogoActivity"
             android:label="@string/app_name" >
@@ -56,58 +56,58 @@
         <activity  android:name=".activity.LoginActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
         <activity  android:name=".activity.RegisterActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
         <!--酒吧 -->
-        <activity  android:name="com.maoba.activity.bar.BarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-        <activity  android:name="com.maoba.activity.bar.BarDetailActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-        <activity  android:name="com.maoba.activity.bar.SearchActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-        <activity  android:name="com.maoba.activity.bar.SearchListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-        <activity  android:name="com.maoba.activity.bar.ShowBarEnvironmentActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-        <activity  android:name="com.maoba.activity.bar.PhotoShowActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>   
-        <activity  android:name="com.maoba.activity.bar.NearbyBarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-        <activity  android:name="com.maoba.activity.my.CollectionOfBarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name=".activity.bar.BarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name=".activity.bar.BarDetailActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name=".activity.bar.SearchActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name=".activity.bar.SearchListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name=".activity.bar.ShowBarEnvironmentActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name=".activity.bar.PhotoShowActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>   
+        <activity  android:name=".activity.bar.NearbyBarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity  android:name=".activity.my.CollectionOfBarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
        <!--个人信息 -->
-        <activity android:name="com.maoba.activity.personalnfo.PersonalInfoActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden">
+        <activity android:name=".activity.personalnfo.PersonalInfoActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden">
              
         </activity>
          <activity
-            android:name="com.maoba.activity.personalnfo.BirthdaySetActivity"
+            android:name=".activity.personalnfo.BirthdaySetActivity"
             >
             <intent-filter>
-                <action android:name="com.maoba.intent.action.BirthdaySetActivity" /> <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".intent.action.BirthdaySetActivity" /> <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.maoba.activity.personalnfo.PersonalizedSignatureActivity" >
+        <activity android:name=".activity.personalnfo.PersonalizedSignatureActivity" >
             <intent-filter>
-                <action android:name="com.maoba.intent.action.PersonalizedSignatureActivity" /><category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".intent.action.PersonalizedSignatureActivity" /><category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.maoba.activity.personalnfo.NickNameActivity" >
+        <activity android:name=".activity.personalnfo.NickNameActivity" >
             <intent-filter>
-                <action android:name="com.maoba.intent.action.NickNameActivity" /><category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".intent.action.NickNameActivity" /><category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.maoba.activity.personalnfo.ChangingPasswordActivity" >
+        <activity android:name=".activity.personalnfo.ChangingPasswordActivity" >
             <intent-filter>
-                <action android:name="com.maoba.intent.action.ChangingPasswordActivity" /> <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".intent.action.ChangingPasswordActivity" /> <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.maoba.activity.personalnfo.ProvinceAcitvity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
-         <activity android:name="com.maoba.activity.personalnfo.CityActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
+        <activity android:name=".activity.personalnfo.ProvinceAcitvity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
+         <activity android:name=".activity.personalnfo.CityActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
          <!-- 消息 -->
-         <activity android:name="com.maoba.activity.news.NewsActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
-         <activity android:name="com.maoba.activity.news.SystemNewsListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>      
-         <activity android:name="com.maoba.activity.news.PrivateNewsListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
-         <activity android:name="com.maoba.activity.news.PrivateLetterActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.news.NewsActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
+         <activity android:name=".activity.news.SystemNewsListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>      
+         <activity android:name=".activity.news.PrivateNewsListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
+         <activity android:name=".activity.news.PrivateLetterActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          <!--个人中心 -->
-         <activity android:name="com.maoba.activity.personalcenter.PersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
-         <activity android:name="com.maoba.activity.personalcenter.FriendPersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.personalcenter.PersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
+         <activity android:name=".activity.personalcenter.FriendPersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          <!--设置 -->
-         <activity android:name="com.maoba.activity.setting.SettingAboutActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-         <activity android:name="com.maoba.activity.setting.SettingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-         <activity android:name="com.maoba.activity.setting.SettingFeedbackActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-         <activity android:name="com.maoba.activity.setting.SettingNoticeActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.setting.SettingAboutActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.setting.SettingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.setting.SettingFeedbackActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.setting.SettingNoticeActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          
          <!-- 活动 -->
-         <activity android:name="com.maoba.activity.event.EventListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.event.EventListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
 		 <!-- push服务 -->
          <service android:name=".service.PullService"></service>
          <!-- 检测更新 -->

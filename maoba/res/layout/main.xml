@@ -46,10 +46,10 @@
 	            <TextView android:id="@+id/tvTop" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/white"
 	                android:textSize="20dp" android:textStyle="bold" android:layout_gravity="center_vertical|left" android:layout_marginLeft="15dp"/>
 	        </FrameLayout>
-	        <com.maoba.view.GridViewInScrollView android:id="@+id/gvBarType" android:layout_width="fill_parent" android:layout_height="wrap_content" android:listSelector="@android:color/transparent"
+	        <com.keju.maomao.view.GridViewInScrollView android:id="@+id/gvBarType" android:layout_width="fill_parent" android:layout_height="wrap_content" android:listSelector="@android:color/transparent"
 	            android:numColumns="2" android:horizontalSpacing="10dp" android:verticalSpacing="10dp" android:layout_marginTop="10dp">
 	            
-	        </com.maoba.view.GridViewInScrollView>
+	        </com.keju.maomao.view.GridViewInScrollView>
 	    </LinearLayout>
 	</ScrollView>
 </LinearLayout>

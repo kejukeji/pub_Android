@@ -16,36 +16,23 @@
             android:clickable="true"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:paddingBottom="5dp"
+           
             android:paddingTop="5dp" >
 
             <ImageView
                 android:id="@+id/ivSettingUserPhoto"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:scaleType="fitXY"
-               android:layout_marginTop="20dp"
-                android:src="@drawable/left_menu_userimage" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="微笑"
-                android:textColor="#B4B4B4"
-                android:textSize="@dimen/BasicTextSize"
-                android:textStyle="bold" 
-                android:visibility="gone"/>
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/tvsignaTure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:singleLine="true"
+                android:layout_marginTop="5dp"
                 android:textColor="#B4B4B4"
                 android:textSize="@dimen/BasicTextSize"
                 android:textStyle="bold" />
@@ -62,7 +49,35 @@
             android:background="@drawable/left_menu_bg_gray"
             android:clickable="true"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/rlMain"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_left_menu__selector"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="35dp"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/left_menu_mian"
+                    android:drawablePadding="20dp"
+                    android:gravity="center_vertical"
+                    android:text="首页"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/TitleTextSize" />
+                
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/menu_line1_repeat" />
 
             <LinearLayout
                 android:id="@+id/rlCollect"
@@ -107,10 +122,19 @@
                     android:drawableLeft="@drawable/left_menu_information"
                     android:drawablePadding="20dp"
                     android:gravity="center_vertical"
-                    android:text="信息"
+                    android:text="消息"
                     android:textColor="@color/white"
                     android:textSize="@dimen/TitleTextSize" />
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.97"
+                    android:drawableLeft="@drawable/ic_infromation"
+                    android:gravity="center_vertical" />
+                
             </LinearLayout>
+            
 
             <View
                 android:layout_width="fill_parent"

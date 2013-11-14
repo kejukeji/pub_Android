@@ -11,7 +11,7 @@
        android:textSize="15sp"
        android:layout_margin="5dp"
        android:textColor="@color/blue"
-       android:text="全部地区"
+       android:text="全部省"
        />
    <View 
        android:layout_width="fill_parent"
