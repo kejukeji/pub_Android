@@ -65,33 +65,13 @@
         <activity  android:name=".activity.bar.NearbyBarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
         <activity  android:name=".activity.my.CollectionOfBarListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
        <!--个人信息 -->
-        <activity android:name=".activity.personalnfo.PersonalInfoActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden">
-             
-        </activity>
-         <activity
-            android:name=".activity.personalnfo.BirthdaySetActivity"
-            >
-            <intent-filter>
-                <action android:name=".intent.action.BirthdaySetActivity" /> <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.personalnfo.PersonalizedSignatureActivity" >
-            <intent-filter>
-                <action android:name=".intent.action.PersonalizedSignatureActivity" /><category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.personalnfo.NickNameActivity" >
-            <intent-filter>
-                <action android:name=".intent.action.NickNameActivity" /><category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.personalnfo.ChangingPasswordActivity" >
-            <intent-filter>
-                <action android:name=".intent.action.ChangingPasswordActivity" /> <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".activity.personalnfo.PersonalInfoActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity android:name=".activity.personalnfo.BirthdaySetActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity android:name=".activity.personalnfo.PersonalizedSignatureActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity android:name=".activity.personalnfo.NickNameActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+        <activity android:name=".activity.personalnfo.ChangingPasswordActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
         <activity android:name=".activity.personalnfo.ProvinceAcitvity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
-         <activity android:name=".activity.personalnfo.CityActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
+        <activity android:name=".activity.personalnfo.CityActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden" ></activity>
          <!-- 消息 -->
          <activity android:name=".activity.news.NewsActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>  
          <activity android:name=".activity.news.SystemNewsListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>      

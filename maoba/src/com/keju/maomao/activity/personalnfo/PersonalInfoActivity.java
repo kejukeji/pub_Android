@@ -185,21 +185,21 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			case Constants.CAMERA_WITH_DATA:// 拍照
 				doCropPhoto(mCurrentPhotoFile);
 				break;
-			case Constants.BIRTHDAYNUM:
-				dateReceice = (data.getIntArrayExtra("BRITHDAYSELECTED"));
-				dateSelected = String.valueOf(dateReceice[0]) + "-"
-						+ String.valueOf(dateReceice[1] + "-" + String.valueOf(dateReceice[2]));
-				tvBirthday.setText(dateSelected);
-				break;
-			case Constants.SIGNATURENUM:
-				tvSignature.setText(data.getStringExtra("SIGNATUREINPUT"));
-				break;
-			case Constants.NICKNAMENUM:
-				tvNickName.setText(data.getStringExtra("NICKNAMEINPUT"));
-				break;
-			case Constants.PASSWORDNUMBER:
-				tvModificationPassword.setText(data.getStringExtra("NEWPASSWORD"));
-				// .(data.getStringExtra("NEWPASSWORD"));
+//			case Constants.BIRTHDAYNUM:
+//				dateReceice = (data.getIntArrayExtra("BRITHDAYSELECTED"));
+//				dateSelected = String.valueOf(dateReceice[0]) + "-"
+//						+ String.valueOf(dateReceice[1] + "-" + String.valueOf(dateReceice[2]));
+//				tvBirthday.setText(dateSelected);
+//				break;
+//			case Constants.SIGNATURENUM:
+//				tvSignature.setText(data.getStringExtra("SIGNATUREINPUT"));
+//				break;
+//			case Constants.NICKNAMENUM:
+//				tvNickName.setText(data.getStringExtra("NICKNAMEINPUT"));
+//				break;
+//			case Constants.PASSWORDNUMBER:
+//				tvModificationPassword.setText(data.getStringExtra("NEWPASSWORD"));
+//				// .(data.getStringExtra("NEWPASSWORD"));
 
 			}
 		}
@@ -317,16 +317,16 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			});
 			break;
 		case R.id.viewBirthday:
-			startActivityForResult(new Intent(Constants.INTENT_BIRTHDAY), Constants.BIRTHDAYNUM);
+		   openActivity(BirthdaySetActivity.class);
 			break;
 		case R.id.viewSignature:
-			startActivityForResult(new Intent(Constants.INTENT_SIGNATURE), Constants.SIGNATURENUM);
+			openActivity(PersonalizedSignatureActivity.class);			
 			break;
 		case R.id.viewNickname:
-			startActivityForResult(new Intent(Constants.INTENT_NICKNAME), Constants.NICKNAMENUM);
+			openActivity(NickNameActivity.class);		
 			break;
 		case R.id.viewChangingPassword:
-			startActivityForResult(new Intent(Constants.INTENT_PASSWORD), Constants.PASSWORDNUMBER);
+			openActivity(ChangingPasswordActivity.class);	
 			break;
 		case R.id.viewdistrict:
 			openActivity(ProvinceAcitvity.class);

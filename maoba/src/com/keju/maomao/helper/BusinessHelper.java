@@ -30,7 +30,10 @@ public class BusinessHelper {
 	/**
 	 * 网络访问路径
 	 */
-
+	//测试服务器
+//	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
+//	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
+	//生产服务器
 	public static final String BASE_URL = "http://61.188.37.228:8081/restful/";
 	public static final String PIC_BASE_URL = "http://61.188.37.228:8081";
 	HttpClient httpClient = new HttpClient();
@@ -531,9 +534,9 @@ public class BusinessHelper {
 		if (uid > 0) {
 			p.add(new PostParameter("user_id", uid));
 		} else {
-			p.add(new PostParameter("user_id", newsType));
+			p.add(new PostParameter("user_id", ""));
 		}
-		p.add(new PostParameter("types", ""));
+		p.add(new PostParameter("types", newsType));
 		ResponseBean<NewsBean> response;
 		JSONObject obj;
 		try {
