@@ -27,16 +27,22 @@ public class LogoActivity extends BaseActivity {
 	 */
 	private void animation() {
 		AlphaAnimation aa = new AlphaAnimation(1.0f, 1.0f);
-		aa.setDuration(2000);
+		aa.setDuration(3000);
 		viewLogo.startAnimation(aa);
 			aa.setAnimationListener(new AnimationListener() {
 				public void onAnimationEnd(Animation arg0) {
-					if(SharedPrefUtil.isLogin(LogoActivity.this)){
-						startActivity(new Intent(LogoActivity.this, MainActivity.class));
+					if (SharedPrefUtil.isFistLogin(LogoActivity.this)) {
+						startActivity(new Intent(LogoActivity.this, FirstStartActivity.class));
 					}else{
-						startActivity(new Intent(LogoActivity.this, LoginActivity.class));
+						if (SharedPrefUtil.isLogin(LogoActivity.this)) {
+							startActivity(new Intent(LogoActivity.this, MainActivity.class));
+							LogoActivity.this.finish();
+						} else {
+							startActivity(new Intent(LogoActivity.this, LoginActivity.class));
+							overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+							LogoActivity.this.finish();
+						}
 					}
-					finish();
 				}
 
 				public void onAnimationRepeat(Animation animation) {
@@ -46,4 +52,5 @@ public class LogoActivity extends BaseActivity {
 				}
 			});
 	}
+
 }

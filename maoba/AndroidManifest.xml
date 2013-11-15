@@ -51,6 +51,7 @@
                 <data android:scheme="tencent100492496" /><!-- 100380359 100381104 222222 -->
             </intent-filter>
         </activity>
+        <activity  android:name=".activity.FirstStartActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
         <activity  android:name=".activity.AuthorizeActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
         <activity  android:name=".activity.MainActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
         <activity  android:name=".activity.LoginActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 

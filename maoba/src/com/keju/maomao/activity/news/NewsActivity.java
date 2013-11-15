@@ -111,7 +111,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener {
 		protected JSONObject doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(NewsActivity.this);
 			try {
-				return new BusinessHelper().getSysLetter1(uid,0);
+				return new BusinessHelper().getSysLetter1(uid);
 			} catch (SystemException e) {
 			}
 			return null;

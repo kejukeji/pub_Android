@@ -573,9 +573,9 @@ public class BusinessHelper {
 	 * @return
 	 * @throws SystemException
 	 */
-	public JSONObject getSysLetter1(int uid, int newsType) throws SystemException {
-		return httpClient.get(BASE_URL + "message/by/type/info", new PostParameter[] { 
-				new PostParameter("user_id", uid),new PostParameter("types", newsType),})
+	public JSONObject getSysLetter1(int uid) throws SystemException {
+		return httpClient.get(BASE_URL + "user/message", new PostParameter[] { 
+				new PostParameter("user_id", uid),})
 				.asJSONObject();
 
 	}
