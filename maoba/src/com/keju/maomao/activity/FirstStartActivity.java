@@ -124,6 +124,7 @@ public class FirstStartActivity extends Activity {
 		alPages.add(inflater.inflate(R.layout.firststartpage3, null));
 
 		ivPages = new ImageView[alPages.size()]; // 减掉空的view就是点的数目
+		
 		vgWelcomepage = (ViewGroup) inflater.inflate(R.layout.firststart, null);
 
 		vgWelcomeflag = (ViewGroup) vgWelcomepage.findViewById(R.id.viewGroup);
