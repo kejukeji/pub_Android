@@ -49,8 +49,8 @@ public class EventBean implements Serializable {
 			this.id = obj.getInt("id");
 		}
 
-		if (obj.has("name")) {
-			this.eventTitle = obj.getString("name");
+		if (obj.has("title")) {
+			this.eventTitle = obj.getString("title");
 
 		}
 		if (obj.has("city_county")) {
@@ -65,11 +65,11 @@ public class EventBean implements Serializable {
 
 		}
 
-		if (obj.has("joinNumber")) {
-			this.joinNumber = obj.getInt("joinNumber");
+		if (obj.has("join_people_number")) {
+			this.joinNumber = obj.getInt("join_people_number");
 		}
-		if (obj.has("pic_path")) {
-			this.photoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
+		if (obj.has("activity_picture_path")) {
+			this.photoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("activity_picture_path");
 		}
 		if (obj.has("recommendPhotoUrl")) {
 			this.recommendPhotoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("recommendPhotoUrl");
@@ -78,12 +78,12 @@ public class EventBean implements Serializable {
 		if (obj.has("pub_name")) {
 			this.barName = obj.getString("pub_name");
 		}
-		if (obj.has("barAddress")) {
-			this.barAddress = obj.getString("barAddress");
+		if (obj.has("county")) {
+			this.barAddress = obj.getString("county");
 		}
 
-		if (obj.has("eventContent")) {
-			this.eventContent = obj.getString("eventContent");
+		if (obj.has("activity_info")) {
+			this.eventContent = obj.getString("activity_info");
 		}
 
 	}

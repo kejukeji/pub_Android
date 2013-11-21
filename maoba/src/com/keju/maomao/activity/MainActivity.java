@@ -34,6 +34,7 @@ import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.bar.BarListActivity;
 import com.keju.maomao.activity.base.BaseSlidingFragmentActivity;
+import com.keju.maomao.activity.event.EventListActivity;
 import com.keju.maomao.activity.my.CollectionOfBarListActivity;
 import com.keju.maomao.activity.news.NewsActivity;
 import com.keju.maomao.activity.personalcenter.PersonalCenter;
@@ -197,7 +198,8 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			openActivity(SettingActivity.class);
 			break;
 		case R.id.rlMain:
-			openActivity(MainActivity.class);
+			//openActivity(MainActivity.class);
+			openActivity(EventListActivity.class);
 			break;
 		case R.id.viewSettingTitle:
 			openActivity(PersonalCenter.class);

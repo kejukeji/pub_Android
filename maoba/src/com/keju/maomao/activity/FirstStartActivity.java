@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -15,8 +16,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.keju.maomao.R;
+import com.keju.maomao.util.SharedPrefUtil;
 
 
 /**
@@ -122,17 +125,19 @@ public class FirstStartActivity extends Activity {
 		alPages.add(inflater.inflate(R.layout.firststartpage1, null));
 		alPages.add(inflater.inflate(R.layout.firststartpage2, null));
 		alPages.add(inflater.inflate(R.layout.firststartpage3, null));
-
+		
 		ivPages = new ImageView[alPages.size()]; // 减掉空的view就是点的数目
 		
 		vgWelcomepage = (ViewGroup) inflater.inflate(R.layout.firststart, null);
 
 		vgWelcomeflag = (ViewGroup) vgWelcomepage.findViewById(R.id.viewGroup);
 		vpPager = (ViewPager) vgWelcomepage.findViewById(R.id.guidePages);
-
 		for (int i = 0; i < ivPages.length; i++) {
 			// 设置最下面标识图片
 			ivFlag = new ImageView(FirstStartActivity.this);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); 
+			lp.setMargins(4, 0, 4, 0);
+			ivFlag.setLayoutParams(lp);
 			if (i == 0) {
 				// 默认选中第一张图片
 				ivFlag.setBackgroundResource(R.drawable.ic_slide_point_sel);
@@ -153,7 +158,13 @@ public class FirstStartActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
+				if(SharedPrefUtil.isLogin(FirstStartActivity.this)){
+					startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
+				}else{
+					startActivity(new Intent(FirstStartActivity.this, LoginActivity.class));
+					
+				}
+			
 				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				finish();
 			}

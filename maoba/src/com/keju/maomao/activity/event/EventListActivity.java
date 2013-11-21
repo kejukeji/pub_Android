@@ -96,6 +96,8 @@ public class EventListActivity extends BaseActivity implements OnClickListener {
 	private void fillData() {
 		ibLeft.setOnClickListener(this);
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
+		tvTitle.setText("活动列表");
+		
 
 		eventList = new ArrayList<EventBean>();
 		adapter = new EventAdapter();

@@ -23,7 +23,7 @@ import com.keju.maomao.internet.PostParameter;
 /**
  * 网络访问操作
  * 
- * @author zhouyong 说明�?1、一些网络操作方�?2、访问系统业务方法，转换成json数据对象，或者业务对象�?
+ * @author zhouyong 说明 1、一些网络操作方法2、访问系统业务方法，转换成json数据对象，或者业务对象方法
  */
 public class BusinessHelper {
 
@@ -621,9 +621,6 @@ public class BusinessHelper {
 
 	public ResponseBean<EventBean> getEventList(int pageIndex) throws SystemException {
 		List<PostParameter> p = new ArrayList<PostParameter>();
-		// if (bar_id > 0) {
-		// p.add(new PostParameter("type_id", bar_id));
-		// }
 		p.add(new PostParameter("page", pageIndex));
 		ResponseBean<EventBean> response;
 		try {

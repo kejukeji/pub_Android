@@ -207,7 +207,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 
 					}
 				} catch (JSONException e) {
-				//	showShortToast(R.string.json_exception);
+					ivUserPhoto.setImageResource(R.drawable.bg_show11);
 				}
 			} else {
 				showShortToast(R.string.connect_server_exception);

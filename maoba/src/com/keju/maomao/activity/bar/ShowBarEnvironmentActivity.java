@@ -220,7 +220,7 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(ShowBarEnvironmentActivity.this, PhotoShowActivity.class);
-					intent.putExtra("photoId", photoBean.getBar_id());
+					intent.putExtra("photoId", photoBean.getPictureId());
 					intent.putExtra("photoBeans", environmentBean);
 					startActivity(intent);
 				}

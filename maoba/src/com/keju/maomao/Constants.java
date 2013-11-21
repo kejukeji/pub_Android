@@ -67,17 +67,17 @@ public class Constants {
 	/**
 	 * 新浪微博配置
 	 */
-	public static final String WEIBO_CONSUMER_KEY = "3955024569";// 替换为开发者的appkey，例如"1646212960";
-	public static final String WEIBO_CONSUMER_SECRET = "b2071565ef1f2514504ccefb16866b25";// 替换为开发者的appkey，例如"94098772160b6f8ffc1315374d8861f9";
+	public static final String WEIBO_CONSUMER_KEY = "3250026215";// 替换为开发者的appkey，例如"1646212960";
+	public static final String WEIBO_CONSUMER_SECRET = "149d5190f01fe9d6189abfa69fb84398";// 替换为开发者的appkey，例如"94098772160b6f8ffc1315374d8861f9";
 	public static final String WEIBO_REDIRECT_URL = "http://www.eemedia.cn/";// 微博应用回调地址
 	public static final String WEIBO_USER_UID = "1291843462";
 
 	/**
 	 * 腾讯微博配置
 	 */
-	public static final String TENCENT_APP_ID = "100548650";// app id
-	public static final String TENCENT_APP_KEY = "a06b8f65a67e1b4a37b54d5dbe5ababb";// app// key
-																					
+	public static final String TENCENT_APP_ID = "100559005";//app id  801237383
+	public static final String TENCENT_APP_KEY = "0e95f60635ebe70775a49737b4fdbd7c";//app key
+	
 	public static final String TENCENT_REDIRECT_URL = "http://www.eemedia.cn/app_download.aspx";
 
 	/**

@@ -65,6 +65,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 	private boolean isComplete = false;// 是否加载完了；
 
 	private CommonApplication app;
+	private boolean gpsIsOpen = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +91,16 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 		vFooter = getLayoutInflater().inflate(R.layout.footer, null);
 		pbFooter = (ProgressBar) vFooter.findViewById(R.id.progressBar);
 		tvFooterMore = (TextView) vFooter.findViewById(R.id.tvMore);
-
 		if (NetUtil.checkNet(NearbyBarListActivity.this)) {
-			new GetNearbyBarListTask().execute();
+			gpsIsOpen = NetUtil.isOPen(NearbyBarListActivity.this);
+			if (gpsIsOpen) {
+				new GetNearbyBarListTask().execute();
+			} else {
+             showShortToast("请先打开定位服务");
+			}
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
-
 	}
 
 	private void fillData() {
@@ -190,10 +194,11 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
- //
 			try {
-				return new BusinessHelper().getNearbyBarList(app.getLastLocation().getLatitude(), app.getLastLocation().getLongitude(),pageIndex);
+				return new BusinessHelper().getNearbyBarList(app.getLastLocation().getLatitude(), app.getLastLocation()
+						.getLongitude(), pageIndex);
 			} catch (SystemException e) {
+				showShortToast("你可能还没开启定位哦");
 			}
 			return null;
 		}
@@ -253,6 +258,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 							tvFooterMore.setText("");
 						}
 					} catch (JSONException e) {
+						showShortToast("您附近没有酒吧");
 					}
 				}
 			} else {

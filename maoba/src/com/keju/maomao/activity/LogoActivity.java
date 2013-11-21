@@ -27,12 +27,13 @@ public class LogoActivity extends BaseActivity {
 	 */
 	private void animation() {
 		AlphaAnimation aa = new AlphaAnimation(1.0f, 1.0f);
-		aa.setDuration(3000);
+		aa.setDuration(1000);
 		viewLogo.startAnimation(aa);
 			aa.setAnimationListener(new AnimationListener() {
 				public void onAnimationEnd(Animation arg0) {
 					if (SharedPrefUtil.isFistLogin(LogoActivity.this)) {
 						startActivity(new Intent(LogoActivity.this, FirstStartActivity.class));
+						SharedPrefUtil.setFistLogined(LogoActivity.this);
 					}else{
 						if (SharedPrefUtil.isLogin(LogoActivity.this)) {
 							startActivity(new Intent(LogoActivity.this, MainActivity.class));

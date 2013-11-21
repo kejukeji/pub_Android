@@ -3,14 +3,12 @@
  */
 package com.keju.maomao.activity.bar;
 
-import java.io.File;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -36,7 +34,7 @@ import com.keju.maomao.bean.BarBean;
 import com.umeng.analytics.MobclickAgent;
 
 /**
- * 点击图片看大图
+ * 酒吧环境图片大图
  * 
  * @author zhouyong
  * @data 创建时间：2013-10-28 上午10:50:01
@@ -50,14 +48,11 @@ public class PhotoShowActivity extends BaseActivity implements OnClickListener {
 	private PhotoPagerAdapter photoPagerAdapter;
 
 	private int screenWidth;// 屏幕宽度
-	private File localFile;
-	private ProgressDialog pd;
 
 	private List<BarBean> photoBeans;
 	private int currentPhotoPosition;// 当前选择图片索引
 
-	private long currPhotoId;
-	private boolean isSelf;
+	private int currPhotoId;
 
 	public static Map<String, SoftReference<Drawable>> imageCache = new HashMap<String, SoftReference<Drawable>>();
 	public static int maxSize = 3;
@@ -72,8 +67,7 @@ public class PhotoShowActivity extends BaseActivity implements OnClickListener {
 		if (photoBeans == null) {
 			photoBeans = new ArrayList<BarBean>();
 		}
-		isSelf = getIntent().getBooleanExtra("isSelf", false);
-		currPhotoId = getIntent().getLongExtra("photoId", 0);
+		currPhotoId = getIntent().getIntExtra("photoId", 0);
 		currentPhotoPosition = getCurrentPhotoPosition();
 		
 		
@@ -130,7 +124,7 @@ public class PhotoShowActivity extends BaseActivity implements OnClickListener {
 		ibLeft.setOnClickListener(this);
 
 		btnRight.setOnClickListener(this);
-		tvTitle.setText("酒吧环境图片");
+		//tvTitle.setText("酒吧环境图片");
 
 	}
 
@@ -146,12 +140,17 @@ public class PhotoShowActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * 获取点击的是哪张；
+	 * 
+	 * @return
+	 */
 	private int getCurrentPhotoPosition() {
 		if (photoBeans != null) {
 			int photoSize = photoBeans.size();
 			for (int i = 0; i < photoSize; i++) {
 				BarBean photoBean = photoBeans.get(i);
-				int id = photoBean.getBar_id();
+				int id = photoBean.getPictureId();
 				if (id != 0) {
 					if (id == currPhotoId) {
 						return i;

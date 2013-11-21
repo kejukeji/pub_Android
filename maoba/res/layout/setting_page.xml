@@ -47,12 +47,14 @@
 			<View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/personal_line_repeat" />
+                android:background="@drawable/personal_line_repeat"
+                android:visibility="gone" />
         <LinearLayout
             android:id="@+id/rlSound"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="match_parent"

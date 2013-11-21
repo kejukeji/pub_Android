@@ -15,7 +15,6 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -45,7 +44,6 @@ import com.keju.maomao.util.StringUtil;
  */
 public class CollectionOfBarListActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
-	private Button btnRight;
 	private TextView tvTitle;
 	private ListView lvCollBarList;
 	private Adapter adapter;
@@ -65,7 +63,6 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 	private boolean isLoad = false;// 是否正在加载数据
 	private boolean isComplete = false;// 是否加载完了；
 	
-	private boolean isFilter = false; //是否清除
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +78,6 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		btnRight = (Button) findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		lvCollBarList = (ListView) findViewById(R.id.lvCollBarList);
 

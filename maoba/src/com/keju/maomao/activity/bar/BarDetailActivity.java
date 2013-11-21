@@ -274,8 +274,10 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 								if (showArrList != null) {
 									ArrayList<BarBean> showBeans = (ArrayList<BarBean>) BarBean
 											.constractList(showArrList);
-									showList.addAll(showBeans);
-									fillShowList(showBeans);
+									if(showList.size()<showBeans.size()){
+										showList.addAll(showBeans);
+										fillShowList(showBeans);
+									}
 								}
 								JSONArray barDetailList1 = result.getJSONArray("pub_list");
 								ArrayList<BarBean> barDetailBeans = (ArrayList<BarBean>) BarBean

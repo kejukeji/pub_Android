@@ -38,6 +38,8 @@ public class BarBean implements Serializable {
 	private String barType;
 	private String barEnviromentPhoto;
 	private String collectTime;
+	
+	private int  pictureId;//显示图片的id
 
 	private String screenAreaName;// 筛选的地区
 	private int cityId;// 筛选城市的id
@@ -119,6 +121,10 @@ public class BarBean implements Serializable {
 		if (obj.has("county") && !TextUtils.isEmpty(obj.getString("county"))) {
 			this.list.add(new BarBean(0, this.screenAreaName));
 			this.list.addAll(BarBean.constractList(obj.getJSONArray("county")));
+		}
+		
+		if (obj.has("picture_id")) {
+			this.pictureId = obj.getInt("picture_id");
 		}
 
 	}
@@ -268,8 +274,19 @@ public class BarBean implements Serializable {
 		return cityId;
 	}
 
+	public int getPictureId() {
+		return pictureId;
+	}
+
+	public void setPictureId(int pictureId) {
+		this.pictureId = pictureId;
+	}
+
 	public void setCityId(int cityId) {
 		this.cityId = cityId;
 	}
+	
+	
+	
 
 }
