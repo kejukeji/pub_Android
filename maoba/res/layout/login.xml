@@ -34,7 +34,7 @@
                 android:id="@+id/edUserName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_input"
+                android:background="@drawable/bg_login_in"
                 android:hint="昵称/邮箱/手机号"
                 android:paddingLeft="5dp"
                 android:textSize="14sp" />
@@ -44,8 +44,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bg_input"
-                android:hint="密码"
+                android:background="@drawable/bg_login_in"
                 android:inputType="textPassword"
                 android:paddingLeft="5dp"
                 android:textSize="14sp" />

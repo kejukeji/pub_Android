@@ -55,16 +55,18 @@ import com.keju.maomao.view.slidingmenu.SlidingMenu;
  * @data 创建时间：2013-10-15 下午2:52:49
  */
 
-public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener {
+public class MainActivity extends BaseSlidingFragmentActivity implements
+		OnClickListener {
 	private SlidingMenu sm;
 	// 侧边栏
 	private LinearLayout rlCollect;// 收藏
 	private LinearLayout rlInfromation;// 信息
 	private LinearLayout rlSetting;// 设置
-    private LinearLayout rlMain;//首页
+	private LinearLayout rlMain;// 首页
 	private LinearLayout viewSettingTitle;
 	private ImageView ivSettingUserPhoto;
 	private TextView tvsignaTure;
+	private TextView tvNewMessagePoint;
 	// 主页
 	private Button btnLeftMenu;
 	private int screenWidth;
@@ -73,8 +75,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	private GridViewInScrollView gvBarType;
 	private List<BarTypeBean> barTypeList;
 	private Adapter adapter;
-	
-   
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -116,8 +116,9 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		rlCollect = (LinearLayout) findViewById(R.id.rlCollect);
 		rlInfromation = (LinearLayout) findViewById(R.id.rlInfromation);
 		rlSetting = (LinearLayout) findViewById(R.id.rlSetting);
-		rlMain = (LinearLayout)findViewById(R.id.rlMain);
+		rlMain = (LinearLayout) findViewById(R.id.rlMain);
 		viewSettingTitle = (LinearLayout) findViewById(R.id.viewSettingTitle);
+		tvNewMessagePoint = (TextView) findViewById(R.id.tv_new_message_point);
 
 		rlCollect.setOnClickListener(this);
 		rlInfromation.setOnClickListener(this);
@@ -142,7 +143,8 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	OnItemClickListener itemListener = new OnItemClickListener() {
 
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
 			BarTypeBean bean = barTypeList.get(position);
 			Bundle b = new Bundle();
 			b.putSerializable(Constants.EXTRA_DATA, bean);
@@ -158,12 +160,14 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			break;
 		case R.id.rlCollect:
 			if (!SharedPrefUtil.isLogin(this)) {
-				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						openActivity(LoginActivity.class);
-					}
-				}, null, null);
+				showAlertDialog(R.string.msg, R.string.no_login,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								openActivity(LoginActivity.class);
+							}
+						}, null, null);
 				return;
 			}
 			int uid = SharedPrefUtil.getUid(MainActivity.this);
@@ -173,32 +177,36 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			break;
 		case R.id.rlInfromation:
 			if (!SharedPrefUtil.isLogin(this)) {
-				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
+				showAlertDialog(R.string.msg, R.string.no_login,
+						new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						openActivity(LoginActivity.class);
-					}
-				}, null, null);
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								openActivity(LoginActivity.class);
+							}
+						}, null, null);
 				return;
 			}
 			openActivity(NewsActivity.class);
 			break;
 		case R.id.rlSetting:
 			if (!SharedPrefUtil.isLogin(this)) {
-				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
+				showAlertDialog(R.string.msg, R.string.no_login,
+						new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						openActivity(LoginActivity.class);
-					}
-				}, null, null);
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								openActivity(LoginActivity.class);
+							}
+						}, null, null);
 				return;
 			}
 			openActivity(SettingActivity.class);
 			break;
 		case R.id.rlMain:
-			//openActivity(MainActivity.class);
+			// openActivity(MainActivity.class);
 			openActivity(EventListActivity.class);
 			break;
 		case R.id.viewSettingTitle:
@@ -241,14 +249,20 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 						} else {
 							tvsignaTure.setText(signaTure);
 						}
-						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
+						String photoUrl = BusinessHelper.PIC_BASE_URL
+								+ userJson.getString("pic_path");
 						ivSettingUserPhoto.setTag(photoUrl);
-						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
-								new ImageCallback() {
+						Drawable cacheDrawble = AsyncImageLoader.getInstance()
+								.loadDrawable(photoUrl, new ImageCallback() {
 									@Override
-									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-										ImageView image = (ImageView) ivSettingUserPhoto.findViewWithTag(imageUrl);
-										Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(imageDrawable, 0.5f);
+									public void imageLoaded(
+											Drawable imageDrawable,
+											String imageUrl) {
+										ImageView image = (ImageView) ivSettingUserPhoto
+												.findViewWithTag(imageUrl);
+										Bitmap bitmap = ImageUtil
+												.getRoundCornerBitmapWithPic(
+														imageDrawable, 0.5f);
 
 										if (image != null) {
 											if (imageDrawable != null) {
@@ -260,10 +274,13 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 									}
 								});
 						if (cacheDrawble != null) {
-							Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(cacheDrawble, 0.5f);
+							Bitmap bitmap = ImageUtil
+									.getRoundCornerBitmapWithPic(cacheDrawble,
+											0.5f);
 							ivSettingUserPhoto.setImageBitmap(bitmap);
 						} else {
-							ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
+							ivSettingUserPhoto
+									.setImageResource(R.drawable.left_menu_userimage);
 						}
 
 					} else {
@@ -271,11 +288,54 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 
 					}
 				} catch (JSONException e) {
-					ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
+					ivSettingUserPhoto
+							.setImageResource(R.drawable.left_menu_userimage);
 				}
 			} else {
-				ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
+				ivSettingUserPhoto
+						.setImageResource(R.drawable.left_menu_userimage);
 				tvsignaTure.setText("未设置");
+			}
+		}
+
+	}
+
+	private class GetNewMessage extends AsyncTask<Void, Void, JSONObject> {
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			int uid = SharedPrefUtil.getUid(MainActivity.this);
+			try {
+				return new BusinessHelper().getSysLetter1(uid);
+			} catch (SystemException e) {
+
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			if (result != null) {
+				try {
+					int status = result.getInt("status");
+					if (status == 1) {
+						tvNewMessagePoint.setVisibility(View.GONE);
+					} else {
+						int systemMessageCount = result.getInt("system_count");
+						int privateMessageCount = result.getInt("direct_count");
+						int finalCount = systemMessageCount
+								+ privateMessageCount;
+						if (finalCount == 0) {
+							tvNewMessagePoint.setVisibility(View.GONE);
+						} else {
+							tvNewMessagePoint.setVisibility(View.VISIBLE);
+						}
+					}
+				} catch (JSONException e) {
+
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -310,20 +370,24 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			if (result != null) {
 				try {
 					if (Constants.REQUEST_SUCCESS == result.getInt("status")) {
-						List<BarTypeBean> tempList = BarTypeBean.constractList(result.getJSONArray("list"));
+						List<BarTypeBean> tempList = BarTypeBean
+								.constractList(result.getJSONArray("list"));
 						final BarTypeBean topBean = tempList.get(0);
 						tvTop.setText(topBean.getName());
 						ivTop.setTag(topBean.getUrl());
-						Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(topBean.getUrl(),
-								new ImageCallback() {
+						Drawable cacheDrawable = AsyncImageLoader.getInstance()
+								.loadDrawable(topBean.getUrl(),
+										new ImageCallback() {
 
-									@Override
-									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-										if (imageDrawable != null) {
-											ivTop.setImageDrawable(imageDrawable);
-										}
-									}
-								});
+											@Override
+											public void imageLoaded(
+													Drawable imageDrawable,
+													String imageUrl) {
+												if (imageDrawable != null) {
+													ivTop.setImageDrawable(imageDrawable);
+												}
+											}
+										});
 						if (cacheDrawable != null) {
 							ivTop.setImageDrawable(cacheDrawable);
 						}
@@ -380,9 +444,12 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			BarTypeBean bean = barTypeList.get(position);
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = getLayoutInflater().inflate(R.layout.bar_type_item, null);
-				holder.ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
-				holder.tvBarType = (TextView) convertView.findViewById(R.id.tvBarType);
+				convertView = getLayoutInflater().inflate(
+						R.layout.bar_type_item, null);
+				holder.ivImage = (ImageView) convertView
+						.findViewById(R.id.ivImage);
+				holder.tvBarType = (TextView) convertView
+						.findViewById(R.id.tvBarType);
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
@@ -394,18 +461,21 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			params.height = itemWidth * 2 / 3;
 			holder.ivImage.setLayoutParams(params);
 			holder.ivImage.setTag(bean.getUrl());
-			Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(bean.getUrl(), new ImageCallback() {
+			Drawable cacheDrawable = AsyncImageLoader.getInstance()
+					.loadDrawable(bean.getUrl(), new ImageCallback() {
 
-				@Override
-				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-					ImageView image = (ImageView) gvBarType.findViewWithTag(imageUrl);
-					if (image != null) {
-						if (imageDrawable != null) {
-							image.setImageDrawable(imageDrawable);
+						@Override
+						public void imageLoaded(Drawable imageDrawable,
+								String imageUrl) {
+							ImageView image = (ImageView) gvBarType
+									.findViewWithTag(imageUrl);
+							if (image != null) {
+								if (imageDrawable != null) {
+									image.setImageDrawable(imageDrawable);
+								}
+							}
 						}
-					}
-				}
-			});
+					});
 			if (cacheDrawable != null) {
 				holder.ivImage.setImageDrawable(cacheDrawable);
 			}
@@ -427,7 +497,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(SharedPrefUtil.isLogin(this)){
+		if (SharedPrefUtil.isLogin(this)) {
 			if (NetUtil.checkNet(this)) {
 				new GetUserInfor().execute();
 			} else {
@@ -462,6 +532,5 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
 
 }
