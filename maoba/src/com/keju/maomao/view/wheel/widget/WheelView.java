@@ -95,7 +95,7 @@ public class WheelView extends View {
 	private WheelRecycle recycle = new WheelRecycle(this);
 	
 	//View backgroud
-	private int backgroudResource=R.drawable.wheel_bg;
+	private int backgroudResource=R.drawable.bg_birthday_setting_wheel;
 
 	// Listeners
 	private List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();

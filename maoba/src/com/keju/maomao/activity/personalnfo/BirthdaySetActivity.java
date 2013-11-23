@@ -233,12 +233,11 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 			if (index == year.getCurrentItem()) {
 
 				textView.setTextColor(0xFF3A788B);
-				textView.setBackgroundColor(0xFFFFFFFF);
-				textView.setHeight(40);
+				
 
 			} else {
 				textView.setTextColor(0xFF000000);
-				textView.setBackgroundColor(0x00FFFFFF);
+				
 			}
 		}
 	};
@@ -249,12 +248,11 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 			if (index == month.getCurrentItem()) {
 
 				textView.setTextColor(0xFF3A788B);
-				textView.setBackgroundColor(0xFFFFFFFF);
-				textView.setHeight(40);
+				
 
 			} else {
 				textView.setTextColor(0xFF000000);
-				textView.setBackgroundColor(0x00FFFFFF);
+				
 			}
 		}
 	};
@@ -265,12 +263,11 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 			if (index == day.getCurrentItem()) {
 
 				textView.setTextColor(0xFF3A788B);
-				textView.setBackgroundColor(0xFFFFFFFF);
-				textView.setHeight(40);
+			
 
 			} else {
 				textView.setTextColor(0xFF000000);
-				textView.setBackgroundColor(0x00FFFFFF);
+				
 			}
 			
 		}
