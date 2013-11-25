@@ -37,7 +37,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/bg_input"
+                android:background="@drawable/bg_login_in"
                 android:hint="昵称/手机号"
                 android:paddingLeft="5dp"
                 android:textSize="14sp" />
@@ -47,7 +47,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/bg_input"
+                android:background="@drawable/bg_login_in"
                 android:hint="邮箱"
                 android:paddingLeft="5dp"
                 android:textSize="14sp" />
@@ -57,7 +57,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bg_input"
+                android:background="@drawable/bg_login_in"
                 android:hint="密码"
                 android:inputType="textPassword"
                 android:paddingLeft="5dp"

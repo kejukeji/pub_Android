@@ -21,6 +21,8 @@ import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
 
 /**
  * 图片处理工具类
@@ -165,4 +167,18 @@ public class ImageUtil {
 		return dateFormat.format(date) + ".jpg";
 	}
 
+	/**
+	 * 设置imageview高宽
+	 * 
+	 * @param imageView
+	 * @param width
+	 * @param height
+	 */
+	public static void resetViewSize(final ImageView imageView, int width,
+			int height) {
+		LayoutParams lp = imageView.getLayoutParams();
+		lp.width = width;
+		lp.height = height;
+		imageView.setLayoutParams(lp);
+	}
 }

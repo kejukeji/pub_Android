@@ -135,6 +135,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 		gvBarType.setOnItemClickListener(itemListener);
 		if (NetUtil.checkNet(this)) {
 			new GetHomeTask().execute();
+			new GetNewMessage().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
@@ -319,7 +320,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 			if (result != null) {
 				try {
 					int status = result.getInt("status");
-					if (status == 1) {
+					if (status == Constants.REQUEST_FAILD) {
 						tvNewMessagePoint.setVisibility(View.GONE);
 					} else {
 						int systemMessageCount = result.getInt("system_count");
@@ -500,6 +501,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 		if (SharedPrefUtil.isLogin(this)) {
 			if (NetUtil.checkNet(this)) {
 				new GetUserInfor().execute();
+				new GetNewMessage().execute();
 			} else {
 				showShortToast(R.string.NoSignalException);
 			}

@@ -130,6 +130,10 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:lineSpacingExtra="1dp"
+                                android:maxEms="10"
+                                android:singleLine="true"
                                 android:textSize="@dimen/SmallTextSize" />
                         </LinearLayout>
                     </LinearLayout>
@@ -192,7 +196,7 @@
                         android:textSize="@dimen/LargeTextSize" />
                 </LinearLayout>
 
-                  <LinearLayout
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -204,10 +208,10 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1"
                         android:scrollbarAlwaysDrawVerticalTrack="false"
-                        android:scrollbars="none"
-                        android:layout_weight="1" 
-                        android:layout_marginRight="15dp">
+                        android:scrollbars="none" >
 
                         <LinearLayout
                             android:id="@+id/viewShowList"
@@ -216,24 +220,26 @@
                             android:orientation="horizontal" >
                         </LinearLayout>
                     </HorizontalScrollView>
-                    <ImageView 
+
+                    <ImageView
                         android:id="@+id/ivNext"
                         android:layout_width="10dp"
                         android:layout_height="17dp"
-                        android:background="@drawable/ic_grey_right_arrow"
                         android:layout_gravity="center_vertical"
-                       android:paddingLeft="20dp"
-                       android:paddingRight="30dp"
-                       android:scaleType="fitXY"
-                       android:layout_marginRight="8dp"
-                       android:layout_marginLeft="5dp"
-                        />
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/ic_grey_right_arrow"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="30dp"
+                        android:scaleType="fitXY" />
                 </LinearLayout>
             </LinearLayout>
-			     <View
+
+            <View
                 android:layout_width="fill_parent"
                 android:layout_height="4dp"
                 android:background="@drawable/bg_bar_details_line" />
+
             <LinearLayout
                 android:id="@+id/viewIntro"
                 android:layout_width="fill_parent"
@@ -266,4 +272,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

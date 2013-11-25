@@ -29,6 +29,7 @@ public class BarBean implements Serializable {
 
 	private String bar_Name;
 	private String bar_Address;
+	private String barStreet;//酒吧详细地址
 	private String imageUrl;
 	private String bar_Intro;
 	private String bar_Type;
@@ -72,6 +73,11 @@ public class BarBean implements Serializable {
 		}
 		if (obj.has("area")) {
 			this.bar_Address = obj.getString("area");
+		}
+		
+		if(obj.has("street")){
+			this.barStreet = obj.getString("street");
+			
 		}
 		if (obj.has("pic_path")) {
 			this.imageUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
@@ -285,8 +291,13 @@ public class BarBean implements Serializable {
 	public void setCityId(int cityId) {
 		this.cityId = cityId;
 	}
-	
-	
-	
+
+	public String getBarStreet() {
+		return barStreet;
+	}
+
+	public void setBarStreet(String barStreet) {
+		this.barStreet = barStreet;
+	}
 
 }

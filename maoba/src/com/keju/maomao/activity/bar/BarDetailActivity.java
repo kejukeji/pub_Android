@@ -12,9 +12,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -30,6 +32,7 @@ import com.keju.maomao.Constants;
 import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
+import com.keju.maomao.activity.mapview.LocationMapActivity;
 import com.keju.maomao.activity.personalcenter.FriendPersonalCenter;
 import com.keju.maomao.activity.personalcenter.PersonalCenter;
 import com.keju.maomao.bean.BarBean;
@@ -105,6 +108,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		btnRight.setOnClickListener(this);
 		ivImage.setOnClickListener(this);
 		ivNext.setOnClickListener(this);
+		tvAddress.setOnClickListener(this);
 		tvTitle.setText("酒吧详情");
 
 		tvName.setText(bean.getBar_Name());// 酒吧名字
@@ -202,6 +206,33 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.ivNext:
 			break;
+		case R.id.tvAddress:
+			try {
+				String address1 = null;
+				String address = bean.getBar_Address();
+				StringTokenizer token = new StringTokenizer(address, "$");
+				String[] add = new String[3];
+				int i1 = 0;
+				while (token.hasMoreTokens()) {
+					add[i1] = token.nextToken();
+					i1++;
+					address1 = add[0];
+				}
+				Intent intent = Intent.getIntent("intent://map/marker?location=" + bean.getLatitude() + ","
+						+ bean.getLongitude() + "&title=" + bean.getBar_Name() + "&content=" + address1
+						+ bean.getBarStreet() + "&src=i创业#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+				startActivity(intent);
+			} catch (Exception e) {
+				if (TextUtils.isEmpty(bean.getLatitude()) || TextUtils.isEmpty(bean.getLongitude())) {
+					showShortToast("酒吧经纬度数据为空");
+					return;
+				}
+				// 跳转到自定义的sdk地图里
+				Intent intent = new Intent(this, LocationMapActivity.class);
+				intent.putExtra(Constants.EXTRA_DATA, bean);
+				startActivity(intent);
+			}
+			break;
 		default:
 			break;
 		}
@@ -262,19 +293,19 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 							String address = result.getString("county");
 							StringTokenizer token = new StringTokenizer(address, "$");
 							String[] add = new String[3];
-						      int i=0;
-						      while(token.hasMoreTokens()){
-						    	  add[i] = token.nextToken();
-						    	  i++;
-						    	  String address1 =add[0]+add[2];
-						    	  tvAddress.setText(address1);// 酒吧地址
-						      }
+							int i = 0;
+							while (token.hasMoreTokens()) {
+								add[i] = token.nextToken();
+								i++;
+								String address1 = add[0];
+								tvAddress.setText(address1 + bean.getBarStreet());// 酒吧地址
+							}
 							if (result.has("picture_list")) {
 								JSONArray showArrList = result.getJSONArray("picture_list");
 								if (showArrList != null) {
 									ArrayList<BarBean> showBeans = (ArrayList<BarBean>) BarBean
 											.constractList(showArrList);
-									if(showList.size()<showBeans.size()){
+									if (showList.size() < showBeans.size()) {
 										showList.addAll(showBeans);
 										fillShowList(showBeans);
 									}
@@ -289,7 +320,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 							showShortToast("json解析错误");
 						}
 					} catch (JSONException e) {
-
+						showShortToast("json解析错误");
 					}
 				}
 
@@ -396,15 +427,15 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		}
 
 	}
-	
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//		if (NetUtil.checkNet(BarDetailActivity.this)) {
-//			new GetBarDetailTask().execute();
-//		} else {
-//			showShortToast(R.string.NoSignalException);
-//		}
-//	}
+
+	// @Override
+	// protected void onResume() {
+	// super.onResume();
+	// if (NetUtil.checkNet(BarDetailActivity.this)) {
+	// new GetBarDetailTask().execute();
+	// } else {
+	// showShortToast(R.string.NoSignalException);
+	// }
+	// }
 
 }

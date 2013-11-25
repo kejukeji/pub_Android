@@ -78,6 +78,8 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
+                    android:lineSpacingExtra="1dp"
+                    android:maxEms="10"
                     android:textSize="@dimen/SmallTextSize" />
             </LinearLayout>
 

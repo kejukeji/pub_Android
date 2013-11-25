@@ -205,6 +205,9 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				if (NetUtil.checkNet(BarListActivity.this)) {
 					if (!isLoad && !isComplete) {
 						new GetBarListTask().execute();
+						if(isFilter){
+							 new GetScreenAreaTask().execute();
+						}
 					}
 				} else {
 					showShortToast(R.string.NoSignalException);
@@ -374,6 +377,10 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		private int cityId, barId;
 		private int pageIndex1 = 1;
 
+		public GetScreenAreaTask() {
+
+		}
+
 		/**
 		 * @param cityId
 		 * @param barId
@@ -414,7 +421,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				if (tempList.size() > 0) {
 					barList.addAll(tempList);
 					adapter.notifyDataSetChanged(); // 通知更新
-					pageIndex++;
+					pageIndex1++;
 				} else {
 					showShortToast("该地区没有相应的酒吧...");
 					isLastPage = true;
@@ -424,7 +431,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 					tvFooterMore.setText(R.string.load_all);
 					isComplete = true;
 				} else {
-					if (tempList.size() > 0 && tempList.size() < Constants.PAGE_SIZE) {
+					if (tempList.size() > 0 && tempList.size() <Constants.PAGE_SIZE) {
 						pbFooter.setVisibility(View.GONE);
 						tvFooterMore.setText(R.string.load_all);
 						isComplete = true;
@@ -433,7 +440,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 						tvFooterMore.setText("上拉查看更多");
 					}
 				}
-				if ((pageIndex == 1 || pageIndex == 2) && tempList.size() < Constants.PAGE_SIZE) {
+				if (pageIndex1 == 1 && tempList.size() == 0) {
 					tvFooterMore.setText("");
 				}
 
@@ -654,16 +661,17 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				holder.ivImage.setImageResource(R.drawable.ic_default);
 			}
 			holder.tvBarName.setText(bean.getBar_Name());
-//			holder.tvAddress.setText(bean.getBar_Address());
+			// holder.tvAddress.setText(bean.getBar_Address());
 			StringTokenizer token = new StringTokenizer(bean.getBar_Address(), "$");
 			String[] add = new String[3];
-		      int i=0;
-		      while(token.hasMoreTokens()){
-		    	  add[i] = token.nextToken();
-		    	  i++;
-		    	  String address1 =add[0]+add[2];
-		    	  holder.tvAddress.setText(address1);// 酒吧地址
-		      }
+			int i = 0;
+			while (token.hasMoreTokens()) {
+				add[i] = token.nextToken();
+				i++;
+				String address1 = add[0];
+				String string = bean.getBarStreet();
+				holder.tvAddress.setText(address1 + string);// 酒吧地址
+			}
 			holder.tvContent.setText(bean.getBar_Intro());
 
 			double latitude;
