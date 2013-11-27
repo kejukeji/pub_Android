@@ -8,6 +8,7 @@
     <include layout="@layout/common_title_bar" />
     
     <ListView
+        style="@style/listviewStyle"
         android:id="@+id/lvSearchBarList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >

@@ -137,11 +137,12 @@ public class BusinessHelper {
 	 * @throws SystemException
 	 */
 
-	public ResponseBean<BarBean> getBarList(int bar_id, int pageIndex) throws SystemException {
+	public ResponseBean<BarBean> getBarList(int barTypeId, int cityId,int pageIndex) throws SystemException {
 		List<PostParameter> p = new ArrayList<PostParameter>();
-		if (bar_id > 0) {
-			p.add(new PostParameter("type_id", bar_id));
+		if (barTypeId > 0) {
+			p.add(new PostParameter("type_id", barTypeId));
 		}
+		p.add(new PostParameter("city_id", cityId));
 		p.add(new PostParameter("page", pageIndex));
 		ResponseBean<BarBean> response = null;
 		try {

@@ -89,10 +89,10 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.bar_list);
 
+		app = (CommonApplication) getApplication();
 		bean = (BarTypeBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
 		findView();
 		fillData();
-		app = (CommonApplication) getApplication();
 		app.addActivity(this);
 	}
 
@@ -142,7 +142,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		if (NetUtil.checkNet(BarListActivity.this)) {
 			new GetBarListTask().execute();
-
+			app.initBMapInfo();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
@@ -205,9 +205,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				if (NetUtil.checkNet(BarListActivity.this)) {
 					if (!isLoad && !isComplete) {
 						new GetBarListTask().execute();
-						if(isFilter){
-							 new GetScreenAreaTask().execute();
-						}
 					}
 				} else {
 					showShortToast(R.string.NoSignalException);
@@ -298,7 +295,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			if (arg2 == 0) {
 				if (NetUtil.checkNet(BarListActivity.this)) {
 					isFilter = true;
-					new GetScreenAreaTask(0, bean.getId()).execute();
+					new GetBarListTask(0).execute();
 				} else {
 					showShortToast(R.string.NoSignalException);
 				}
@@ -306,7 +303,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				BarBean bean1 = ScreenAreaList.get(arg2);
 				if (NetUtil.checkNet(BarListActivity.this)) {
 					isFilter = true;
-					new GetScreenAreaTask(bean1.getCityId(), bean.getId()).execute();
+					new GetBarListTask(bean1.getCityId()).execute();
 				} else {
 					showShortToast(R.string.NoSignalException);
 				}
@@ -372,7 +369,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	/**
 	 * 地区酒吧筛选
 	 * 
-	 */
+	 
 	private class GetScreenAreaTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
 		private int cityId, barId;
 		private int pageIndex1 = 1;
@@ -384,7 +381,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		/**
 		 * @param cityId
 		 * @param barId
-		 */
+		 
 		public GetScreenAreaTask(int cityId, int barId) {
 			this.cityId = cityId;
 			this.barId = barId;
@@ -431,7 +428,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 					tvFooterMore.setText(R.string.load_all);
 					isComplete = true;
 				} else {
-					if (tempList.size() > 0 && tempList.size() <Constants.PAGE_SIZE) {
+					if (tempList.size() > 0 && tempList.size() < Constants.PAGE_SIZE) {
 						pbFooter.setVisibility(View.GONE);
 						tvFooterMore.setText(R.string.load_all);
 						isComplete = true;
@@ -454,12 +451,26 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		}
 
 	}
-
+*/
 	/**
 	 * 获取酒吧列表
 	 * 
 	 */
 	public class GetBarListTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
+		private int cityId=0;
+
+		/**
+		 * @param cityid
+		 */
+
+		public GetBarListTask() {
+
+		}
+
+		public GetBarListTask(int cityId) {
+			this.cityId = cityId;
+		}
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -480,7 +491,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
 
 			try {
-				return new BusinessHelper().getBarList(bean.getId(), pageIndex);
+				return new BusinessHelper().getBarList(bean.getId(),cityId,pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}

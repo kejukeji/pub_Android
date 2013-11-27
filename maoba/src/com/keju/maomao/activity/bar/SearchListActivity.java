@@ -298,6 +298,7 @@ public class SearchListActivity extends BaseActivity implements OnClickListener 
 				holder.tvBarName = (TextView) convertView.findViewById(R.id.tvBarName);
 				holder.tvAddress = (TextView) convertView.findViewById(R.id.tvAddress);
 				holder.tvDistanceLabel = (TextView) convertView.findViewById(R.id.tvDistanceLabel);
+				holder.tvcontent = (TextView)convertView.findViewById(R.id.tvcontent);
 				holder.ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
 				convertView.setTag(holder);
 			} else {
@@ -325,8 +326,8 @@ public class SearchListActivity extends BaseActivity implements OnClickListener 
 				holder.ivImage.setImageResource(R.drawable.ic_default);
 			}
 			holder.tvBarName.setText(bean.getBar_Name());
-			holder.tvAddress.setText(bean.getBar_Address());
-
+			holder.tvAddress.setText(bean.getBarStreet());
+            holder.tvcontent.setText(bean.getBar_Intro());
 			double latitude;
 			try {
 				latitude = Double.parseDouble(bean.getLatitude());
@@ -357,7 +358,7 @@ public class SearchListActivity extends BaseActivity implements OnClickListener 
 	}
 
 	class ViewHolder {
-		private TextView tvBarName, tvDistanceLabel, tvAddress;
+		private TextView tvBarName, tvDistanceLabel, tvAddress,tvcontent;
 		private ImageView ivImage;
 	}
 

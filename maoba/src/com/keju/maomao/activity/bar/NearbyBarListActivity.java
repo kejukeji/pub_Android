@@ -188,15 +188,15 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 				pbFooter.setVisibility(View.VISIBLE);
 				tvFooterMore.setText(R.string.loading);
 			} else {
-				showPd(getString(R.string.loading));
+			  showPd("正在加载...");
 			}
 		}
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
 			try {
-				return new BusinessHelper().getNearbyBarList(app.getLastLocation().getLatitude(), app.getLastLocation()
-						.getLongitude(), pageIndex);
+				return new BusinessHelper().getNearbyBarList(app.getLastLocation().getLongitude(),
+						app.getLastLocation().getLatitude(),pageIndex);
 			} catch (SystemException e) {
 				showShortToast("你可能还没开启定位哦");
 			}

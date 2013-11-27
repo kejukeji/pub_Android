@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_org_in_map"
     android:orientation="vertical"
     android:padding="5dp" >
     <TextView
@@ -18,12 +19,6 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/ic_grey_right_arrow" />
     </LinearLayout>
 
     <TextView

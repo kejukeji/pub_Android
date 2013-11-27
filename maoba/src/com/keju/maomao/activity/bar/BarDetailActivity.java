@@ -54,6 +54,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	private TextView tvTitle;
 
 	private TextView tvName, tvDistanceLabel, tvAddress, tvBarType, tvIntro, tvHot;
+	private TextView tvShowNum;//签到人数
 	private ImageView ivImage;
 	private ImageView ivNext;// 签到
 
@@ -94,6 +95,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		tvBarType = (TextView) this.findViewById(R.id.tvBarType);
 		tvIntro = (TextView) this.findViewById(R.id.tvIntro);
 		tvHot = (TextView) this.findViewById(R.id.tvHot);
+		tvShowNum = (TextView)this.findViewById(R.id.tvShowCount);
 		ivImage = (ImageView) this.findViewById(R.id.ivImage);
 
 		viewShowList = (LinearLayout) this.findViewById(R.id.viewShowList);// 签到
@@ -220,7 +222,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 				}
 				Intent intent = Intent.getIntent("intent://map/marker?location=" + bean.getLatitude() + ","
 						+ bean.getLongitude() + "&title=" + bean.getBar_Name() + "&content=" + address1
-						+ bean.getBarStreet() + "&src=i创业#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+						+ bean.getBarStreet() + "&src=冒冒#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
 				startActivity(intent);
 			} catch (Exception e) {
 				if (TextUtils.isEmpty(bean.getLatitude()) || TextUtils.isEmpty(bean.getLongitude())) {
@@ -291,6 +293,8 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 						if (status == Constants.REQUEST_SUCCESS) {
 							btnRight.setText(result.getString("is_collect"));
 							String address = result.getString("county");
+							String showCount = result.getString("show_count");
+							tvShowNum.setText(showCount);
 							StringTokenizer token = new StringTokenizer(address, "$");
 							String[] add = new String[3];
 							int i = 0;
