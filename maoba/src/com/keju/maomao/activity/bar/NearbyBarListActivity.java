@@ -94,9 +94,10 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 		if (NetUtil.checkNet(NearbyBarListActivity.this)) {
 			gpsIsOpen = NetUtil.isOPen(NearbyBarListActivity.this);
 			if (gpsIsOpen) {
+				app.initBMapInfo();
 				new GetNearbyBarListTask().execute();
 			} else {
-             showShortToast("请先打开定位服务");
+				showShortToast("请先打开定位服务");
 			}
 		} else {
 			showShortToast(R.string.NoSignalException);
@@ -108,7 +109,8 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 
 		barList = new ArrayList<BarBean>();
-
+		adapter = new Adapter();
+		lvNearbyBarList.setAdapter(adapter);
 		lvNearbyBarList.addFooterView(vFooter);
 
 		lvNearbyBarList.setOnScrollListener(LoadListener);
@@ -188,17 +190,18 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 				pbFooter.setVisibility(View.VISIBLE);
 				tvFooterMore.setText(R.string.loading);
 			} else {
-			  showPd("正在加载...");
+				showPd("正在加载...");
 			}
 		}
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
 			try {
-				return new BusinessHelper().getNearbyBarList(app.getLastLocation().getLongitude(),
-						app.getLastLocation().getLatitude(),pageIndex);
+				double longitude = app.getLastLocation().getLongitude();
+				double latitude = app.getLastLocation().getLatitude();
+				return new BusinessHelper().getNearbyBarList(longitude, latitude, pageIndex);
 			} catch (SystemException e) {
-				showShortToast("你可能还没开启定位哦");
+				e.printStackTrace();
 			}
 			return null;
 		}
@@ -216,9 +219,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 					try {
 						int status = result.getInt("status");
 						if (status == Constants.REQUEST_SUCCESS) {
-							String address = result.getString("county");
-							adapter = new Adapter(address);
-							lvNearbyBarList.setAdapter(adapter);
+
 							if (result.has("pub_list")) {
 								JSONArray arr = result.getJSONArray("pub_list");
 								if (arr != null) {
@@ -265,6 +266,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 				showShortToast("服务器连接失败");
 			}
 		}
+
 	}
 
 	/**
@@ -273,14 +275,14 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 	 **/
 
 	public class Adapter extends BaseAdapter {
-		private String address;
-
-		/**
-		 * @param address
-		 */
-		public Adapter(String address) {
-			this.address = address;
-		}
+		// private String address;
+		//
+		// /**
+		// * @param address
+		// */
+		// public Adapter(String address) {
+		// this.address = address;
+		// }
 
 		@Override
 		public int getCount() {
@@ -336,7 +338,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 				holder.ivImage.setImageResource(R.drawable.ic_default);
 			}
 			holder.tvBarName.setText(bean.getBar_Name());
-			holder.tvAddress.setText(address);
+			holder.tvAddress.setText(bean.getBar_Address());
 			holder.tvContent.setText(bean.getBar_Intro());
 
 			double latitude;

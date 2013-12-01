@@ -6,12 +6,18 @@ package com.keju.maomao.activity.bar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,8 +48,15 @@ import com.keju.maomao.bean.BarBean;
 import com.keju.maomao.bean.BarTypeBean;
 import com.keju.maomao.bean.ResponseBean;
 import com.keju.maomao.helper.BusinessHelper;
+import com.keju.maomao.imagecache.ImageCache;
+import com.keju.maomao.imagecache.ImageCache.ImageCacheParams;
+import com.keju.maomao.imagecache.ImageFetcher;
+import com.keju.maomao.util.AndroidUtil;
+import com.keju.maomao.util.ImageUtil;
 import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.StringUtil;
+import com.keju.maomao.view.azzviewpager.JazzyViewPager;
+import com.keju.maomao.view.azzviewpager.JazzyViewPager.TransitionEffect;
 
 /**
  * 酒吧列表
@@ -63,7 +76,24 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private List<BarBean> hotList = new ArrayList<BarBean>();// 热门推荐酒吧
 	private List<BarBean> ScreenAreaList;// 地区
 
-	private LinearLayout viewMenuList;
+	private JazzyViewPager viewPage;// 推荐酒吧滚动控件
+
+	private MyPagerAdapter barAdapter;
+	private ArrayList<View> views = new ArrayList<View>();
+	private LinearLayout viewMenuList;// 原点
+	private int currPosition = 0;// 当前位置
+	private View viewBanner;
+	private ImageView ivBanner;
+
+	private Handler iHandler;
+	private TimerTask timerTask;
+	private Timer timer;
+	private static final int HANDLE_TYPE_RUN = 1;
+
+	private ImageFetcher mImageFetcher;
+	private int screenWidth;// 屏幕宽度
+
+	private int count = 0;
 
 	private int pageIndex = 1;
 
@@ -93,6 +123,13 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		bean = (BarTypeBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
 		findView();
 		fillData();
+		
+		screenWidth = this.getWindowManager().getDefaultDisplay().getWidth();// 获取图片宽度
+		ImageCacheParams cacheParams = new ImageCacheParams(this, Constants.APP_DIR_NAME);
+		cacheParams.memoryCacheEnabled = false;
+		cacheParams.compressQuality = 60;
+		mImageFetcher = new ImageFetcher(this, (int) ((screenWidth + 100) * AndroidUtil.getDensity(this)));
+		mImageFetcher.addImageCache(cacheParams);
 		app.addActivity(this);
 	}
 
@@ -101,7 +138,9 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		btnRight = (Button) this.findViewById(R.id.btnRight);
 		llCommon = findViewById(R.id.llCommon);
 		lvBarList = (ListView) this.findViewById(R.id.lvBarList);
-
+        
+		viewPage = (JazzyViewPager) this.findViewById(R.id.viewPage);
+		viewPage.setTransitionEffect(TransitionEffect.FlipVertical);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		tvTitle.setText(bean.getName());
 		tvTitle.setOnClickListener(this);
@@ -111,7 +150,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		pbFooter = (ProgressBar) vFooter.findViewById(R.id.progressBar);
 		tvFooterMore = (TextView) vFooter.findViewById(R.id.tvMore);
 
-		// 今日推荐
 		viewMenuList = (LinearLayout) this.findViewById(R.id.viewMenuList);
 
 		tvNearbyBar = (TextView) this.findViewById(R.id.tvNearbyBar);
@@ -139,7 +177,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		ScreenAreaList = new ArrayList<BarBean>();// 地区
 		ScreenAreaList.add(new BarBean(0, "全部地区"));
-
+		initMessageHandler();
 		if (NetUtil.checkNet(BarListActivity.this)) {
 			new GetBarListTask().execute();
 			app.initBMapInfo();
@@ -293,6 +331,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				return;
 			}
 			if (arg2 == 0) {
+				pageIndex = 1;
 				if (NetUtil.checkNet(BarListActivity.this)) {
 					isFilter = true;
 					new GetBarListTask(0).execute();
@@ -367,99 +406,15 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	}
 
 	/**
-	 * 地区酒吧筛选
-	 * 
-	 
-	private class GetScreenAreaTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
-		private int cityId, barId;
-		private int pageIndex1 = 1;
-
-		public GetScreenAreaTask() {
-
-		}
-
-		/**
-		 * @param cityId
-		 * @param barId
-		 
-		public GetScreenAreaTask(int cityId, int barId) {
-			this.cityId = cityId;
-			this.barId = barId;
-
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			showPd(R.string.loading);
-
-		}
-
-		@Override
-		protected ResponseBean<BarBean> doInBackground(Void... params) {
-			try {
-				return new BusinessHelper().getScreenArea(cityId, pageIndex1, barId);
-			} catch (SystemException e) {
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(ResponseBean<BarBean> result) {
-			super.onPostExecute(result);
-			dismissPd();
-			pbFooter.setVisibility(View.GONE);
-			if (isFilter) {
-				barList.clear();
-			}
-			if (result.getStatus() != Constants.REQUEST_FAILD) {
-				List<BarBean> tempList = result.getObjList();
-				boolean isLastPage = false;
-				if (tempList.size() > 0) {
-					barList.addAll(tempList);
-					adapter.notifyDataSetChanged(); // 通知更新
-					pageIndex1++;
-				} else {
-					showShortToast("该地区没有相应的酒吧...");
-					isLastPage = true;
-				}
-				if (isLastPage) {
-					pbFooter.setVisibility(View.GONE);
-					tvFooterMore.setText(R.string.load_all);
-					isComplete = true;
-				} else {
-					if (tempList.size() > 0 && tempList.size() < Constants.PAGE_SIZE) {
-						pbFooter.setVisibility(View.GONE);
-						tvFooterMore.setText(R.string.load_all);
-						isComplete = true;
-					} else {
-						pbFooter.setVisibility(View.GONE);
-						tvFooterMore.setText("上拉查看更多");
-					}
-				}
-				if (pageIndex1 == 1 && tempList.size() == 0) {
-					tvFooterMore.setText("");
-				}
-
-			} else {
-				showShortToast(result.getError());
-				tvFooterMore.setText("");
-			}
-			adapter.notifyDataSetChanged();
-			isLoad = false;
-			isFilter = false;
-		}
-
-	}
-*/
-	/**
 	 * 获取酒吧列表
 	 * 
 	 */
 	public class GetBarListTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
-		private int cityId=0;
+		private int cityId = 0;
 
 		/**
+		 * @param pageIndex
+		 * @param i
 		 * @param cityid
 		 */
 
@@ -469,6 +424,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		public GetBarListTask(int cityId) {
 			this.cityId = cityId;
+
 		}
 
 		@Override
@@ -491,7 +447,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
 
 			try {
-				return new BusinessHelper().getBarList(bean.getId(),cityId,pageIndex);
+				return new BusinessHelper().getBarList(bean.getId(), cityId, pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -547,6 +503,9 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				showShortToast(result.getError());
 				tvFooterMore.setText("");
 			}
+			if (isFilter) {
+				isComplete = false;
+			}
 			adapter.notifyDataSetChanged();
 			isLoad = false;
 			isFilter = false;
@@ -558,46 +517,26 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	 * 填充今日推荐数据
 	 * 
 	 * @param list
-	 * 
 	 */
 	private void fillTodayRecommend(final List<BarBean> hotlist) {
 		if (hotlist == null) {
 			return;
 		}
+		views.clear();
+		viewMenuList.removeAllViews();
+		count = hotlist.size();
 		for (int i = 0; i < hotlist.size(); i++) {
 			final BarBean bean = hotlist.get(i);
-			LinearLayout.LayoutParams paramItem = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-					LinearLayout.LayoutParams.WRAP_CONTENT);
-			paramItem.rightMargin = 3;// 图片居上5dp
-			// paramItem.topMargin =2;
-			final View view = getLayoutInflater().inflate(R.layout.today_commened_item, null);
-			view.setLayoutParams(paramItem);
-			ImageView ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
-
+			viewBanner = getLayoutInflater().inflate(R.layout.today_commened_item, null);
+			ivBanner = (ImageView) viewBanner.findViewById(R.id.ivBannerImage);
 			String picUrl = bean.getRecommendImageUrl();
-			ivPhoto.setTag(picUrl);
-			if (!TextUtils.isEmpty(picUrl)) {
-				Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(picUrl, new ImageCallback() {
+			final int viewPagerHeight = viewPage.getHeight();
 
-					@Override
-					public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-						ImageView image = (ImageView) viewMenuList.findViewWithTag(imageUrl);
-						if (image != null) {
-							if (imageDrawable != null) {
-								image.setImageDrawable(imageDrawable);
-							} else {
-								image.setImageResource(R.drawable.ic_default);
-							}
-						}
-					}
-				});
-				if (cacheDrawble != null) {
-					ivPhoto.setImageDrawable(cacheDrawble);
-				} else {
-					ivPhoto.setImageResource(R.drawable.ic_default);
-				}
+			ImageUtil.resetViewSize(ivBanner, screenWidth, viewPagerHeight);
+			if (mImageFetcher != null) {
+				mImageFetcher.loadImage(picUrl, ivBanner);
 			}
-			ivPhoto.setOnClickListener(new View.OnClickListener() {
+			ivBanner.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Bundle b = new Bundle();
@@ -606,7 +545,150 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 				}
 			});
-			viewMenuList.addView(view);
+			views.add(viewBanner);
+
+			ImageView iviewMenuList = new ImageView(this);// 原点设置
+			LayoutParams params = new LayoutParams(0,LayoutParams.WRAP_CONTENT, 1.0f);
+			params.leftMargin = 5;
+			params.rightMargin = 5;
+			iviewMenuList.setLayoutParams(params);
+			if (i == 0) {
+				iviewMenuList.setBackgroundResource(R.drawable.ic_pager_sel);
+			} else {
+				iviewMenuList.setBackgroundResource(R.drawable.ic_pager_nor);
+			}
+			viewMenuList.addView(iviewMenuList, i);
+			if (count == 1) {
+				viewMenuList.setVisibility(View.GONE);
+			} else {
+				viewMenuList.setVisibility(View.VISIBLE);
+			}
+		}
+		barAdapter = new MyPagerAdapter(views);
+		viewPage.setAdapter(barAdapter);
+//		int maxSize = 65535;
+		
+		viewPage.setCurrentItem(0);
+		viewPage.setOnPageChangeListener(listener);
+		startTask();
+
+	}
+
+	private OnPageChangeListener listener = new OnPageChangeListener() {
+
+		@Override
+		public void onPageSelected(int position) {
+			if (count == 1 && position == 1) {
+				viewPage.setCurrentItem(0);
+				return;
+			}
+			currPosition = position;
+			changeState(position);
+
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+		}
+
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+
+		}
+	};
+
+	/**
+	 * 改变原点的状态
+	 * 
+	 * @param position
+	 */
+	private void changeState(int position) {
+		int pos = position % count;
+		int count = viewMenuList.getChildCount();
+		for (int i = 0; i < count; i++) {
+			ImageView ivItem = (ImageView) viewMenuList.getChildAt(i);
+			if (i == pos) {
+				ivItem.setBackgroundResource(R.drawable.ic_pager_sel);
+			} else {
+				ivItem.setBackgroundResource(R.drawable.ic_pager_nor);
+			}
+		}
+	}
+
+	private void startTask() {
+		if (timerTask == null) {
+			timerTask = new TimerTask() {
+				@Override
+				public void run() {
+					Message msg = new Message();
+					msg.what = HANDLE_TYPE_RUN;
+					iHandler.sendMessage(msg);
+				}
+			};
+			timer = new Timer();
+			timer.schedule(timerTask, 0, 5000);
+		}
+	}
+
+	private void closeTimer() {
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
+		if (timerTask != null) {
+			timerTask = null;
+		}
+	}
+
+	private void initMessageHandler() {
+		iHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				int what = msg.what;
+				switch (what) {
+				case HANDLE_TYPE_RUN:
+					if (++currPosition == count) {
+						currPosition = 0;
+					}
+					viewPage.setCurrentItem(currPosition);
+					break;
+				default:
+					break;
+				}
+				super.handleMessage(msg);
+			}
+		};
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		closeTimer();
+		mImageFetcher.setExitTasksEarly(true);
+		mImageFetcher.flushCache();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ImageCache mImageCache = mImageFetcher.getImageCache();
+		if (mImageCache != null) {
+			mImageCache.clearCache();
+			mImageCache.close();
+			mImageCache = null;
+		}
+		mImageFetcher.closeCache();
+		mImageFetcher.clearCache();
+		mImageFetcher = null;
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mImageFetcher.setExitTasksEarly(false);
+		if (count > 1) {
+			startTask();
 		}
 	}
 
@@ -717,6 +799,59 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	class ViewHolder {
 		private TextView tvBarName, tvDistanceLabel, tvAddress, tvContent;
 		private ImageView ivImage;
+	}
+
+	/**
+	 * ViewPager的适配器
+	 * 
+	 * @author Zhoujun
+	 * 
+	 */
+	private class MyPagerAdapter extends PagerAdapter {
+		private ArrayList<View> views;
+
+		public MyPagerAdapter(ArrayList<View> views) {
+			this.views = views;
+		}
+
+		@Override
+		public int getCount() {
+			if (count == 1) {
+				return 1;
+			}
+			return Integer.MAX_VALUE;// 是否循环滚动
+		}
+
+		public void setData(ArrayList<View> views) {
+			this.views = views;
+		}
+
+		private void clear() {
+			if (views != null)
+				views.clear();
+			this.notifyDataSetChanged();
+		}
+
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			return arg0 == arg1;
+		}
+
+		@Override
+		public void destroyItem(View container, int position, Object object) {
+			// ((ViewPager) container).removeView(views.get(position));
+		}
+
+		@Override
+		public Object instantiateItem(View container, int position) {
+			try {
+				((ViewPager) container).addView(views.get(position % views.size()), 0);
+			} catch (Exception e) {
+
+			}
+			return views.get(position % views.size());
+		}
+
 	}
 
 }

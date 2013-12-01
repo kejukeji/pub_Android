@@ -62,13 +62,12 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 	private TextView tvBirthday, tvSex, tvSignature, tvNickName, tvDistrict;
 	private ImageView ivUserImage;
 	private TextView tvModificationPassword;
-
+     
+	private LinearLayout viewImage;
 	private LinearLayout viewBirthday, viewSex, viewSignature, viewNickname, viewChangingPassword, viewdistrict;
 	private File mCurrentPhotoFile;// 照相机拍照得到的图片，临时文件
 	private File avatarFile;// 头像文件
 	private File PHOTO_DIR;// 照相机拍照得到的图片的存储位置
-	private int[] dateReceice = { 0, 0, 0 };
-	private String dateSelected;
 	static final int DATE_DIALOG_ID = 1;
 
 	private long userId;
@@ -110,7 +109,9 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		viewNickname = (LinearLayout) this.findViewById(R.id.viewNickname);
 		viewChangingPassword = (LinearLayout) this.findViewById(R.id.viewChangingPassword);
 		viewdistrict = (LinearLayout) this.findViewById(R.id.viewdistrict);
-
+        
+		viewImage = (LinearLayout)this.findViewById(R.id.viewImage);
+		viewImage.setOnClickListener(this);
 		viewdistrict.setOnClickListener(this);
 		viewChangingPassword.setOnClickListener(this);
 		viewNickname.setOnClickListener(this);
@@ -263,7 +264,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			}).show();
 			// AlertDialog alert = builder.create();
 			break;
-		case R.id.ivUserImage:
+		case R.id.viewImage:
 			LayoutInflater inflater = getLayoutInflater();
 			View layout = inflater.inflate(R.layout.user_image_changing, null); //
 			TextView tvTakePhoto = (TextView) layout.findViewById(R.id.tvtakephoto);

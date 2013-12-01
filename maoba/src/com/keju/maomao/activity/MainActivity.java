@@ -207,8 +207,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 			openActivity(SettingActivity.class);
 			break;
 		case R.id.rlMain:
-			// openActivity(MainActivity.class);
-			openActivity(EventListActivity.class);
+			 openActivity(MainActivity.class);
 			break;
 		case R.id.viewSettingTitle:
 			openActivity(PersonalCenter.class);

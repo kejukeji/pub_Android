@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true" >
 
-    <LinearLayout
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleSmallInverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp" >
+        android:layout_gravity="center" />
 
-        <ImageView
-            android:id="@+id/ivPhoto"
-            android:layout_width="100dp"
-            android:layout_height="95dp"
-            android:scaleType="centerCrop" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/ivBannerImage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tvBannerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" >
+    </TextView>
+
+</FrameLayout>
