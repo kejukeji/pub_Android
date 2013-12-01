@@ -71,10 +71,10 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.nearby_bar_list);
-
+		app = (CommonApplication) getApplication();
 		findView();
 		fillData();
-		app = (CommonApplication) getApplication();
+		
 		app.addActivity(this);
 	}
 
