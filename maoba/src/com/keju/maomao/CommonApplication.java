@@ -5,6 +5,9 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -15,6 +18,20 @@ import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.MKGeneralListener;
 import com.baidu.mapapi.map.LocationData;
 import com.baidu.mapapi.map.MKEvent;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.PopupOverlay;
+import com.baidu.mapapi.search.MKAddrInfo;
+import com.baidu.mapapi.search.MKBusLineResult;
+import com.baidu.mapapi.search.MKDrivingRouteResult;
+import com.baidu.mapapi.search.MKGeocoderAddressComponent;
+import com.baidu.mapapi.search.MKPoiResult;
+import com.baidu.mapapi.search.MKSearch;
+import com.baidu.mapapi.search.MKSearchListener;
+import com.baidu.mapapi.search.MKShareUrlResult;
+import com.baidu.mapapi.search.MKSuggestionResult;
+import com.baidu.mapapi.search.MKTransitRouteResult;
+import com.baidu.mapapi.search.MKWalkingRouteResult;
+import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.keju.maomao.db.DataBaseAdapter;
 
 /**
@@ -34,6 +51,9 @@ public class CommonApplication extends Application {
 	LocationData locData = null;
 	public LocationClient mLocationClient = null;
 	public MyLocationListenner myListener = new MyLocationListenner();
+	
+	private MKSearch mSearch; //搜索定位 
+	private MKSearchListener mSearchListener;
 	/**
 	 * 数据库操作类
 	 * 
@@ -50,6 +70,7 @@ public class CommonApplication extends Application {
 		super.onCreate();
 		instance = this;
 		initBMapInfo();
+
 		dataBaseAdapter = new DataBaseAdapter(this);
 		dataBaseAdapter.open();
 	}
@@ -62,9 +83,11 @@ public class CommonApplication extends Application {
 			mBMapManager = new BMapManager(this);
 		}
 
+
 		if (!mBMapManager.init(mStrKey, new MyGeneralListener())) {
 			Toast.makeText(this, "BMapManager  初始化错误!", Toast.LENGTH_SHORT).show();
 		}
+
 		mLocationClient = new LocationClient(getApplicationContext());
 		/**
 		 * ——————————————————————————————————————————————————————————————————
@@ -72,7 +95,7 @@ public class CommonApplication extends Application {
 		 * ——————————————————————————————————————————————————————————————————
 		 */
 		locData = new LocationData();
-		//mLocationClient.setAK(mStrKey);
+		// mLocationClient.setAK(mStrKey);
 		mLocationClient.registerLocationListener(myListener);
 		LocationClientOption option = new LocationClientOption();
 		option.setServiceName("com.baidu.location.f");
@@ -82,6 +105,11 @@ public class CommonApplication extends Application {
 		option.disableCache(true);
 		option.setCoorType("bd09ll"); // 设置坐标类型
 		mLocationClient.setLocOption(option);
+		
+		mSearch = new MKSearch();
+		mSearchListener = new MySearchListener();
+		mSearch.init(mBMapManager, mSearchListener);
+		
 		mLocationClient.start();
 	}
 
@@ -94,9 +122,12 @@ public class CommonApplication extends Application {
 			if (location == null) {
 				return;
 			}
-
 			lastLocation = location;
+			locData.latitude = location.getLatitude();
+			locData.longitude = location.getLongitude();
+			mSearch.reverseGeocode(new GeoPoint((int) (locData.latitude * 1e6), (int) (locData.longitude * 1e6)));
 			mLocationClient.stop();
+
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
@@ -132,6 +163,60 @@ public class CommonApplication extends Application {
 		}
 	}
 
+	class MySearchListener implements MKSearchListener {
+		/**
+		 * 根据经纬度搜索地址信息结果
+		 * 
+		 * @param result 搜索结果
+		 * 
+		 * @param iError 错误号（0表示正确返回）
+		 *            
+		 * 
+		 */
+		@Override
+		public void onGetAddrResult(MKAddrInfo result, int error) {
+			 MKGeocoderAddressComponent kk = result.addressComponents;
+			 String city = kk.province;
+
+		}
+
+		@Override
+		public void onGetBusDetailResult(MKBusLineResult arg0, int arg1) {
+		}
+
+		@Override
+		public void onGetDrivingRouteResult(MKDrivingRouteResult arg0, int arg1) {
+		}
+
+		@Override
+		public void onGetPoiDetailSearchResult(int arg0, int arg1) {
+		}
+
+		@Override
+		public void onGetPoiResult(MKPoiResult arg0, int arg1, int arg2) {
+		}
+
+		@Override
+		public void onGetShareUrlResult(MKShareUrlResult arg0, int arg1, int arg2) {
+		}
+
+		@Override
+		public void onGetSuggestionResult(MKSuggestionResult arg0, int arg1) {
+
+		}
+
+		@Override
+		public void onGetTransitRouteResult(MKTransitRouteResult arg0, int arg1) {
+
+		}
+
+		@Override
+		public void onGetWalkingRouteResult(MKWalkingRouteResult arg0, int arg1) {
+
+		}
+
+	}
+
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
@@ -165,3 +250,34 @@ public class CommonApplication extends Application {
 
 }
 
+/**
+ * 继承MapView重写onTouchEvent实现泡泡处理操作
+ * 
+ * @author hejin
+ * 
+ */
+class MyLocationMapView extends MapView {
+	static PopupOverlay pop = null;// 弹出泡泡图层，点击图标使用
+
+	public MyLocationMapView(Context context) {
+		super(context);
+	}
+
+	public MyLocationMapView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	public MyLocationMapView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (!super.onTouchEvent(event)) {
+			// 消隐泡泡
+			if (pop != null && event.getAction() == MotionEvent.ACTION_UP)
+				pop.hidePop();
+		}
+		return true;
+	}
+}

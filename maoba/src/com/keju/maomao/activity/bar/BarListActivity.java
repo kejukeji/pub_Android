@@ -57,6 +57,7 @@ import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.StringUtil;
 import com.keju.maomao.view.azzviewpager.JazzyViewPager;
 import com.keju.maomao.view.azzviewpager.JazzyViewPager.TransitionEffect;
+import com.keju.maomao.view.azzviewpager.OutlineContainer;
 
 /**
  * 酒吧列表
@@ -101,12 +102,13 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private ProgressBar pbFooter;
 	private TextView tvFooterMore;
 
-	private boolean isFilter = false;
+	private boolean isFilter = false;//是否为筛选
 
 	private boolean isLoad = false;// 是否正在加载数据
 	private boolean isLoadMore = false;
 	private boolean isComplete = false;// 是否加载完了；
-
+    
+	private boolean isFirst = true;//是否第一次进该界面
 	private BarTypeBean bean;
 
 	private ProgressDialog pd;
@@ -123,7 +125,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		bean = (BarTypeBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
 		findView();
 		fillData();
-		
+
 		screenWidth = this.getWindowManager().getDefaultDisplay().getWidth();// 获取图片宽度
 		ImageCacheParams cacheParams = new ImageCacheParams(this, Constants.APP_DIR_NAME);
 		cacheParams.memoryCacheEnabled = false;
@@ -138,7 +140,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		btnRight = (Button) this.findViewById(R.id.btnRight);
 		llCommon = findViewById(R.id.llCommon);
 		lvBarList = (ListView) this.findViewById(R.id.lvBarList);
-        
+
 		viewPage = (JazzyViewPager) this.findViewById(R.id.viewPage);
 		viewPage.setTransitionEffect(TransitionEffect.FlipVertical);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
@@ -340,6 +342,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				}
 			} else {
 				BarBean bean1 = ScreenAreaList.get(arg2);
+				pageIndex = 1;
 				if (NetUtil.checkNet(BarListActivity.this)) {
 					isFilter = true;
 					new GetBarListTask(bean1.getCityId()).execute();
@@ -348,7 +351,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				}
 			}
 
-			pw.dismiss();
+			onPressBack();
 		}
 	};
 
@@ -470,8 +473,13 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				List<BarBean> tempList = result.getObjList();
 				if (pageIndex == 1) {
 					hotList.addAll(result.getObjList1());
-					fillTodayRecommend(result.getObjList1());
-					ScreenAreaList.addAll(result.getObjList2());
+					if (isFilter) {
+					}else{
+						fillTodayRecommend(result.getObjList1());
+					}
+					if(isFirst){
+						ScreenAreaList.addAll(result.getObjList2());
+					}
 				}
 				boolean isLastPage = false;
 				if (tempList.size() > 0) {
@@ -479,6 +487,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 					adapter.notifyDataSetChanged(); // 通知更新
 					pageIndex++;
 				} else {
+					showShortToast("该地区无相应的酒吧");
 					isLastPage = true;
 				}
 				if (isLastPage) {
@@ -509,6 +518,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			adapter.notifyDataSetChanged();
 			isLoad = false;
 			isFilter = false;
+			isFirst = false;
 		}
 
 	}
@@ -548,7 +558,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 			views.add(viewBanner);
 
 			ImageView iviewMenuList = new ImageView(this);// 原点设置
-			LayoutParams params = new LayoutParams(0,LayoutParams.WRAP_CONTENT, 1.0f);
+			LayoutParams params = new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.0f);
 			params.leftMargin = 5;
 			params.rightMargin = 5;
 			iviewMenuList.setLayoutParams(params);
@@ -566,8 +576,8 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		}
 		barAdapter = new MyPagerAdapter(views);
 		viewPage.setAdapter(barAdapter);
-//		int maxSize = 65535;
-		
+		// int maxSize = 65535;
+
 		viewPage.setCurrentItem(0);
 		viewPage.setOnPageChangeListener(listener);
 		startTask();
@@ -833,13 +843,20 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		}
 
 		@Override
-		public boolean isViewFromObject(View arg0, Object arg1) {
-			return arg0 == arg1;
+		public boolean isViewFromObject(View view, Object obj) {
+			// return arg0 == arg1;
+			if (view instanceof OutlineContainer) {
+				return ((OutlineContainer) view).getChildAt(0) == obj;
+			} else {
+				return view == obj;
+			}
 		}
 
 		@Override
 		public void destroyItem(View container, int position, Object object) {
 			// ((ViewPager) container).removeView(views.get(position));
+			((ViewPager) container).removeView(viewPage.findViewFromObject(position));
+
 		}
 
 		@Override

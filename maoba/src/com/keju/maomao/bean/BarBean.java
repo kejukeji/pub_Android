@@ -27,20 +27,21 @@ public class BarBean implements Serializable {
 	private int bar_id;
 	private int userId;
 
-	private String bar_Name;
-	private String bar_Address;
-	private String barStreet;//酒吧详细地址
-	private String imageUrl;
-	private String bar_Intro;
-	private String bar_Type;
-	private String recommendImageUrl;
-	private String showPhotoUrl;
-	private String hot;
+	private String bar_Name; //酒吧名字
+	private String bar_Address;//酒吧省份和市
+	private String barStreet;// 酒吧详细地址
+	private String imageUrl; //酒吧图片url
+	private String bar_Intro; //酒吧介绍
+	private String bar_Type; //酒吧类型
+	private String recommendImageUrl; //进入推荐图片url
+	private String showPhotoUrl; //签到人图片url
+	private String hot; //酒吧人气
 	private String barType;
-	private String barEnviromentPhoto;
-	private String collectTime;
-	
-	private int  pictureId;//显示图片的id
+	private String barEnviromentPhoto; //酒吧环境图片url
+	private String collectTime; //
+	private String telephone;// 电话号码
+
+	private int pictureId;// 显示图片的id
 
 	private String screenAreaName;// 筛选的地区
 	private int cityId;// 筛选城市的id
@@ -48,8 +49,8 @@ public class BarBean implements Serializable {
 	private String latitude;// 纬度（跳转地图时，纬度放在前面）
 	private String longitude;// 经度
 
-	
 	private List<BarBean> list = new ArrayList<BarBean>();
+
 	public BarBean(int id, String screenAreaName) {
 		super();
 		this.screenAreaName = screenAreaName;
@@ -74,10 +75,10 @@ public class BarBean implements Serializable {
 		if (obj.has("area")) {
 			this.bar_Address = obj.getString("area");
 		}
-		
-		if(obj.has("street")){
+
+		if (obj.has("street")) {
 			this.barStreet = obj.getString("street");
-			
+
 		}
 		if (obj.has("pic_path")) {
 			this.imageUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
@@ -88,6 +89,10 @@ public class BarBean implements Serializable {
 		if (obj.has("type")) {
 			this.bar_Type = obj.getString("type");
 
+		}
+
+		if (obj.has("tel_list")) {
+			this.telephone = obj.getString("tel_list");
 		}
 		if (obj.has("latitude")) {
 			this.latitude = obj.getString("latitude");
@@ -128,7 +133,7 @@ public class BarBean implements Serializable {
 			this.list.add(new BarBean(0, this.screenAreaName));
 			this.list.addAll(BarBean.constractList(obj.getJSONArray("county")));
 		}
-		
+
 		if (obj.has("picture_id")) {
 			this.pictureId = obj.getInt("picture_id");
 		}
@@ -291,13 +296,21 @@ public class BarBean implements Serializable {
 	public void setCityId(int cityId) {
 		this.cityId = cityId;
 	}
-
+    
 	public String getBarStreet() {
 		return barStreet;
 	}
 
 	public void setBarStreet(String barStreet) {
 		this.barStreet = barStreet;
+	}
+    //电话号码
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
 	}
 
 }

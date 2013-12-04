@@ -5,20 +5,26 @@
     android:orientation="vertical" >
 
     <include layout="@layout/common_title_bar" />
-   <TextView 
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:textSize="15sp"
-       android:layout_margin="5dp"
-       android:textColor="@color/blue"
-       android:text="全部地区"
-       />
-   <View 
-       android:layout_width="fill_parent"
-       android:layout_height="1dp"
-       android:background="@drawable/bg_bar_details_line1"
-       
-       />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:text="全部地区"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:textStyle="normal" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_bar_details_line1" />
+
     <ListView
         android:id="@+id/provinceList"
         style="@style/listviewStyle"

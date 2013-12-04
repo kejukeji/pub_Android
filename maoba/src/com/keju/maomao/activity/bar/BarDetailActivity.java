@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -53,7 +54,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	private Button btnRight;
 	private TextView tvTitle;
 
-	private TextView tvName, tvDistanceLabel, tvAddress, tvBarType, tvIntro, tvHot;
+	private TextView tvName, tvDistanceLabel, tvAddress, tvTelNumber,tvBarType, tvIntro, tvHot;
 	private TextView tvShowNum;//签到人数
 	private ImageView ivImage;
 	private ImageView ivNext;// 签到
@@ -92,6 +93,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		tvName = (TextView) this.findViewById(R.id.tvName);
 		tvDistanceLabel = (TextView) this.findViewById(R.id.tvDistanceLabel);
 		tvAddress = (TextView) this.findViewById(R.id.tvAddress);
+		tvTelNumber = (TextView) this.findViewById(R.id.tvTelNumber);
 		tvBarType = (TextView) this.findViewById(R.id.tvBarType);
 		tvIntro = (TextView) this.findViewById(R.id.tvIntro);
 		tvHot = (TextView) this.findViewById(R.id.tvHot);
@@ -111,11 +113,14 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		ivImage.setOnClickListener(this);
 		ivNext.setOnClickListener(this);
 		tvAddress.setOnClickListener(this);
+		tvTelNumber.setOnClickListener(this);
+		
 		tvTitle.setText("酒吧详情");
 
 		tvName.setText(bean.getBar_Name());// 酒吧名字
 		tvBarType.setText(bean.getBarType());// 酒吧类型
 		tvIntro.setText(bean.getBar_Intro());// 酒吧内容
+		tvTelNumber.setText(bean.getTelephone());//酒吧号码
 		tvHot.setText(bean.getHot());// 酒吧人气
 
 		if (NetUtil.checkNet(BarDetailActivity.this)) {
@@ -234,6 +239,16 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 				intent.putExtra(Constants.EXTRA_DATA, bean);
 				startActivity(intent);
 			}
+			break;
+		case R.id.tvTelNumber:
+			String phoneNum = bean.getTelephone();
+			if (TextUtils.isEmpty(phoneNum)) {
+				return;
+			}
+			Intent callIntent = new Intent();
+			callIntent.setAction(Intent.ACTION_DIAL);
+			callIntent.setData(Uri.parse("tel:" + phoneNum));
+			startActivity(callIntent);
 			break;
 		default:
 			break;

@@ -77,6 +77,7 @@ public class CityActivity extends BaseActivity implements OnClickListener {
 		adapter = new CityAdapter(cityListBean);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(itemListener);
+		listview.setDividerHeight(0);//消除listview自带每个item之间的分割线
 	}
 
 	@Override
@@ -258,10 +259,10 @@ public class CityActivity extends BaseActivity implements OnClickListener {
 			try {
 				if (result.getInt("status") == Constants.REQUEST_SUCCESS) {
 					setResult(RESULT_OK);
-					showShortToast("个人资料设置成功");
+					showShortToast("地区修改成功");
 					finish();
 				} else {
-					showShortToast("个人资料设置失败");
+					showShortToast("地区修改失败");
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();

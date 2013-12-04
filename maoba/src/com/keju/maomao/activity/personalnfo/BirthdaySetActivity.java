@@ -349,10 +349,10 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 				try {
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_SUCCESS) {
-						showShortToast("个人资料设置成功");
+						showShortToast("生日设置成功");
 						finish();
 					} else {
-						showShortToast("个人资料设置失败");
+						showShortToast("生日设置失败");
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

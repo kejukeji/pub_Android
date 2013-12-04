@@ -166,10 +166,10 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 				try {
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_SUCCESS) {
-						showShortToast("个人资料设置成功");
+						showShortToast("个性签名设置成功");
 						finish();
 					} else {
-						showShortToast("个人资料设置失败");
+						showShortToast("个性签名设置失败");
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();

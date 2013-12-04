@@ -28,6 +28,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
 	private TextView tvTitle;
 	private LinearLayout rlNotice, rlAbout, rlVersionTest, rlFeedback;
+	private LinearLayout rlClearCache;//清除缓存
 	private Button btnLogout;
 
 	@Override
@@ -51,6 +52,8 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		rlNotice = (LinearLayout) findViewById(R.id.rlNotice);
 		rlNotice.setOnClickListener(this);
+		rlClearCache = (LinearLayout)this.findViewById(R.id.rlClearCache);
+		rlClearCache.setOnClickListener(this);
 		rlAbout = (LinearLayout) findViewById(R.id.rlAbout);
 		rlAbout.setOnClickListener(this);
 		rlVersionTest = (LinearLayout) findViewById(R.id.rlVersionTest);
@@ -67,6 +70,9 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			break;
+		case R.id.rlClearCache:
+//			rlClearCache
 			break;
 		case R.id.rlNotice:
 			openActivity(SettingNoticeActivity.class);

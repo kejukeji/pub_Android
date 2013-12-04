@@ -81,6 +81,34 @@
     	android:background="@drawable/bg_setting"
     	android:layout_marginTop="30dp">
         <LinearLayout
+            android:id="@+id/rlClearCache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:text="清除缓存"
+                android:textColor="#1d4869" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_right" />
+        </LinearLayout>
+        <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/personal_line_repeat" />
+        <LinearLayout
             android:id="@+id/rlVersionTest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

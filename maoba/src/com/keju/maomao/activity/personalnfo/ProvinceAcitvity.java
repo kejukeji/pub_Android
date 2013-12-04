@@ -74,6 +74,7 @@ public class ProvinceAcitvity extends BaseActivity implements OnClickListener {
 		adapter = new Adapter();
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(itemListener);
+		listview.setDividerHeight(0);//消除listview自带每个item之间的分割线
 		
 		if (NetUtil.checkNet(this)) {
 			new GetProvinceTask().execute();

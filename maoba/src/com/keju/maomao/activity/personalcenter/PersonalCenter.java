@@ -167,7 +167,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 							int birthYear = Integer.valueOf(Num[0]);// 取出年份值
 							int age = currentYear - birthYear;// 算出年龄
 							String ageString = String.valueOf(age);// 转换
-							tvAge.setText(ageString+"岁");
+							tvAge.setText(ageString);
 						}
 						if (address.equals("$$")) {
 							tvAddress.setText("未设置");

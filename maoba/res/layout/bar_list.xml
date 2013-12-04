@@ -74,7 +74,7 @@
             <TextView
                 android:id="@+id/btnAll"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:background="@drawable/bg_today_recommend"
                 android:gravity="center"
                 android:paddingTop="5dp"

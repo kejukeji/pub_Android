@@ -18,8 +18,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:background="@drawable/left_btn_menu_bg" />
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/left_btn_menu_bg"
+            android:gravity="center"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp" />
 
         <TextView
             android:id="@+id/tvSignature1"
@@ -30,23 +33,28 @@
             android:layout_toRightOf="@+id/btnLeftMenu"
             android:text="个性签名："
             android:textColor="@color/white"
-            android:textSize="@dimen/BasicTextSize" />
+            android:textSize="@dimen/BasicTextSize"
+            android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tvSignature"
+        <ImageView
+            android:id="@+id/ivPersonalSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tvSignature1"
-            android:layout_marginLeft="2dp"
-            android:layout_toRightOf="@id/tvSignature1"
-            android:textColor="@color/white"
-            android:textSize="@dimen/BasicTextSize" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:src="@drawable/ic_personal_infro_setting" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center_vertical"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -71,15 +79,17 @@
                     android:layout_height="28dp"
                     android:layout_marginBottom="20dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_personal_center" />
+                    android:src="@drawable/ic_personal_center"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tvAge"
+                    android:id="@+id/tvAge1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/eventList" />
+                    android:textSize="@dimen/eventList"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tvAddress"
@@ -90,17 +100,16 @@
                     android:lineSpacingExtra="1dp"
                     android:maxEms="9"
                     android:paddingLeft="5dp"
-                    android:textColor="@color/white"
+                    android:textColor="#FF8D01"
                     android:textSize="@dimen/eventList" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_margin="5dp"
-                android:background="#20434E"
+                android:background="@drawable/bg_personal"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -113,23 +122,197 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginLeft="95dp"
-                        android:src="@drawable/ic_personal_infro_setting" />
+                        android:src="@drawable/ic_personal_infro_setting"
+                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/ivUserPhoto"
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
-                         android:scaleType="fitCenter"
-                          />
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:scaleType="fitCenter" />
 
                     <TextView
-                        android:id="@+id/tvNickName"
+                        android:id="@+id/tvNickName1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/SmallTextSize" />
+                        android:textSize="@dimen/SmallTextSize"
+                        android:visibility="gone" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/tvNickName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/BasicTextSize"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="left"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/tvSignature"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="left"
+                            android:lineSpacingExtra="1dp"
+                            android:maxEms="10"
+                            android:singleLine="true"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/SmallerTextSize" />
+
+                        <ImageView
+                            android:id="@+id/ivSex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/ic_sex_girl" />
+
+                        <TextView
+                            android:id="@+id/tvAge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="15dp"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DADADA"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingTop="10dp" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginRight="25dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:text="103" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="邀 约" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="45dp"
+                android:background="@drawable/main_bottom_line" />
+
+            <LinearLayout
+               android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:text="103" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="礼 物" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="45dp"
+                android:background="@drawable/main_bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:text="103" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="传 情" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="45dp"
+                android:background="@drawable/main_bottom_line" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginLeft="25dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:text="13" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="私 信" />
             </LinearLayout>
         </LinearLayout>
 

@@ -139,6 +139,36 @@
                                 android:textSize="@dimen/SmallTextSize" />
                         </LinearLayout>
                     </LinearLayout>
+                    
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="电话："
+                                android:textSize="@dimen/SmallTextSize" />
+
+                            <TextView
+                                android:id="@+id/tvTelNumber"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:lineSpacingExtra="1dp"
+                                android:maxEms="10"
+                                android:singleLine="true"
+                                android:textSize="@dimen/SmallTextSize" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="fill_parent"

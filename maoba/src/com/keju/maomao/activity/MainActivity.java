@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.keju.maomao.AsyncImageLoader;
 import com.keju.maomao.AsyncImageLoader.ImageCallback;
+import com.keju.maomao.CommonApplication;
 import com.keju.maomao.Constants;
 import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
@@ -75,16 +76,20 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 	private GridViewInScrollView gvBarType;
 	private List<BarTypeBean> barTypeList;
 	private Adapter adapter;
+	
+	private CommonApplication app;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		app = (CommonApplication) getApplication();
 		Display display = this.getWindowManager().getDefaultDisplay();
 		screenWidth = display.getWidth();
 		initSlidingMenu();
 		findView();
 		fillData();
+		app.addActivity(this);
 	}
 
 	/**

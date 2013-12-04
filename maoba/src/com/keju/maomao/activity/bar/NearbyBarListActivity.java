@@ -4,6 +4,7 @@
 package com.keju.maomao.activity.bar;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,7 +75,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 		app = (CommonApplication) getApplication();
 		findView();
 		fillData();
-		
+
 		app.addActivity(this);
 	}
 
@@ -91,17 +92,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 		vFooter = getLayoutInflater().inflate(R.layout.footer, null);
 		pbFooter = (ProgressBar) vFooter.findViewById(R.id.progressBar);
 		tvFooterMore = (TextView) vFooter.findViewById(R.id.tvMore);
-		if (NetUtil.checkNet(NearbyBarListActivity.this)) {
-			gpsIsOpen = NetUtil.isOPen(NearbyBarListActivity.this);
-			if (gpsIsOpen) {
-				app.initBMapInfo();
-				new GetNearbyBarListTask().execute();
-			} else {
-				showShortToast("请先打开定位服务");
-			}
-		} else {
-			showShortToast(R.string.NoSignalException);
-		}
+		
 	}
 
 	private void fillData() {
@@ -110,13 +101,25 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 
 		barList = new ArrayList<BarBean>();
 		adapter = new Adapter();
+		
+		lvNearbyBarList.addFooterView(vFooter); //注意 此句话必须要在setAdapter前面才可以显示上拉查看更多
 		lvNearbyBarList.setAdapter(adapter);
-		lvNearbyBarList.addFooterView(vFooter);
-
 		lvNearbyBarList.setOnScrollListener(LoadListener);
 		lvNearbyBarList.setOnItemClickListener(itemListener);
 		lvNearbyBarList.setDivider(null);
 		lvNearbyBarList.setFooterDividersEnabled(false);
+		
+		if (NetUtil.checkNet(NearbyBarListActivity.this)) {
+			gpsIsOpen = NetUtil.isOPen(NearbyBarListActivity.this);
+//			if (gpsIsOpen) {
+				app.initBMapInfo();
+				new GetNearbyBarListTask().execute();
+//			} else {
+//				showShortToast("请先打开定位服务");
+//			}
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
 
 	}
 
@@ -238,7 +241,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 										tvFooterMore.setText(R.string.load_all);
 										isComplete = true;
 									} else {
-										if (nearBean.size() > 0 && nearBean.size() < Constants.PAGE_SIZE) {
+										if (nearBean.size() > 0 && nearBean.size() <Constants.PAGE_SIZE) {
 											pbFooter.setVisibility(View.GONE);
 											tvFooterMore.setText(R.string.load_all);
 											isComplete = true;
@@ -275,15 +278,6 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 	 **/
 
 	public class Adapter extends BaseAdapter {
-		// private String address;
-		//
-		// /**
-		// * @param address
-		// */
-		// public Adapter(String address) {
-		// this.address = address;
-		// }
-
 		@Override
 		public int getCount() {
 			return barList.size();
@@ -338,7 +332,16 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 				holder.ivImage.setImageResource(R.drawable.ic_default);
 			}
 			holder.tvBarName.setText(bean.getBar_Name());
-			holder.tvAddress.setText(bean.getBar_Address());
+			StringTokenizer token = new StringTokenizer(bean.getBar_Address(), "$");
+			String[] add = new String[3];
+			int i = 0;
+			while (token.hasMoreTokens()) {
+				add[i] = token.nextToken();
+				i++;
+				String address1 = add[0];
+				String string = bean.getBarStreet();
+				holder.tvAddress.setText(address1 + string);// 酒吧地址
+			}
 			holder.tvContent.setText(bean.getBar_Intro());
 
 			double latitude;

@@ -208,6 +208,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
 	@Override
 	public void onClick(View v) {
+		int version = Integer.valueOf(android.os.Build.VERSION.SDK); 
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
@@ -218,7 +219,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		case R.id.viewSex:
 			final CharSequence[] items = { "男", "女", };
 			int sexStatus = 0;
-			if (tvSex.getText() == "女") {
+			if (tvSex.getText() == "男") {
 				sexStatus = 1;
 			}
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -227,12 +228,12 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			builder.setSingleChoiceItems(items, sexStatus, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
 					switch (item) {
-					case 0:
-						tvSex.setText("男");
+					case 1:
+						tvSex.setText("女");
 						tvSex.setTextSize(15);
 						tvSex.setTextColor(0xFF5F5F5F);
 						String nickname = "";
-						String sex = "男";
+						String sex = "女";
 						String signature = "";
 						String newPassword = "";
 						String birthday = "";
@@ -241,12 +242,12 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 						}
 						dialog.dismiss();
 						break;
-					case 1:
-						tvSex.setText("女");
+					case 0:
+						tvSex.setText("男");
 						tvSex.setTextSize(15);
 						tvSex.setTextColor(0xFF5F5F5F);
 						String nickname1 = "";
-						String sex1 = "女";
+						String sex1 = "男";
 						String signature1 = "";
 						String newPassword1 = "";
 						String birthday1 = "";
@@ -319,18 +320,34 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			break;
 		case R.id.viewBirthday:
 		   openActivity(BirthdaySetActivity.class);
+		   //动画效果
+		   if(version > 5 ){ 
+			   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
+			   } 
 			break;
 		case R.id.viewSignature:
-			openActivity(PersonalizedSignatureActivity.class);			
+			openActivity(PersonalizedSignatureActivity.class);		
+			if(version > 5 ){ 
+				   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
+				   } 
 			break;
 		case R.id.viewNickname:
-			openActivity(NickNameActivity.class);		
+			openActivity(NickNameActivity.class);	
+			if(version > 5 ){ 
+				   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
+				   } 
 			break;
 		case R.id.viewChangingPassword:
 			openActivity(ChangingPasswordActivity.class);	
+			if(version > 5 ){ 
+				   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
+				   } 
 			break;
 		case R.id.viewdistrict:
 			openActivity(ProvinceAcitvity.class);
+			if(version > 5 ){ 
+				   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
+				   } 
 		default:
 			break;
 		}
