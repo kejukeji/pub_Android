@@ -31,6 +31,9 @@ public class SharedPrefUtil {
 	public static final String LOGIN_TYPE = "login_type";// 登录方式 0 普通登陆 1 新浪登陆 2
 													// qq登录
     public static final String PASSWORD = "password"; //密码
+    
+    
+    public static final String PUB_COUNT="pub_count"; //酒吧列表的酒吧个数
 	/**
 	 * 判断是否是第一次进入应用
 	 * 
@@ -134,6 +137,23 @@ public class SharedPrefUtil {
 		return sp.getString(PASSWORD, null);
 	}
 
+	/**
+	 * 保存列表的酒吧个数
+	 * 
+	 * @param context
+	 * @param pubCount 酒吧个数
+	 */
+	public static void setPubCount(Context context, int pubCount) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putInt(PUB_COUNT, pubCount);
+		e.commit();
+	}
+
+	public static int getPubCount(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getInt(PUB_COUNT, 0);
+	}
 	// -----------------------------新浪微博验证信息-----------------
 	/**
 	 * 获取新浪微博openid
@@ -317,5 +337,6 @@ public class SharedPrefUtil {
 		e.putBoolean(IS_INFO_COMPLETE, isComplete);
 		e.commit();
 	}
+
 
 }

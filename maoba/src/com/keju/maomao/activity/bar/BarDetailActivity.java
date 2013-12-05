@@ -109,6 +109,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
+		btnRight.setText("收藏");
 		btnRight.setOnClickListener(this);
 		ivImage.setOnClickListener(this);
 		ivNext.setOnClickListener(this);
@@ -198,7 +199,6 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.btnRight:
-
 			if (isCollectingTask == false) {
 				showShortToast("正在执行收藏操作,请稍等...");
 				// return;
@@ -306,7 +306,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 					try {
 						int status = result.getInt("status");
 						if (status == Constants.REQUEST_SUCCESS) {
-							btnRight.setText(result.getString("is_collect"));
+//							btnRight.setText(result.getString("is_collect"));
 							String address = result.getString("county");
 							String showCount = result.getString("show_count");
 							tvShowNum.setText(showCount);

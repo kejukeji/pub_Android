@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
     android:clickable="true"
     android:orientation="vertical" >
 
@@ -51,7 +51,7 @@
             android:paddingTop="5dp"
             android:src="@drawable/ic_personal_infro_setting" />
     </RelativeLayout>
-
+    
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -60,36 +60,17 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+             android:background="@color/bg_home"
             android:layout_gravity="center_vertical"
-            android:background="@color/bg_home"
             android:orientation="horizontal" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="265dp"
-                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="110dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="10dp"
+                android:paddingBottom="100dp"
+                android:paddingLeft="5dp"
                 android:paddingTop="30dp" >
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginBottom="20dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_personal_center"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/tvAge1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/eventList"
-                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tvAddress"
@@ -99,31 +80,70 @@
                     android:ellipsize="end"
                     android:lineSpacingExtra="1dp"
                     android:maxEms="9"
-                    android:paddingLeft="5dp"
+                    android:text="上海市 黄浦区"
                     android:textColor="#FF8D01"
+                    android:textSize="@dimen/eventList" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:text="经验值"
+                        android:textColor="#FF8D01"
+                        android:textSize="@dimen/eventList" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lineSpacingExtra="1dp"
+                        android:maxEms="9"
+                        android:text="300280"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/eventList" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LV.9资深泡客"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/eventList" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:paddingLeft="5dp"
+                    android:text="积分"
+                    android:textColor="#FF8D01"
+                    android:textSize="@dimen/eventList" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1030"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/eventList" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:background="@drawable/bg_personal"
                 android:gravity="center"
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
+                    android:gravity="center"
                     android:orientation="vertical" >
-
-                    <ImageView
-                        android:id="@+id/ivPersonalSetting"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginLeft="95dp"
-                        android:src="@drawable/ic_personal_infro_setting"
-                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/ivUserPhoto"
@@ -211,7 +231,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#DADADA"
+            android:background="@drawable/bg_invite_and_gift"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingLeft="25dp"
@@ -221,9 +241,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="25dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_marginRight="25dp"
                 android:orientation="vertical" >
 
                 <TextView
@@ -244,12 +264,12 @@
                 android:background="@drawable/main_bottom_line" />
 
             <LinearLayout
-               android:layout_width="0dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="vertical" >
 
                 <TextView
@@ -272,10 +292,10 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:orientation="vertical" >
 
                 <TextView
@@ -296,11 +316,12 @@
                 android:background="@drawable/main_bottom_line" />
 
             <LinearLayout
+                android:id="@+id/viewMyNews"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_marginLeft="25dp"
                 android:orientation="vertical" >
 
                 <TextView
@@ -319,63 +340,77 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@color/common_bg"
+            android:background="#DDDEE0"
             android:orientation="vertical" >
 
             <LinearLayout
                 android:id="@+id/viewMyCollect"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_infor"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="10dp"
                 android:paddingBottom="10dp" >
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/left_menu_collect" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="我 的 收 藏" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="我 的 收 藏"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:text="33"
+                    android:textSize="18sp"
+                    android:textStyle="normal" />
             </LinearLayout>
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:background="@drawable/bg_bar_details_line" />
-
             <LinearLayout
-                android:id="@+id/viewMyNews"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_infor"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="10dp"
                 android:paddingBottom="10dp" >
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/left_menu_information" />
+                    android:src="@drawable/ic_my_activity" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="我 的 活 动"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="我 的 私 信" />
+                    android:layout_marginRight="15dp"
+                    android:text="43"
+                    android:textSize="18sp"
+                    android:textStyle="normal" />
             </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:background="@drawable/bg_bar_details_line" />
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

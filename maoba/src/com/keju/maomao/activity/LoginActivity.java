@@ -257,7 +257,55 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 						openActivity(MainActivity.class);
 						finish();
 					} else {
-						showShortToast(result.getString("message"));
+						if(result.getString("message").equals("不存在这个open_id")){
+							LayoutInflater inflater = getLayoutInflater();
+							View view = inflater.inflate(R.layout.dialog_ninkname_, null); //
+							TextView tvDialogMsg = (TextView) view.findViewById(R.id.tvDialogMsg); // 取得布局文件的控件
+							final EditText etNickName = (EditText) view.findViewById(R.id.etNickName); // 取得布局文件的控件
+							tvDialogMsg.setText("没有昵称无法第三方登录，请输入昵称");
+							final Dialog dialog = new Dialog(LoginActivity.this, R.style.dialog); // 取得style的文件
+
+							dialog.setContentView(view); // 将取得布局文件set进去
+							dialog.show(); // 显示
+							WindowManager windowManager = getWindowManager();
+							Display display = windowManager.getDefaultDisplay();
+							WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+							lp.width = (int) (display.getWidth() - 30); // 设置宽度
+
+							dialog.getWindow().setAttributes(lp);
+							Button btnDialogLeft = (Button) view.findViewById(R.id.btnDialogLeft);
+							btnDialogLeft.setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									nickName = etNickName.getText().toString().trim();
+									if (TextUtils.isEmpty(nickName)) {
+										showShortToast("请输入昵称");
+									} else {
+										if (NetUtil.checkNet(LoginActivity.this)) {
+											new RegisterTask(nickName, logintype, openid, true).execute();
+										} else {
+											showShortToast(R.string.NoSignalException);
+										}
+									}
+
+								}
+							});
+							Button btnDialogRight = (Button) view.findViewById(R.id.btnDialogRight);
+							btnDialogRight.setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									dialog.dismiss();
+								}
+							});
+							btnDialogRight.setText("取消");
+
+						
+						}else{
+							showShortToast(result.getString("message"));
+						}
+						
 					}
 				} catch (JSONException e) {
 					showShortToast(R.string.json_exception);
@@ -304,15 +352,24 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				pd.dismiss();
 			}
 			if (result != null) {
-
 				try {
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_FAILD) {
-
 						LayoutInflater inflater = getLayoutInflater();
 						View view = inflater.inflate(R.layout.dialog_ninkname_, null); //
 						TextView tvDialogMsg = (TextView) view.findViewById(R.id.tvDialogMsg); // 取得布局文件的控件
 						final EditText etNickName = (EditText) view.findViewById(R.id.etNickName); // 取得布局文件的控件
+						tvDialogMsg.setText("没有昵称无法第三方登录，请输入昵称");
+						final Dialog dialog = new Dialog(LoginActivity.this, R.style.dialog); // 取得style的文件
+
+						dialog.setContentView(view); // 将取得布局文件set进去
+						dialog.show(); // 显示
+						WindowManager windowManager = getWindowManager();
+						Display display = windowManager.getDefaultDisplay();
+						WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+						lp.width = (int) (display.getWidth() - 30); // 设置宽度
+
+						dialog.getWindow().setAttributes(lp);
 						Button btnDialogLeft = (Button) view.findViewById(R.id.btnDialogLeft);
 						btnDialogLeft.setOnClickListener(new OnClickListener() {
 
@@ -327,7 +384,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 									} else {
 										showShortToast(R.string.NoSignalException);
 									}
-
 								}
 
 							}
@@ -337,22 +393,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
 							@Override
 							public void onClick(View v) {
-								finish();
+								dialog.dismiss();
 							}
 						});
 						btnDialogRight.setText("取消");
-
-						tvDialogMsg.setText("没有昵称无法第三方登录，请输入昵称");
-						final Dialog dialog = new Dialog(LoginActivity.this, R.style.dialog); // 取得style的文件
-
-						dialog.setContentView(view); // 将取得布局文件set进去
-						dialog.show(); // 显示
-						WindowManager windowManager = getWindowManager();
-						Display display = windowManager.getDefaultDisplay();
-						WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-						lp.width = (int) (display.getWidth() - 30); // 设置宽度
-
-						dialog.getWindow().setAttributes(lp);
 
 					} else {
 						if (NetUtil.checkNet(LoginActivity.this)) {

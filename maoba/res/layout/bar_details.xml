@@ -227,7 +227,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:text="签到 show"
+                        android:text="签到签"
                         android:textSize="@dimen/LargeTextSize" />
                 </LinearLayout>
 

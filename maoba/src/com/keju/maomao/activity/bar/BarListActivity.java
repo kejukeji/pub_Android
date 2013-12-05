@@ -102,13 +102,13 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private ProgressBar pbFooter;
 	private TextView tvFooterMore;
 
-	private boolean isFilter = false;//是否为筛选
+	private boolean isFilter = false;// 是否为筛选
 
 	private boolean isLoad = false;// 是否正在加载数据
 	private boolean isLoadMore = false;
 	private boolean isComplete = false;// 是否加载完了；
-    
-	private boolean isFirst = true;//是否第一次进该界面
+
+	private boolean isFirst = true;// 是否第一次进该界面
 	private BarTypeBean bean;
 
 	private ProgressDialog pd;
@@ -473,11 +473,11 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				List<BarBean> tempList = result.getObjList();
 				if (pageIndex == 1) {
 					hotList.addAll(result.getObjList1());
-					if (isFilter) {
-					}else{
+					if (isFilter) {// 根据用户的需求再定吧
+					} else {
 						fillTodayRecommend(result.getObjList1());
 					}
-					if(isFirst){
+					if (isFirst) {
 						ScreenAreaList.addAll(result.getObjList2());
 					}
 				}
@@ -529,7 +529,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	 * @param list
 	 */
 	private void fillTodayRecommend(final List<BarBean> hotlist) {
-		if (hotlist == null) {
+		if (hotlist.size() <= 0) {
 			return;
 		}
 		views.clear();
@@ -559,8 +559,8 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 			ImageView iviewMenuList = new ImageView(this);// 原点设置
 			LayoutParams params = new LayoutParams(0, LayoutParams.WRAP_CONTENT, 1.0f);
-			params.leftMargin = 5;
-			params.rightMargin = 5;
+			params.leftMargin = 2;
+			params.rightMargin = 2;
 			iviewMenuList.setLayoutParams(params);
 			if (i == 0) {
 				iviewMenuList.setBackgroundResource(R.drawable.ic_pager_sel);

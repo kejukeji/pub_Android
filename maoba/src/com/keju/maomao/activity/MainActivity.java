@@ -48,6 +48,7 @@ import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.SharedPrefUtil;
 import com.keju.maomao.view.GridViewInScrollView;
 import com.keju.maomao.view.slidingmenu.SlidingMenu;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 首页
@@ -76,6 +77,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 	private GridViewInScrollView gvBarType;
 	private List<BarTypeBean> barTypeList;
 	private Adapter adapter;
+	private ImageView ivBanner;//广告
 	
 	private CommonApplication app;
 
@@ -113,6 +115,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 		btnLeftMenu = (Button) findViewById(R.id.btnLeftMenu);// 头部界面左边按钮控件
 		btnLeftMenu.setOnClickListener(this);
 		ivTop = (ImageView) findViewById(R.id.ivTop);
+		ivBanner = (ImageView) findViewById(R.id.ivBanner);
 		gvBarType = (GridViewInScrollView) findViewById(R.id.gvBarType);
 		tvTop = (TextView) findViewById(R.id.tvTop);
 
@@ -375,6 +378,36 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 			if (result != null) {
 				try {
 					if (Constants.REQUEST_SUCCESS == result.getInt("status")) {
+						String bannerUrl = result.getString("advertising_picture");
+						if(bannerUrl == null){
+							return;
+						}
+						ivBanner.setTag(BusinessHelper.PIC_BASE_URL+bannerUrl);
+						Drawable cacheDrawable1 = AsyncImageLoader.getInstance()
+								.loadDrawable(BusinessHelper.PIC_BASE_URL+bannerUrl,new ImageCallback() {
+											@Override
+											public void imageLoaded(
+													Drawable imageDrawable,
+													String imageUrl) {
+												if (imageDrawable != null) {
+													ivBanner.setImageDrawable(imageDrawable);
+												}
+											}
+										});
+						if (cacheDrawable1 != null) {
+							ivBanner.setImageDrawable(cacheDrawable1);
+						}
+						ivBanner.setOnClickListener(new View.OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+//								MobclickAgent.onEvent(HomeActivity.this, " banner_click", bean.getTitle() + bean.getLink());
+								Bundle b = new Bundle();
+								b.putString(Constants.EXTRA_DATA, "http://www.tmall.com/");
+								b.putString("name", "百度");
+								openActivity(WebviewActivity.class, b);
+							}
+						});
 						List<BarTypeBean> tempList = BarTypeBean
 								.constractList(result.getJSONArray("list"));
 						final BarTypeBean topBean = tempList.get(0);

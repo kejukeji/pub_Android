@@ -83,7 +83,6 @@ public class CommonApplication extends Application {
 			mBMapManager = new BMapManager(this);
 		}
 
-
 		if (!mBMapManager.init(mStrKey, new MyGeneralListener())) {
 			Toast.makeText(this, "BMapManager  初始化错误!", Toast.LENGTH_SHORT).show();
 		}

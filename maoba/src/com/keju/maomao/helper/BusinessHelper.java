@@ -7,6 +7,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.keju.maomao.Constants;
@@ -19,6 +21,7 @@ import com.keju.maomao.bean.ProvinceBean;
 import com.keju.maomao.bean.ResponseBean;
 import com.keju.maomao.internet.HttpClient;
 import com.keju.maomao.internet.PostParameter;
+import com.keju.maomao.util.SharedPrefUtil;
 
 /**
  * 网络访问操作
@@ -31,11 +34,11 @@ public class BusinessHelper {
 	 * 网络访问路径
 	 */
 	//测试服务器
-//	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
-//	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
+	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
+	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
 	//生产服务器
-	public static final String BASE_URL = "http://61.188.37.228:8081/restful/";
-	public static final String PIC_BASE_URL = "http://61.188.37.228:8081";
+//	public static final String BASE_URL = "http://61.188.37.228:8081/restful/";
+//	public static final String PIC_BASE_URL = "http://61.188.37.228:8081";
 	HttpClient httpClient = new HttpClient();
 
 	/**
@@ -150,6 +153,8 @@ public class BusinessHelper {
 			obj = httpClient.get(BASE_URL + "pub/list/detail", p.toArray(new PostParameter[p.size()])).asJSONObject();
 			int status = obj.getInt("status");
 			if (status == Constants.REQUEST_SUCCESS) {
+//				Context context = ;
+//				SharedPrefUtil.setPubCount(context, obj.getInt("pub_count"));
 				response = new ResponseBean<BarBean>(obj);
 				List<BarBean> list = null;
 				List<BarBean> list1 = null;
@@ -397,7 +402,19 @@ public class BusinessHelper {
 				new PostParameter[] { new PostParameter("user_id", uid), new PostParameter("pub_id", bar_id) })
 				.asJSONObject();
 	}
-
+	/**
+	 * 删除酒吧
+	 * 
+	 * @param uid
+	 * @param id
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject DelBar(int uid, int bar_id) throws SystemException {
+		return httpClient.get(BASE_URL + "cancel/collect/pub",
+				new PostParameter[] { new PostParameter("user_id", uid), new PostParameter("pub_id", bar_id) })
+				.asJSONObject();
+	}
 	/**
 	 * 获取首页数据
 	 * 

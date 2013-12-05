@@ -47,8 +47,8 @@
                         android:id="@+id/tvCollBarName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/BasicTextSize"
                         android:text="你好好和"
+                        android:textSize="@dimen/BasicTextSize"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -93,6 +93,15 @@
                         android:textSize="@dimen/SmallTextSize" />
                 </LinearLayout>
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivDel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:src="@drawable/ic_delete"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 

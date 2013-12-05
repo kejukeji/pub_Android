@@ -48,8 +48,10 @@
 	        </FrameLayout>
 	        <com.keju.maomao.view.GridViewInScrollView android:id="@+id/gvBarType" android:layout_width="fill_parent" android:layout_height="wrap_content" android:listSelector="@android:color/transparent"
 	            android:numColumns="2" android:horizontalSpacing="10dp" android:verticalSpacing="10dp" android:layout_marginTop="10dp">
-	            
 	        </com.keju.maomao.view.GridViewInScrollView>
+	         <ImageView android:id="@+id/ivBanner" android:layout_width="fill_parent" android:layout_height="60dp" android:scaleType="centerCrop" android:layout_marginTop="10dp"
+	                android:focusable="true" android:focusableInTouchMode="true"/>
 	    </LinearLayout>
+	    
 	</ScrollView>
 </LinearLayout>
