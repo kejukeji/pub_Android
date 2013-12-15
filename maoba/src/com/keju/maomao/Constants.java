@@ -44,6 +44,7 @@ public class Constants {
 	public static final String INTENT_SIGNATURE = "com.maoba.intent.action.PersonalizedSignatureActivity";
 	public static final String INTENT_NICKNAME = "com.maoba.intent.action.NickNameActivity";
 	public static final String INTENT_PASSWORD="com.maoba.intent.action.ChangingPasswordActivity";
+    public static final int INDEX = 0;//调转回掉 标志位
 	/**
 	 * 分页数据
 	 */
@@ -69,7 +70,7 @@ public class Constants {
 	 */
 	public static final String WEIBO_CONSUMER_KEY = "3250026215";// 替换为开发者的appkey，例如"1646212960";
 	public static final String WEIBO_CONSUMER_SECRET = "149d5190f01fe9d6189abfa69fb84398";// 替换为开发者的appkey，例如"94098772160b6f8ffc1315374d8861f9";
-	public static final String WEIBO_REDIRECT_URL = "http://www.eemedia.cn/";// 微博应用回调地址
+	public static final String WEIBO_REDIRECT_URL = "http://www.maomao.com";// 微博应用回调地址
 	public static final String WEIBO_USER_UID = "1291843462";
 
 	/**

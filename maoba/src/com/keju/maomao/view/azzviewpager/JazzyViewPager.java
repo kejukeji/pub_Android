@@ -52,7 +52,7 @@ public class JazzyViewPager extends ViewPager {
 		String[] transitions = getResources().getStringArray(
 				R.array.jazzy_effects);
 		setTransitionEffect(TransitionEffect.valueOf(transitions[effect]));
-		setFadeEnabled(ta.getBoolean(R.styleable.JazzyViewPager_fadeEnabled1,
+		setFadeEnabled(ta.getBoolean(R.styleable.JazzyViewPager_fadeEnabled,
 				false));
 		setOutlineEnabled(ta.getBoolean(
 				R.styleable.JazzyViewPager_outlineEnabled, false));
@@ -429,8 +429,8 @@ public class JazzyViewPager extends ViewPager {
 
 		float effectOffset = isSmall(positionOffset) ? 0 : positionOffset;
 
-		// mLeft = getChildAt(position);
-		// mRight = getChildAt(position+1);
+//		 mLeft = getChildAt(position);
+//		 mRight = getChildAt(position+1);
 		mLeft = findViewFromObject(position);
 		mRight = findViewFromObject(position + 1);
 

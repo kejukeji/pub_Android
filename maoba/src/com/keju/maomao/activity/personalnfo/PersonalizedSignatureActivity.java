@@ -72,6 +72,7 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			Signature = edSignature.getText().toString();

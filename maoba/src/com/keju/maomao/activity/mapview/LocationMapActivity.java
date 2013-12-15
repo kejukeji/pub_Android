@@ -111,6 +111,7 @@ public class LocationMapActivity extends BaseActivity implements OnClickListener
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			Toast.makeText(this, "请安装百度地图使用该功能", Toast.LENGTH_SHORT).show();

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -35,7 +36,6 @@ import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.bar.BarListActivity;
 import com.keju.maomao.activity.base.BaseSlidingFragmentActivity;
-import com.keju.maomao.activity.event.EventListActivity;
 import com.keju.maomao.activity.my.CollectionOfBarListActivity;
 import com.keju.maomao.activity.news.NewsActivity;
 import com.keju.maomao.activity.personalcenter.PersonalCenter;
@@ -48,7 +48,6 @@ import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.SharedPrefUtil;
 import com.keju.maomao.view.GridViewInScrollView;
 import com.keju.maomao.view.slidingmenu.SlidingMenu;
-import com.umeng.analytics.MobclickAgent;
 
 /**
  * 首页
@@ -57,8 +56,7 @@ import com.umeng.analytics.MobclickAgent;
  * @data 创建时间：2013-10-15 下午2:52:49
  */
 
-public class MainActivity extends BaseSlidingFragmentActivity implements
-		OnClickListener {
+public class MainActivity extends BaseSlidingFragmentActivity implements OnClickListener {
 	private SlidingMenu sm;
 	// 侧边栏
 	private LinearLayout rlCollect;// 收藏
@@ -77,9 +75,13 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 	private GridViewInScrollView gvBarType;
 	private List<BarTypeBean> barTypeList;
 	private Adapter adapter;
-	private ImageView ivBanner;//广告
-	
+	private ImageView ivBanner;// 广告
+
 	private CommonApplication app;
+
+	private TextView tvCity;// 城市切换
+	private int provinceId;// 省得id
+	private String cityName;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,30 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 		findView();
 		fillData();
 		app.addActivity(this);
+	}
+
+	/**
+	 * 城市切换的数据回调
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case Constants.INDEX:
+				provinceId = data.getIntExtra("PROVINCEID", Constants.INDEX);
+				cityName = data.getStringExtra("CITYNAME");
+				if (cityName == null) {
+					tvCity.setText("城市切换");
+				} else {
+					tvCity.setText(cityName);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+
 	}
 
 	/**
@@ -128,6 +154,13 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 		viewSettingTitle = (LinearLayout) findViewById(R.id.viewSettingTitle);
 		tvNewMessagePoint = (TextView) findViewById(R.id.tv_new_message_point);
 
+		tvCity = (TextView) this.findViewById(R.id.tvCity);
+		tvCity.setOnClickListener(this);
+		if (SharedPrefUtil.getCityName(MainActivity.this) == null) {
+			tvCity.setText("城市切换");
+		} else {
+			tvCity.setText(SharedPrefUtil.getCityName(MainActivity.this));
+		}
 		rlCollect.setOnClickListener(this);
 		rlInfromation.setOnClickListener(this);
 		rlSetting.setOnClickListener(this);
@@ -152,11 +185,11 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 	OnItemClickListener itemListener = new OnItemClickListener() {
 
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			BarTypeBean bean = barTypeList.get(position);
 			Bundle b = new Bundle();
 			b.putSerializable(Constants.EXTRA_DATA, bean);
+			b.putInt("PROVINCEID", provinceId);
 			openActivity(BarListActivity.class, b);
 		}
 	};
@@ -169,14 +202,12 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 			break;
 		case R.id.rlCollect:
 			if (!SharedPrefUtil.isLogin(this)) {
-				showAlertDialog(R.string.msg, R.string.no_login,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								openActivity(LoginActivity.class);
-							}
-						}, null, null);
+				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						openActivity(LoginActivity.class);
+					}
+				}, null, null);
 				return;
 			}
 			int uid = SharedPrefUtil.getUid(MainActivity.this);
@@ -186,39 +217,41 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 			break;
 		case R.id.rlInfromation:
 			if (!SharedPrefUtil.isLogin(this)) {
-				showAlertDialog(R.string.msg, R.string.no_login,
-						new DialogInterface.OnClickListener() {
+				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								openActivity(LoginActivity.class);
-							}
-						}, null, null);
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						openActivity(LoginActivity.class);
+					}
+				}, null, null);
 				return;
 			}
 			openActivity(NewsActivity.class);
 			break;
 		case R.id.rlSetting:
 			if (!SharedPrefUtil.isLogin(this)) {
-				showAlertDialog(R.string.msg, R.string.no_login,
-						new DialogInterface.OnClickListener() {
+				showAlertDialog(R.string.msg, R.string.no_login, new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								openActivity(LoginActivity.class);
-							}
-						}, null, null);
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						openActivity(LoginActivity.class);
+					}
+				}, null, null);
 				return;
 			}
 			openActivity(SettingActivity.class);
 			break;
 		case R.id.rlMain:
-			 openActivity(MainActivity.class);
+			openActivity(MainActivity.class);
 			break;
 		case R.id.viewSettingTitle:
 			openActivity(PersonalCenter.class);
+			break;
+		case R.id.tvCity:
+			Intent intent = new Intent();
+			intent.setClass(MainActivity.this, CityChangActivity.class);
+			startActivityForResult(intent, Constants.INDEX);
+			// openActivity(CityChangActivity.class);
 			break;
 		default:
 			break;
@@ -257,20 +290,14 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 						} else {
 							tvsignaTure.setText(signaTure);
 						}
-						String photoUrl = BusinessHelper.PIC_BASE_URL
-								+ userJson.getString("pic_path");
+						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 						ivSettingUserPhoto.setTag(photoUrl);
-						Drawable cacheDrawble = AsyncImageLoader.getInstance()
-								.loadDrawable(photoUrl, new ImageCallback() {
+						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
+								new ImageCallback() {
 									@Override
-									public void imageLoaded(
-											Drawable imageDrawable,
-											String imageUrl) {
-										ImageView image = (ImageView) ivSettingUserPhoto
-												.findViewWithTag(imageUrl);
-										Bitmap bitmap = ImageUtil
-												.getRoundCornerBitmapWithPic(
-														imageDrawable, 0.5f);
+									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+										ImageView image = (ImageView) ivSettingUserPhoto.findViewWithTag(imageUrl);
+										Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(imageDrawable, 0.5f);
 
 										if (image != null) {
 											if (imageDrawable != null) {
@@ -282,13 +309,10 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 									}
 								});
 						if (cacheDrawble != null) {
-							Bitmap bitmap = ImageUtil
-									.getRoundCornerBitmapWithPic(cacheDrawble,
-											0.5f);
+							Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(cacheDrawble, 0.5f);
 							ivSettingUserPhoto.setImageBitmap(bitmap);
 						} else {
-							ivSettingUserPhoto
-									.setImageResource(R.drawable.left_menu_userimage);
+							ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
 						}
 
 					} else {
@@ -296,12 +320,10 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 
 					}
 				} catch (JSONException e) {
-					ivSettingUserPhoto
-							.setImageResource(R.drawable.left_menu_userimage);
+					ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
 				}
 			} else {
-				ivSettingUserPhoto
-						.setImageResource(R.drawable.left_menu_userimage);
+				ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
 				tvsignaTure.setText("未设置");
 			}
 		}
@@ -332,8 +354,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 					} else {
 						int systemMessageCount = result.getInt("system_count");
 						int privateMessageCount = result.getInt("direct_count");
-						int finalCount = systemMessageCount
-								+ privateMessageCount;
+						int finalCount = systemMessageCount + privateMessageCount;
 						if (finalCount == 0) {
 							tvNewMessagePoint.setVisibility(View.GONE);
 						} else {
@@ -379,21 +400,19 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 				try {
 					if (Constants.REQUEST_SUCCESS == result.getInt("status")) {
 						String bannerUrl = result.getString("advertising_picture");
-						if(bannerUrl == null){
+						if (bannerUrl == null) {
 							return;
 						}
-						ivBanner.setTag(BusinessHelper.PIC_BASE_URL+bannerUrl);
-						Drawable cacheDrawable1 = AsyncImageLoader.getInstance()
-								.loadDrawable(BusinessHelper.PIC_BASE_URL+bannerUrl,new ImageCallback() {
-											@Override
-											public void imageLoaded(
-													Drawable imageDrawable,
-													String imageUrl) {
-												if (imageDrawable != null) {
-													ivBanner.setImageDrawable(imageDrawable);
-												}
-											}
-										});
+						ivBanner.setTag(BusinessHelper.PIC_BASE_URL + bannerUrl);
+						Drawable cacheDrawable1 = AsyncImageLoader.getInstance().loadDrawable(
+								BusinessHelper.PIC_BASE_URL + bannerUrl, new ImageCallback() {
+									@Override
+									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+										if (imageDrawable != null) {
+											ivBanner.setImageDrawable(imageDrawable);
+										}
+									}
+								});
 						if (cacheDrawable1 != null) {
 							ivBanner.setImageDrawable(cacheDrawable1);
 						}
@@ -401,31 +420,29 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 
 							@Override
 							public void onClick(View v) {
-//								MobclickAgent.onEvent(HomeActivity.this, " banner_click", bean.getTitle() + bean.getLink());
+								// MobclickAgent.onEvent(HomeActivity.this,
+								// " banner_click", bean.getTitle() +
+								// bean.getLink());
 								Bundle b = new Bundle();
 								b.putString(Constants.EXTRA_DATA, "http://www.tmall.com/");
 								b.putString("name", "百度");
 								openActivity(WebviewActivity.class, b);
 							}
 						});
-						List<BarTypeBean> tempList = BarTypeBean
-								.constractList(result.getJSONArray("list"));
+						List<BarTypeBean> tempList = BarTypeBean.constractList(result.getJSONArray("list"));
 						final BarTypeBean topBean = tempList.get(0);
 						tvTop.setText(topBean.getName());
 						ivTop.setTag(topBean.getUrl());
-						Drawable cacheDrawable = AsyncImageLoader.getInstance()
-								.loadDrawable(topBean.getUrl(),
-										new ImageCallback() {
+						Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(topBean.getUrl(),
+								new ImageCallback() {
 
-											@Override
-											public void imageLoaded(
-													Drawable imageDrawable,
-													String imageUrl) {
-												if (imageDrawable != null) {
-													ivTop.setImageDrawable(imageDrawable);
-												}
-											}
-										});
+									@Override
+									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+										if (imageDrawable != null) {
+											ivTop.setImageDrawable(imageDrawable);
+										}
+									}
+								});
 						if (cacheDrawable != null) {
 							ivTop.setImageDrawable(cacheDrawable);
 						}
@@ -435,6 +452,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 							public void onClick(View v) {
 								Bundle b = new Bundle();
 								b.putSerializable(Constants.EXTRA_DATA, topBean);
+								b.putInt("PROVINCEID", provinceId);
 								openActivity(BarListActivity.class, b);
 							}
 						});
@@ -482,12 +500,9 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 			BarTypeBean bean = barTypeList.get(position);
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = getLayoutInflater().inflate(
-						R.layout.bar_type_item, null);
-				holder.ivImage = (ImageView) convertView
-						.findViewById(R.id.ivImage);
-				holder.tvBarType = (TextView) convertView
-						.findViewById(R.id.tvBarType);
+				convertView = getLayoutInflater().inflate(R.layout.bar_type_item, null);
+				holder.ivImage = (ImageView) convertView.findViewById(R.id.ivImage);
+				holder.tvBarType = (TextView) convertView.findViewById(R.id.tvBarType);
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
@@ -499,21 +514,18 @@ public class MainActivity extends BaseSlidingFragmentActivity implements
 			params.height = itemWidth * 2 / 3;
 			holder.ivImage.setLayoutParams(params);
 			holder.ivImage.setTag(bean.getUrl());
-			Drawable cacheDrawable = AsyncImageLoader.getInstance()
-					.loadDrawable(bean.getUrl(), new ImageCallback() {
+			Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(bean.getUrl(), new ImageCallback() {
 
-						@Override
-						public void imageLoaded(Drawable imageDrawable,
-								String imageUrl) {
-							ImageView image = (ImageView) gvBarType
-									.findViewWithTag(imageUrl);
-							if (image != null) {
-								if (imageDrawable != null) {
-									image.setImageDrawable(imageDrawable);
-								}
-							}
+				@Override
+				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+					ImageView image = (ImageView) gvBarType.findViewWithTag(imageUrl);
+					if (image != null) {
+						if (imageDrawable != null) {
+							image.setImageDrawable(imageDrawable);
 						}
-					});
+					}
+				}
+			});
 			if (cacheDrawable != null) {
 				holder.ivImage.setImageDrawable(cacheDrawable);
 			}

@@ -54,6 +54,7 @@ import com.keju.maomao.imagecache.ImageFetcher;
 import com.keju.maomao.util.AndroidUtil;
 import com.keju.maomao.util.ImageUtil;
 import com.keju.maomao.util.NetUtil;
+import com.keju.maomao.util.SharedPrefUtil;
 import com.keju.maomao.util.StringUtil;
 import com.keju.maomao.view.azzviewpager.JazzyViewPager;
 import com.keju.maomao.view.azzviewpager.JazzyViewPager.TransitionEffect;
@@ -115,6 +116,8 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private CommonApplication app;
 
 	private TextView tvNearbyBar;// 附近酒啊
+	
+	private int provinceId;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +126,12 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		app = (CommonApplication) getApplication();
 		bean = (BarTypeBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
+		
+		if((int) getIntent().getExtras().getInt("PROVINCEID")==0){
+			provinceId = SharedPrefUtil.getProvinceId(BarListActivity.this);
+		}else{
+			provinceId = (int) getIntent().getExtras().getInt("PROVINCEID");
+		}
 		findView();
 		fillData();
 
@@ -142,7 +151,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		lvBarList = (ListView) this.findViewById(R.id.lvBarList);
 
 		viewPage = (JazzyViewPager) this.findViewById(R.id.viewPage);
-		viewPage.setTransitionEffect(TransitionEffect.FlipVertical);
+
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		tvTitle.setText(bean.getName());
 		tvTitle.setOnClickListener(this);
@@ -193,6 +202,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			openActivity(SearchActivity.class);
@@ -450,7 +460,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
 
 			try {
-				return new BusinessHelper().getBarList(bean.getId(), cityId, pageIndex);
+				return new BusinessHelper().getBarList(bean.getId(),provinceId,cityId, pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -574,39 +584,15 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				viewMenuList.setVisibility(View.VISIBLE);
 			}
 		}
+		viewPage.setTransitionEffect(TransitionEffect.CubeOut);
+		viewPage.setCurrentItem(0);
 		barAdapter = new MyPagerAdapter(views);
 		viewPage.setAdapter(barAdapter);
-		// int maxSize = 65535;
 
-		viewPage.setCurrentItem(0);
-		viewPage.setOnPageChangeListener(listener);
+		viewPage.setOnPageChangeListener(new MyPageChangeListener());
 		startTask();
 
 	}
-
-	private OnPageChangeListener listener = new OnPageChangeListener() {
-
-		@Override
-		public void onPageSelected(int position) {
-			if (count == 1 && position == 1) {
-				viewPage.setCurrentItem(0);
-				return;
-			}
-			currPosition = position;
-			changeState(position);
-
-		}
-
-		@Override
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-		}
-
-		@Override
-		public void onPageScrollStateChanged(int arg0) {
-
-		}
-	};
 
 	/**
 	 * 改变原点的状态
@@ -863,6 +849,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		public Object instantiateItem(View container, int position) {
 			try {
 				((ViewPager) container).addView(views.get(position % views.size()), 0);
+				viewPage.setObjectForPosition(views.get(position % views.size()), position);
 			} catch (Exception e) {
 
 			}
@@ -870,5 +857,36 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		}
 
 	}
+
+	/**
+	 * 当ViewPager中页面的状态发生改变时调用
+	 * 
+	 * @author Administrator
+	 * 
+	 */
+
+	private class MyPageChangeListener implements OnPageChangeListener {
+
+		@Override
+		public void onPageSelected(int position) {
+			if (count == 1 && position == 1) {
+				viewPage.setCurrentItem(0);
+				return;
+			}
+			currPosition = position;
+			changeState(position);
+
+		}
+
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+		}
+	};
 
 }

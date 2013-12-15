@@ -36,7 +36,11 @@ public class LogoActivity extends BaseActivity {
 						SharedPrefUtil.setFistLogined(LogoActivity.this);
 					}else{
 						if (SharedPrefUtil.isLogin(LogoActivity.this)) {
+							if(SharedPrefUtil.getCityName(LogoActivity.this)==null){
+								startActivity(new Intent(LogoActivity.this, CityChangActivity.class));
+							}else{
 							startActivity(new Intent(LogoActivity.this, MainActivity.class));
+							}
 							LogoActivity.this.finish();
 						} else {
 							startActivity(new Intent(LogoActivity.this, LoginActivity.class));
@@ -50,8 +54,8 @@ public class LogoActivity extends BaseActivity {
 				}
 
 				public void onAnimationStart(Animation animation) {
-				}
-			});
+			}
+		});
 	}
 
 }

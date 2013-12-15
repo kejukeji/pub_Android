@@ -7,8 +7,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.keju.maomao.Constants;
@@ -21,7 +19,6 @@ import com.keju.maomao.bean.ProvinceBean;
 import com.keju.maomao.bean.ResponseBean;
 import com.keju.maomao.internet.HttpClient;
 import com.keju.maomao.internet.PostParameter;
-import com.keju.maomao.util.SharedPrefUtil;
 
 /**
  * 网络访问操作
@@ -36,6 +33,9 @@ public class BusinessHelper {
 	//测试服务器
 	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
 	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
+	//本地服务器
+//	public static final String BASE_URL1 = "http://192.168.0.126:5000/restful/";
+//	public static final String PIC_BASE_URL = "http://192.168.0.126:5000";
 	//生产服务器
 //	public static final String BASE_URL = "http://61.188.37.228:8081/restful/";
 //	public static final String PIC_BASE_URL = "http://61.188.37.228:8081";
@@ -140,10 +140,12 @@ public class BusinessHelper {
 	 * @throws SystemException
 	 */
 
-	public ResponseBean<BarBean> getBarList(int barTypeId, int cityId,int pageIndex) throws SystemException {
+	public ResponseBean<BarBean> getBarList(int barTypeId, int provinceId,int cityId,int pageIndex) throws SystemException {
 		List<PostParameter> p = new ArrayList<PostParameter>();
 		if (barTypeId > 0) {
 			p.add(new PostParameter("type_id", barTypeId));
+		}if(provinceId >=0){
+		  p.add(new PostParameter("province_id", provinceId));
 		}
 		p.add(new PostParameter("city_id", cityId));
 		p.add(new PostParameter("page", pageIndex));
@@ -685,6 +687,22 @@ public class BusinessHelper {
 	}
 	
 	/**
+	 * 获取用户在貓吧的信息
+	 * 
+	 * @param loginWay
+	 * @param openId
+	 * @param uid
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject GetUserBaseInfor(int uid) throws SystemException {
+		return httpClient.get(BASE_URL + "person/center", new PostParameter[] { 
+				new PostParameter("user_id", uid),})
+				.asJSONObject();
+	}
+	
+	
+	/**
 	 * 修改用户资料  图片上传
 	 * 此方案即可上传文件  又可以不传
 	 * @param loginWay
@@ -897,5 +915,88 @@ public class BusinessHelper {
 		}
 		return response;
 	}
+	
+	/**
+	 * 获取活动详情接口 
+	 * 
+	 * @param bar_id 酒吧的id
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject getEventDetail(int eventId,int userId) throws SystemException {
+		return httpClient.get(
+				BASE_URL + "activity/info",
+				new PostParameter[] { new PostParameter("activity_id", eventId),
+						new PostParameter("user_id", userId)}).asJSONObject();
+	}
+	
+	/**
+	 * 活动收藏和取消接口 
+	 * 
+	 * @param bar_id 酒吧的id
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject collectEvent(int eventId,int userId) throws SystemException {
+		return httpClient.get(
+				BASE_URL + "cancel/collect/activity",
+				new PostParameter[] { new PostParameter("activity_id", eventId),
+				new PostParameter("user_id", userId)}).asJSONObject();
+	}
+	
+	/**
+	 * 获取用户收藏的活动列表接口
+	 * 
+	 * @param uid
+	 * @param pageIndex
+	 * @return
+	 * @throws SystemException
+	 * */
+	public ResponseBean<EventBean> getcollectEvent(int uid, int pageIndex) throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		if (uid > 0) {
+			p.add(new PostParameter("user_id", uid));
+		} else {
+			p.add(new PostParameter("user_id", ""));
+		}
+		p.add(new PostParameter("page", pageIndex));
+		ResponseBean<EventBean> response;
+		JSONObject obj;
+		try {
+			obj = httpClient.get(BASE_URL + "collect/activity/list", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<EventBean>(obj);
+				List<EventBean> list = null;
+				if (!TextUtils.isEmpty(obj.getString("activity_collect"))) {
+					list = EventBean.constractList(obj.getJSONArray("activity_collect"));
+
+				} else {
+					list = new ArrayList<EventBean>();
+				}
+				response.setObjList(list);
+			} else {
+				response = new ResponseBean<EventBean>(Constants.REQUEST_FAILD, obj.getString(""));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<EventBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e2) {
+			response = new ResponseBean<EventBean>(Constants.REQUEST_FAILD, "json解析失败");
+		}
+
+		return response;
+
+	}
+	/**
+	 * 获取城市切换接口 
+	 * 
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject getCity() throws SystemException {
+		return httpClient.get(
+				BASE_URL + "city/data").asJSONObject();
+	}
+	
 
 }

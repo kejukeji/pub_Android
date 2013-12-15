@@ -267,7 +267,7 @@ public class SlidingMenu extends RelativeLayout {
 		}
 		int shadowWidth = (int) ta.getDimension(R.styleable.SlidingMenu_shadowWidth, 0);
 		setShadowWidth(shadowWidth);
-		boolean fadeEnabled = ta.getBoolean(R.styleable.SlidingMenu_fadeEnabled, true);
+		boolean fadeEnabled = ta.getBoolean(R.styleable.SlidingMenu_fadeEnabled1, true);
 		setFadeEnabled(fadeEnabled);
 		float fadeDeg = ta.getFloat(R.styleable.SlidingMenu_fadeDegree, 0.33f);
 		setFadeDegree(fadeDeg);

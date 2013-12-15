@@ -89,6 +89,7 @@ public class ProvinceAcitvity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		default:
 			break;
@@ -117,6 +118,7 @@ public class ProvinceAcitvity extends BaseActivity implements OnClickListener {
 			Intent intent = new Intent(ProvinceAcitvity.this,CityActivity.class);
 			intent.putExtras(b);
 			startActivityForResult(intent, Constants.REQUEST_CODE_CHOOSE_AREA);
+			overridePendingTransition(R.anim.roll_up, R.anim.roll);
 		}
 	};
 

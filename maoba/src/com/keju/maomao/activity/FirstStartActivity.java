@@ -159,7 +159,7 @@ public class FirstStartActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(SharedPrefUtil.isLogin(FirstStartActivity.this)){
-					startActivity(new Intent(FirstStartActivity.this, MainActivity.class));
+					startActivity(new Intent(FirstStartActivity.this, LogoActivity.class));
 				}else{
 					startActivity(new Intent(FirstStartActivity.this, LoginActivity.class));
 					

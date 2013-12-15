@@ -127,6 +127,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			isEdit = !isEdit;

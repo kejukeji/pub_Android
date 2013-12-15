@@ -97,6 +97,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.viewMyCollect:
 			Bundle b = new Bundle();

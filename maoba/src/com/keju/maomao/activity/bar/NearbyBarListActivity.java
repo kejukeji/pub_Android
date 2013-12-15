@@ -128,6 +128,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		default:
 			break;
@@ -250,7 +251,7 @@ public class NearbyBarListActivity extends BaseActivity implements OnClickListen
 											tvFooterMore.setText("上拉查看更多");
 										}
 									}
-									if ((pageIndex == 1 || pageIndex == 2) && nearBean.size() < Constants.PAGE_SIZE) {
+									if (pageIndex == 1 && nearBean.size() == 0) {
 										tvFooterMore.setText("");
 									}
 									adapter.notifyDataSetChanged();

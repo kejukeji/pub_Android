@@ -142,6 +142,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			if (NetUtil.checkNet(PrivateNewsListActivity.this)) {

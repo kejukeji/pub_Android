@@ -22,7 +22,7 @@ import com.keju.maomao.helper.BusinessHelper;
 public class EventBean implements Serializable {
 	private static final long serialVersionUID = 4617043918315208981L;
 
-	private int id;
+	private int eventId; 
 	private String eventTitle;
 	private String eventAddress;
 	private String startTime;// 活动开始时间
@@ -30,6 +30,8 @@ public class EventBean implements Serializable {
 	private int joinNumber;
 	private String photoUrl;
 	private String recommendPhotoUrl;// 推荐活动图片
+	private String collectTime;//收藏时间
+	private Boolean isCollect;
 	
 	private int barId;
 	private String barName;
@@ -43,10 +45,10 @@ public class EventBean implements Serializable {
 	public EventBean(JSONObject obj) throws JSONException {
 
 		if (obj.has("pub_id")) {
-			this.id = obj.getInt("pub_id");
+			this.eventId = obj.getInt("pub_id");
 		}
 		if (obj.has("id")) {
-			this.id = obj.getInt("id");
+			this.eventId = obj.getInt("id");
 		}
 
 		if (obj.has("title")) {
@@ -64,15 +66,17 @@ public class EventBean implements Serializable {
 			this.endTime = obj.getString("end_date");
 
 		}
-
+         if(obj.has("collect_time")){
+        	this.collectTime = obj.getString("collect_time");
+         }
 		if (obj.has("join_people_number")) {
 			this.joinNumber = obj.getInt("join_people_number");
 		}
-		if (obj.has("activity_picture_path")) {
-			this.photoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("activity_picture_path");
+		if (obj.has("pic_path")) {
+			this.photoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
-		if (obj.has("recommendPhotoUrl")) {
-			this.recommendPhotoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("recommendPhotoUrl");
+		if (obj.has("pic_path")) {
+			this.recommendPhotoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
 		}
 
 		if (obj.has("pub_name")) {
@@ -84,6 +88,9 @@ public class EventBean implements Serializable {
 
 		if (obj.has("activity_info")) {
 			this.eventContent = obj.getString("activity_info");
+		}
+		if(obj.has("is_collect")){
+			this.isCollect = obj.getBoolean("is_collect");
 		}
 
 	}
@@ -100,12 +107,12 @@ public class EventBean implements Serializable {
 		return list;
 	}
 
-	public int getId() {
-		return id;
+	public int getEventId() {
+		return eventId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setEventId(int id) {
+		this.eventId = id;
 	}
 
 	public int getBarId() {
@@ -194,6 +201,22 @@ public class EventBean implements Serializable {
 
 	public void setEventContent(String eventContent) {
 		this.eventContent = eventContent;
+	}
+
+	public String getCollectTime() {
+		return collectTime;
+	}
+
+	public void setCollectTime(String collectTime) {
+		this.collectTime = collectTime;
+	}
+
+	public Boolean getIsCollect() {
+		return isCollect;
+	}
+
+	public void setIsCollect(Boolean isCollect) {
+		this.isCollect = isCollect;
 	}
 
 }

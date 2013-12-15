@@ -33,7 +33,14 @@ public class SharedPrefUtil {
     public static final String PASSWORD = "password"; //密码
     
     
-    public static final String PUB_COUNT="pub_count"; //酒吧列表的酒吧个数
+    public static final String CITYNAME="city_name"; //保存选择的城市名字
+    public static final String PROVINCEID="province_id"; //保存选择的省得id
+    public static final String IS_FIRST_CITYACTIVITY="is_first_cityactivity"; //是不是第一次进入城市切换界面
+    
+    
+   
+    
+    
 	/**
 	 * 判断是否是第一次进入应用
 	 * 
@@ -100,6 +107,65 @@ public class SharedPrefUtil {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		return sp.getString(OPEN_ID, null);
 	}
+	
+	/**
+	 * 保存用户选择的城市
+	 * 
+	 * @param context
+	 * @param cityName
+	 */
+	public static void setCityName(Context context, String cityName) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putString(CITYNAME, cityName);
+		e.commit();
+	}
+
+	public static String getCityName(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getString(CITYNAME, null);
+	}
+	/**
+	 * 保存用户选择省的id
+	 * 
+	 * @param context
+	 * @param provinceId
+	 */
+	public static void setProvinceId(Context context, int provinceId) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putInt(PROVINCEID, provinceId);
+		e.commit();
+	}
+
+	public static int getProvinceId(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getInt(PROVINCEID, 0);
+	}
+	
+	/**
+	 * 判断是否是第一次进入城市切换界面
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static boolean isFistCityActivity(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getBoolean(IS_FIRST_CITYACTIVITY, true);
+	}
+
+	/**
+	 * 如果已经进入城市切换界面，则设置第一次为false
+	 * 
+	 * @param context
+	 */
+	public static void setFistCityActivity(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putBoolean(IS_FIRST_CITYACTIVITY, false);
+		e.commit();
+	}
+
 
 	/**
 	 * 保存登陆的方式
@@ -137,23 +203,6 @@ public class SharedPrefUtil {
 		return sp.getString(PASSWORD, null);
 	}
 
-	/**
-	 * 保存列表的酒吧个数
-	 * 
-	 * @param context
-	 * @param pubCount 酒吧个数
-	 */
-	public static void setPubCount(Context context, int pubCount) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		Editor e = sp.edit();
-		e.putInt(PUB_COUNT, pubCount);
-		e.commit();
-	}
-
-	public static int getPubCount(Context context) {
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		return sp.getInt(PUB_COUNT, 0);
-	}
 	// -----------------------------新浪微博验证信息-----------------
 	/**
 	 * 获取新浪微博openid

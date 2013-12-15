@@ -76,6 +76,7 @@ public class SettingFeedbackActivity extends BaseActivity implements OnClickList
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		default:
 		case R.id.btnRight:

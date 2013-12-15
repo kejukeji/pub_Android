@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_bg"
     android:orientation="vertical" >
 
     <include layout="@layout/common_title_bar" />
@@ -9,6 +10,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -16,21 +18,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="3dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
             android:paddingTop="3dp" >
 
             <com.keju.maomao.view.azzviewpager.JazzyViewPager
-                android:id="@+id/viewPage"
+                android:id="@+id/eventViewPager"
                 android:layout_width="fill_parent"
-                android:layout_height="150dp" />
+                android:layout_height="160dp" />
 
             <LinearLayout
                 android:id="@+id/viewMenuList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="horizontal" >
+                android:orientation="horizontal" 
+                android:visibility="gone">
             </LinearLayout>
         </LinearLayout>
 
@@ -38,10 +39,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/bg_bar_list"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_event"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
@@ -49,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="3dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="3dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
@@ -84,10 +83,12 @@
                     android:orientation="horizontal"
                     android:paddingTop="5dp" >
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="位置："
+                        android:background="@drawable/ic_distance"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="3dp"
                         android:textSize="@dimen/SmallTextSize" />
 
                     <TextView
@@ -100,6 +101,7 @@
                         android:lineSpacingExtra="1dp"
                         android:maxEms="8"
                         android:singleLine="true"
+                        
                         android:text="上海市闵行区凯旋路238号"
                         android:textSize="@dimen/SmallTextSize" />
                 </LinearLayout>
@@ -179,6 +181,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="已经有"
+                        android:textColor="#747474"
                         android:textSize="@dimen/SmallTextSize" />
 
                     <TextView
@@ -187,7 +190,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="1223"
-                        android:textColor="#41849a"
+                        android:textColor="#747474"
                         android:textSize="@dimen/SmallTextSize" />
 
                     <TextView
@@ -195,10 +198,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="人参加"
+                        android:textColor="#747474"
                         android:textSize="@dimen/SmallTextSize" />
                 </LinearLayout>
-
-                <LinearLayout
+              
+            </LinearLayout>
+             
+        </LinearLayout>
+         <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -209,18 +216,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="活动详情："
-                        android:textSize="@dimen/SmallTextSize" />
+                        android:textSize="@dimen/BasicTextSize" />
 
                     <TextView
                         android:id="@+id/tvEventContent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="10dp"
                         android:text="美女活动美女活动美女活动美女活动美女活动美女活动美女活动美女活动美女活动美女活动美女活动美女活动"
                         android:textSize="@dimen/SmallTextSize" />
                 </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

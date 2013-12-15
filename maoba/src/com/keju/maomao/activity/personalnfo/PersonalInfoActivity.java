@@ -208,10 +208,10 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
 	@Override
 	public void onClick(View v) {
-		int version = Integer.valueOf(android.os.Build.VERSION.SDK); 
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 
@@ -219,7 +219,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		case R.id.viewSex:
 			final CharSequence[] items = { "男", "女", };
 			int sexStatus = 0;
-			if (tvSex.getText() == "男") {
+			if (tvSex.getText() == "女") {
 				sexStatus = 1;
 			}
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -321,33 +321,23 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		case R.id.viewBirthday:
 		   openActivity(BirthdaySetActivity.class);
 		   //动画效果
-		   if(version > 5 ){ 
-			   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
-			   } 
+		   overridePendingTransition(R.anim.roll_up, R.anim.roll);
 			break;
 		case R.id.viewSignature:
 			openActivity(PersonalizedSignatureActivity.class);		
-			if(version > 5 ){ 
-				   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
-				   } 
+			overridePendingTransition(R.anim.roll_up, R.anim.roll);
 			break;
 		case R.id.viewNickname:
 			openActivity(NickNameActivity.class);	
-			if(version > 5 ){ 
-				   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
-				   } 
+			overridePendingTransition(R.anim.roll_up, R.anim.roll);
 			break;
 		case R.id.viewChangingPassword:
 			openActivity(ChangingPasswordActivity.class);	
-			if(version > 5 ){ 
-				   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
-				   } 
+			overridePendingTransition(R.anim.roll_up, R.anim.roll);
 			break;
 		case R.id.viewdistrict:
 			openActivity(ProvinceAcitvity.class);
-			if(version > 5 ){ 
-				   overridePendingTransition(R.anim.alphain, R.anim.alphaout); 
-				   } 
+			overridePendingTransition(R.anim.roll_up, R.anim.roll);
 		default:
 			break;
 		}

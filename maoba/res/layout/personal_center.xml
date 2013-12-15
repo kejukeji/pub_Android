@@ -51,7 +51,7 @@
             android:paddingTop="5dp"
             android:src="@drawable/ic_personal_infro_setting" />
     </RelativeLayout>
-    
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -59,19 +59,21 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-             android:background="@color/bg_home"
+            android:layout_height="0dp"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/bg_home"
             android:orientation="horizontal" >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical"
                 android:paddingBottom="100dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="30dp" >
-
+            
                 <TextView
                     android:id="@+id/tvAddress"
                     android:layout_width="50dp"
@@ -98,6 +100,7 @@
                         android:textSize="@dimen/eventList" />
 
                     <TextView
+                        android:id="@+id/tvExperiencePrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -106,35 +109,57 @@
                         android:text="300280"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
-
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
                     <TextView
+                        android:id="@+id/tvLevel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="LV.9资深泡客"
+                        android:ellipsize="end"
+                        android:text="LV.9"
+                        android:textColor="#FF8D01"
+                        android:textSize="@dimen/eventList" />
+
+                    <TextView
+                        android:id="@+id/tvGrade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="资深泡客"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
                 </LinearLayout>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:paddingLeft="5dp"
-                    android:text="积分"
-                    android:textColor="#FF8D01"
-                    android:textSize="@dimen/eventList" />
+                    android:orientation="vertical" >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1030"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/eventList" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:paddingLeft="5dp"
+                        android:text="积分"
+                        android:textColor="#FF8D01"
+                        android:textSize="@dimen/eventList" />
+
+                    <TextView
+                        android:id="@+id/tvIntegral"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1030"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/eventList" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="fill_parent"
+                android:layout_weight="3"
                 android:background="@drawable/bg_personal"
                 android:gravity="center"
                 android:orientation="vertical" >
@@ -186,8 +211,6 @@
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"
                         android:gravity="left"
                         android:orientation="horizontal" >
 
@@ -229,188 +252,203 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_invite_and_gift"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:paddingTop="10dp" >
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="25dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp"
-                    android:text="103" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="邀 约" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="45dp"
-                android:background="@drawable/main_bottom_line" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp"
-                    android:text="103" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="礼 物" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="45dp"
-                android:background="@drawable/main_bottom_line" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp"
-                    android:text="103" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="传 情" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="45dp"
-                android:background="@drawable/main_bottom_line" />
-
-            <LinearLayout
-                android:id="@+id/viewMyNews"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp"
-                    android:text="13" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="私 信" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="#DDDEE0"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/viewMyCollect"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_infor"
-                android:gravity="center_vertical"
+                android:background="@drawable/bg_invite_and_gift"
                 android:orientation="horizontal"
-                android:padding="10dp"
-                android:paddingBottom="10dp" >
+                android:paddingBottom="10dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingTop="10dp" >
 
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/left_menu_collect" />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="25dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="我 的 收 藏"
-                    android:textSize="18sp" />
+                    android:orientation="vertical" >
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tvInvite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:text="103" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="邀 约" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="33"
-                    android:textSize="18sp"
-                    android:textStyle="normal" />
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tvGift"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:text="103" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="礼 物" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tvConvey"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:text="103" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="传 情" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
+
+                <LinearLayout
+                    android:id="@+id/viewMyNews"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tvPrivateLett"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:text="13" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="私 信" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_infor"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:paddingBottom="10dp" >
+                android:layout_height="fill_parent"
+                android:background="#FFFFFF"
+                android:orientation="vertical" >
 
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_my_activity" />
-
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/viewMyCollectBar"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="我 的 活 动"
-                    android:textSize="18sp" />
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_infor"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:paddingBottom="10dp" >
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/left_menu_collect" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="我 的 收 藏"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvMyColBarCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:text="33"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/viewMyCollectEvent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
-                    android:text="43"
-                    android:textSize="18sp"
-                    android:textStyle="normal" />
+                    android:background="@drawable/bg_infor"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:paddingBottom="10dp" >
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/ic_my_activity" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="我 的 活 动"
+                        android:textSize="18sp" />
+
+                    <TextView
+                         android:id="@+id/tvMyColEventCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:text="43"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

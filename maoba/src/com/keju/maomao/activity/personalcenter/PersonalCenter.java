@@ -26,6 +26,7 @@ import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
 import com.keju.maomao.activity.my.CollectionOfBarListActivity;
+import com.keju.maomao.activity.my.CollectionOfEventListActivity;
 import com.keju.maomao.activity.news.PrivateNewsListActivity;
 import com.keju.maomao.activity.personalnfo.PersonalInfoActivity;
 import com.keju.maomao.helper.BusinessHelper;
@@ -44,10 +45,14 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 
 	private LinearLayout viewMycollect;
 	private LinearLayout viewMyNews;
+	private LinearLayout viewMyCollectEvent;
 	private ImageView ivUserPhoto;
 	private TextView tvAge, tvAddress, tvNickName, tvSignature;
 
 	private Button btnLeftMenu;
+
+	private TextView tvExperiencePrice, tvGrade,tvLevel, tvIntegral, tvInvite, tvGift, tvConvey, tvPrivateLett,
+			tvMyColBarCount, tvMyColEventCount;
 
 	private ImageView ivPersonalSetting;// 个人资料设置或修改
 
@@ -63,7 +68,8 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 
 		btnLeftMenu = (Button) this.findViewById(R.id.btnLeftMenu);
 
-		viewMycollect = (LinearLayout) this.findViewById(R.id.viewMyCollect);
+		viewMycollect = (LinearLayout) this.findViewById(R.id.viewMyCollectBar);
+		viewMyCollectEvent = (LinearLayout) this.findViewById(R.id.viewMyCollectEvent);
 		viewMyNews = (LinearLayout) this.findViewById(R.id.viewMyNews);
 		tvSignature = (TextView) this.findViewById(R.id.tvSignature);
 		tvAge = (TextView) this.findViewById(R.id.tvAge);
@@ -72,8 +78,21 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		ivUserPhoto = (ImageView) this.findViewById(R.id.ivUserPhoto);
 		ivPersonalSetting = (ImageView) this.findViewById(R.id.ivPersonalSetting);
 
+		// 经验值和积分等
+		tvExperiencePrice = (TextView) this.findViewById(R.id.tvExperiencePrice);
+		tvGrade = (TextView) this.findViewById(R.id.tvGrade);
+		tvLevel = (TextView) this.findViewById(R.id.tvLevel);
+		tvIntegral = (TextView) this.findViewById(R.id.tvIntegral);
+		tvInvite = (TextView) this.findViewById(R.id.tvInvite);
+		tvGift = (TextView) this.findViewById(R.id.tvGift);
+		tvConvey = (TextView) this.findViewById(R.id.tvConvey);
+		tvPrivateLett = (TextView) this.findViewById(R.id.tvPrivateLett);
+		tvMyColBarCount = (TextView) this.findViewById(R.id.tvMyColBarCount);
+		tvMyColEventCount = (TextView) this.findViewById(R.id.tvMyColEventCount);
+
 		if (NetUtil.checkNet(PersonalCenter.this)) {
 			new GetUserInfor().execute();
+			new GetUserBaseInforTask().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
@@ -83,6 +102,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 	private void fillData() {
 		btnLeftMenu.setOnClickListener(this);
 		viewMycollect.setOnClickListener(this);
+		viewMyCollectEvent.setOnClickListener(this);
 		viewMyNews.setOnClickListener(this);
 
 		ivPersonalSetting.setOnClickListener(this);
@@ -93,8 +113,9 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnLeftMenu:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
-		case R.id.viewMyCollect:
+		case R.id.viewMyCollectBar:
 			int uid = SharedPrefUtil.getUid(PersonalCenter.this);
 			Bundle b = new Bundle();
 			b.putInt(Constants.EXTRA_DATA, uid);
@@ -105,6 +126,10 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.ivPersonalSetting:
 			openActivity(PersonalInfoActivity.class);
+			break;
+		case R.id.viewMyCollectEvent:
+			openActivity(CollectionOfEventListActivity.class);
+			break;
 		default:
 			break;
 		}
@@ -173,9 +198,9 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 							tvAddress.setText("未设置");
 						} else {
 							String address1 = StringUtil.stringCut(address);
-						    	  tvAddress.setText(address1);// 酒吧地址
+							tvAddress.setText(address1);// 酒吧地址
 						}
-						String photoUrl = BusinessHelper.PIC_BASE_URL +userJson.getString("pic_path");
+						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 						ivUserPhoto.setTag(photoUrl);
 						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
 								new ImageCallback() {
@@ -212,26 +237,71 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		}
 
 	}
-	//Activity从后台重新回到前台时被调用  
-    @Override  
-    protected void onRestart() {  
-        super.onRestart();  
-        if (NetUtil.checkNet(this)) {
+
+	private class GetUserBaseInforTask extends AsyncTask<Void, Void, JSONObject> {
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			int uid = SharedPrefUtil.getUid(PersonalCenter.this);
+			try {
+				return new BusinessHelper().GetUserBaseInfor(uid);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			if(result!=null){
+	            try {
+					if(result.getInt("status")==Constants.REQUEST_SUCCESS){
+						JSONObject objUser = result.getJSONObject("user");
+						 tvMyColEventCount.setText(objUser.getInt("collect_activity_count")+"");
+						 tvMyColBarCount.setText(objUser.getInt("collect_pub_count")+"");
+						 tvInvite.setText(objUser.getInt("invitation")+"");						 
+						 tvGift.setText(objUser.getInt("invitation")+"");
+						 tvConvey.setText(objUser.getInt("greeting_count")+"");
+						 tvPrivateLett.setText(objUser.getInt("private_letter_count")+"");
+						 tvExperiencePrice.setText(objUser.getInt("reputation")+"");
+						 tvGrade.setText(objUser.getString("level_description"));
+						 tvLevel.setText(objUser.getString("level"));
+						 tvIntegral.setText(objUser.getInt("credit")+"");
+					}
+				} catch (JSONException e) {
+					e.printStackTrace(); 
+					showShortToast(R.string.json_exception);
+				}			
+     				
+			}else{
+				showShortToast(R.string.connect_server_exception);
+			}
+			
+		}
+
+	}
+
+	// Activity从后台重新回到前台时被调用
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		if (NetUtil.checkNet(this)) {
 			new GetUserInfor().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
-        
-    }  
+
+	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		   if (NetUtil.checkNet(this)) {
-				new GetUserInfor().execute();
-			} else {
-				showShortToast(R.string.NoSignalException);
-			}
+		if (NetUtil.checkNet(this)) {
+			new GetUserInfor().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
 	}
 
 }

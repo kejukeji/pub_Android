@@ -188,6 +188,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.ivEmoticon:// 添加表情
 			if (scrollViewFace.getVisibility() == View.VISIBLE) {

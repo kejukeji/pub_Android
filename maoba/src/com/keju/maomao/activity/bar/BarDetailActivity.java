@@ -33,6 +33,7 @@ import com.keju.maomao.Constants;
 import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
+import com.keju.maomao.activity.event.EventDetailActivity;
 import com.keju.maomao.activity.mapview.LocationMapActivity;
 import com.keju.maomao.activity.personalcenter.FriendPersonalCenter;
 import com.keju.maomao.activity.personalcenter.PersonalCenter;
@@ -54,12 +55,13 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	private Button btnRight;
 	private TextView tvTitle;
 
-	private TextView tvName, tvDistanceLabel, tvAddress, tvTelNumber,tvBarType, tvIntro, tvHot;
-	private TextView tvShowNum;//签到人数
+	private TextView tvName, tvDistanceLabel, tvAddress, tvTelNumber, tvBarType, tvIntro;
+	private TextView tvShowNum;// 签到人数
 	private ImageView ivImage;
 	private ImageView ivNext;// 签到
 
 	private LinearLayout viewShowList;
+	private LinearLayout viewAddress;// 酒啊地址
 
 	private ProgressDialog pd;
 	private CommonApplication app;
@@ -69,6 +71,15 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	private BarBean bean;
 	private List<BarBean> barDetailList = new ArrayList<BarBean>();// 酒吧详情
 	private List<BarBean> showList = new ArrayList<BarBean>();// 签到
+
+	// 活动
+	private LinearLayout viewEvent;
+	private ImageView ivEvent;
+	private TextView tvEventTitle, tvEventEndTime;
+	private LinearLayout viewEventShow;// 如果酒吧没有活动就不显示
+	
+	private int eventId;
+	private Boolean iscollect;//活动是否被收藏
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +107,21 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		tvTelNumber = (TextView) this.findViewById(R.id.tvTelNumber);
 		tvBarType = (TextView) this.findViewById(R.id.tvBarType);
 		tvIntro = (TextView) this.findViewById(R.id.tvIntro);
-		tvHot = (TextView) this.findViewById(R.id.tvHot);
-		tvShowNum = (TextView)this.findViewById(R.id.tvShowCount);
+//		tvHot = (TextView) this.findViewById(R.id.tvHot);
+		tvShowNum = (TextView) this.findViewById(R.id.tvShowCount);
 		ivImage = (ImageView) this.findViewById(R.id.ivImage);
 
 		viewShowList = (LinearLayout) this.findViewById(R.id.viewShowList);// 签到
+		viewAddress = (LinearLayout) this.findViewById(R.id.viewAddress);
+
 		ivNext = (ImageView) this.findViewById(R.id.ivNext);
+
+		// 活动
+		viewEvent = (LinearLayout) this.findViewById(R.id.viewEvent);
+		ivEvent = (ImageView) this.findViewById(R.id.ivEvent);
+		tvEventTitle = (TextView) this.findViewById(R.id.tvEventTitle);
+		tvEventEndTime = (TextView) this.findViewById(R.id.tvEventEndTime);
+		viewEventShow = (LinearLayout) this.findViewById(R.id.viewEventShow);
 
 	}
 
@@ -113,16 +133,17 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		btnRight.setOnClickListener(this);
 		ivImage.setOnClickListener(this);
 		ivNext.setOnClickListener(this);
-		tvAddress.setOnClickListener(this);
 		tvTelNumber.setOnClickListener(this);
-		
+
+		viewAddress.setOnClickListener(this);
+        viewEvent.setOnClickListener(this);
 		tvTitle.setText("酒吧详情");
 
 		tvName.setText(bean.getBar_Name());// 酒吧名字
 		tvBarType.setText(bean.getBarType());// 酒吧类型
-		tvIntro.setText(bean.getBar_Intro());// 酒吧内容
-		tvTelNumber.setText(bean.getTelephone());//酒吧号码
-		tvHot.setText(bean.getHot());// 酒吧人气
+		tvIntro.setText(  bean.getBar_Intro());// 酒吧内容
+		tvTelNumber.setText(bean.getTelephone());// 酒吧号码
+//		tvHot.setText(bean.getHot());// 酒吧人气
 
 		if (NetUtil.checkNet(BarDetailActivity.this)) {
 			new GetBarDetailTask().execute();
@@ -197,6 +218,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
+			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			if (isCollectingTask == false) {
@@ -213,7 +235,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.ivNext:
 			break;
-		case R.id.tvAddress:
+		case R.id.viewAddress:
 			try {
 				String address1 = null;
 				String address = bean.getBar_Address();
@@ -249,6 +271,13 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 			callIntent.setAction(Intent.ACTION_DIAL);
 			callIntent.setData(Uri.parse("tel:" + phoneNum));
 			startActivity(callIntent);
+			break;
+		case R.id.viewEvent:
+           Bundle b = new Bundle();
+           b.putInt(Constants.EXTRA_DATA,eventId);
+           b.putString("BARNAME", bean.getBar_Name());
+           b.putBoolean("ISCOLLECT", iscollect);
+           openActivity(EventDetailActivity.class, b);
 			break;
 		default:
 			break;
@@ -306,10 +335,10 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 					try {
 						int status = result.getInt("status");
 						if (status == Constants.REQUEST_SUCCESS) {
-//							btnRight.setText(result.getString("is_collect"));
+							// btnRight.setText(result.getString("is_collect"));
 							String address = result.getString("county");
 							String showCount = result.getString("show_count");
-							tvShowNum.setText(showCount);
+							tvShowNum.setText( showCount +"人");
 							StringTokenizer token = new StringTokenizer(address, "$");
 							String[] add = new String[3];
 							int i = 0;
@@ -319,6 +348,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 								String address1 = add[0];
 								tvAddress.setText(address1 + bean.getBarStreet());// 酒吧地址
 							}
+
 							if (result.has("picture_list")) {
 								JSONArray showArrList = result.getJSONArray("picture_list");
 								if (showArrList != null) {
@@ -334,12 +364,48 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 										.constractList(barDetailList1);
 								barDetailList.addAll(barDetailBeans);
 							}
+							JSONObject objEvent = null;
+							if (!result.getString("activity").equals("null")) {
+								objEvent = result.getJSONObject("activity");
+								// 加载活动图片
+								String imageUrl = BusinessHelper.PIC_BASE_URL + objEvent.getString("pic_path");
+								ivEvent.setTag(imageUrl);
+								Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(imageUrl,
+										new ImageCallback() {
+
+											@Override
+											public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+												ImageView image = (ImageView) ivEvent.findViewWithTag(imageUrl);
+												if (image != null) {
+													if (imageDrawable != null) {
+														ivEvent.setImageDrawable(imageDrawable);
+													} else {
+														ivEvent.setImageResource(R.drawable.ic_default);
+													}
+												}
+											}
+										});
+								if (cacheDrawable != null) {
+									ivEvent.setImageDrawable(cacheDrawable);
+								} else {
+									ivEvent.setImageResource(R.drawable.ic_default);
+								}
+								tvEventTitle.setText(objEvent.getString("activity_info"));
+								tvEventEndTime.setText(objEvent.getString("end_date"));
+								eventId = objEvent.getInt("id");
+								viewEventShow.setVisibility(View.VISIBLE);
+								
+								iscollect = objEvent.getBoolean("is_collect");
+							} else {
+								viewEventShow.setVisibility(View.GONE);
+								return;
+							}
 
 						} else {
-							showShortToast("json解析错误");
+							showShortToast(R.string.json_exception);
 						}
 					} catch (JSONException e) {
-						showShortToast("json解析错误");
+						showShortToast(R.string.json_exception);
 					}
 				}
 
