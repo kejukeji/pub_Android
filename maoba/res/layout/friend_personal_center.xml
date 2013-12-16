@@ -5,180 +5,434 @@
     android:clickable="true"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/rlCommon"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
         android:background="@drawable/bg_title"
-        android:gravity="center_vertical"
         android:paddingTop="3dp" >
 
-        <ImageButton
-            android:id="@+id/ibLeft"
+        <Button
+            android:id="@+id/btnLeftMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:background="@null"
-            android:textColor="@android:color/white" />
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/left_btn_menu_bg"
+            android:gravity="center"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp" />
 
         <TextView
+            android:id="@+id/tvSignature1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_alignBottom="@+id/btnLeftMenu"
+            android:layout_marginLeft="35dp"
+            android:layout_toRightOf="@+id/btnLeftMenu"
             android:text="个性签名："
             android:textColor="@color/white"
-            android:textSize="@dimen/BasicTextSize" />
+            android:textSize="@dimen/BasicTextSize"
+            android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tvSignature"
+        <ImageView
+            android:id="@+id/ivPersonalSetting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/SmallTextSize" />
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:src="@drawable/ic_personal_infro_setting"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center_vertical"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:background="@color/bg_home"
             android:orientation="horizontal" >
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="255dp"
-                android:layout_marginBottom="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center_horizontal"
+                android:paddingBottom="100dp"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp" >
-
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="35dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_personal_center" />
-
-                <TextView
-                    android:id="@+id/tvAge"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="30dp"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/eventList" />
+                android:paddingTop="30dp" >
 
                 <TextView
                     android:id="@+id/tvAddress"
-                    android:layout_width="46dp"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="5dp"
-                    android:textColor="@color/white"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
                     android:ellipsize="end"
-                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingExtra="1dp"
                     android:maxEms="9"
+                    android:text="上海市 黄浦区"
+                    android:textColor="#FF8D01"
                     android:textSize="@dimen/eventList" />
 
-                <TextView
-                    android:id="@+id/tvSendPrivateNews"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:background="#404040"
-                    android:paddingBottom="6dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:paddingTop="6dp"
-                    android:text="发私信"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/eventList" />
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:text="距离"
+                        android:textColor="#FF8D01"
+                        android:textSize="@dimen/eventList" />
+
+                    <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2.3千米"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/eventList" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tvLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:text="等级"
+                        android:textColor="#FF8D01"
+                        android:textSize="@dimen/eventList" />
+
+                    <TextView
+                        android:id="@+id/tvGrade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="资深泡客"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/eventList" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:paddingLeft="5dp"
+                        android:text="积分"
+                        android:textColor="#FF8D01"
+                        android:textSize="@dimen/eventList" />
+
+                    <TextView
+                        android:id="@+id/tvIntegral"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1030"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/eventList" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="5dp"
-                android:background="#20434E"
-                android:orientation="horizontal" >
+                android:layout_weight="3"
+                android:background="@drawable/bg_personal"
+                android:gravity="center"
+                android:orientation="vertical" >
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical" >
 
                     <ImageView
                         android:id="@+id/ivUserPhoto"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:scaleType="fitCenter"
-                         />
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:scaleType="fitCenter" />
 
                     <TextView
-                        android:id="@+id/tvNickName"
+                        android:id="@+id/tvNickName1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/SmallTextSize" />
+                        android:textSize="@dimen/SmallTextSize"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/tvNickName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/BasicTextSize"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/tvSignature"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="left"
+                            android:lineSpacingExtra="1dp"
+                            android:maxEms="10"
+                            android:singleLine="true"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/SmallerTextSize" />
+
+                        <ImageView
+                            android:id="@+id/ivSex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="5dp"
+                           />
+
+                        <TextView
+                            android:id="@+id/tvAge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="15dp"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@color/common_bg"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/viewMyCollect"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:background="@drawable/bg_invite_and_gift"
                 android:orientation="horizontal"
-                android:padding="10dp"
-                android:paddingBottom="10dp" >
+                android:paddingBottom="10dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingTop="10dp" >
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/left_menu_collect" />
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/viewDrink"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="25dp"
                     android:layout_weight="1"
-                    android:text="Ta 的 收 藏"
-                    android:textSize="@dimen/BasicTextSize" />
+                    android:gravity="center"
+                    android:orientation="horizontal" >
 
-                <TextView
-                    android:id="@+id/tvCollectNum"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="喝一杯" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
+
+                <LinearLayout
+                    android:id="@+id/viewGiveOneTheEye"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="眉目传情" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
+
+                <LinearLayout
+                    android:id="@+id/viewSendGife"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="送个礼物" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
+
+                <LinearLayout
+                    android:id="@+id/viewSendNews"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="发信息" />
+                </LinearLayout>
             </LinearLayout>
 
-            <View
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:background="@drawable/bg_bar_details_line" />
+                android:layout_height="fill_parent"
+                android:background="#FFFFFF"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/viewFriendGift"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_infor"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:paddingBottom="10dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="礼物"
+                        android:textSize="18sp" />
+
+                    <TextView
+                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="共收到"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+                      <TextView
+                        android:id="@+id/tvGiftCount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:layout_marginRight="20dp"
+                        android:text="10件"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="6dp"
+                        android:src="@drawable/ic_grey_right_arrow" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/viewCollectBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_infor"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:paddingBottom="10dp" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="酒吧收藏"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvCollectNum"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1"
+                        android:text="43"
+                        android:textSize="18sp"
+                        android:textStyle="normal" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="6dp"
+                        android:src="@drawable/ic_grey_right_arrow" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

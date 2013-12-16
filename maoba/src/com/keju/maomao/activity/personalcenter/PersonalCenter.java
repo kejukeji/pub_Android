@@ -55,6 +55,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 			tvMyColBarCount, tvMyColEventCount;
 
 	private ImageView ivPersonalSetting;// 个人资料设置或修改
+	private ImageView ivSex;//男女
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		tvAddress = (TextView) this.findViewById(R.id.tvAddress);
 		tvNickName = (TextView) this.findViewById(R.id.tvNickName);
 		ivUserPhoto = (ImageView) this.findViewById(R.id.ivUserPhoto);
+		ivSex = (ImageView) this.findViewById(R.id.ivSex);
 		ivPersonalSetting = (ImageView) this.findViewById(R.id.ivPersonalSetting);
 
 		// 经验值和积分等
@@ -89,6 +91,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		tvPrivateLett = (TextView) this.findViewById(R.id.tvPrivateLett);
 		tvMyColBarCount = (TextView) this.findViewById(R.id.tvMyColBarCount);
 		tvMyColEventCount = (TextView) this.findViewById(R.id.tvMyColEventCount);
+		
 
 		if (NetUtil.checkNet(PersonalCenter.this)) {
 			new GetUserInfor().execute();
@@ -173,6 +176,12 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 						String birthday = userJson.getString("birthday");
 						String NickName = user.getString("nick_name");
 						String address = userJson.getString("county");
+						int sex = userJson.getInt("sex");
+						if(sex==1){
+							ivSex.setBackgroundResource(R.drawable.ic_sex_man);
+						}else{
+							ivSex.setBackgroundResource(R.drawable.ic_sex_girl);
+						}
 						if (signaTure.equals("null")) {
 							tvSignature.setText("主人很懒未设置哦");
 						} else {
@@ -237,7 +246,11 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		}
 
 	}
-
+	/***
+	 *
+	 *获取用户在猫吧的详细信息
+	 *
+	 */
 	private class GetUserBaseInforTask extends AsyncTask<Void, Void, JSONObject> {
 
 		@Override
