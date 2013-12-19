@@ -212,18 +212,14 @@ public class StringUtil {
 	 * @return
 	 */
 
-	public static String stringCut(String str1) {
-		String address1 =null;
-		StringTokenizer token = new StringTokenizer(str1, "$");
+	public static String[] stringCut(String str1) {
+		StringTokenizer token = new StringTokenizer(str1, "$$");
 		String[] add = new String[3];
 		int i = 0;
 		while (token.hasMoreTokens()) {
 			add[i] = token.nextToken();
 			i++;
-			 address1 = add[0] + add[1];
-		
-
 		}
-		return address1;
+		return add;
 	}
 }

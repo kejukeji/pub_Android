@@ -208,8 +208,8 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						if (address.equals("$$")) {
 							tvAddress.setText("未设置");
 						} else {
-							String address1 = StringUtil.stringCut(address);
-							tvAddress.setText(address1);
+//							String address1 = StringUtil.stringCut(address);
+//							tvAddress.setText(address1);
 						}
 						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 						ivUserPhoto.setTag(photoUrl);

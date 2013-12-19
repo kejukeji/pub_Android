@@ -684,7 +684,7 @@ public class BusinessHelper {
 	 * @throws SystemException
 	 */
 	public JSONObject getUserInfor(int uid) throws SystemException {
-		return httpClient.post(BASE_URL + "personal/center",new PostParameter[]{new PostParameter("user_id", uid)}).asJSONObject();
+		return httpClient.post(BASE_URL + "user/user_info/" + uid).asJSONObject();
 	}
 	
 	/**

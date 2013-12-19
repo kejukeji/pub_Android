@@ -193,7 +193,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 						String signaTure = userJson.getString("signature");
 						String birthday = userJson.getString("birthday");
 						String NickName = user.getString("nick_name");
-						String address = userJson.getString("c");
+						String address = userJson.getString("county");
 						if(!userJson.getString("sex").equals("null")){
 							int sex = userJson.getInt("sex");
 							if (sex == 1) {
@@ -226,30 +226,38 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 						if (address.equals("$$")) {
 							tvAddress.setText("未设置");
 						} else {
-							String address1 = StringUtil.stringCut(address);
-							tvAddress.setText(address1);
+							try {
+								String[] address1 = StringUtil.stringCut(address);
+								tvAddress.setText(address1[0]);
+								tvArea.setText(address1[1]);
+							} catch (Exception e) {
+							}
 						}
-						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
-						ivUserPhoto.setTag(photoUrl);
-						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
-								new ImageCallback() {
-									@Override
-									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-										ImageView image = (ImageView) ivUserPhoto.findViewWithTag(imageUrl);
-										Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(imageDrawable, 0.5f);
-										if (image != null) {
-											if (imageDrawable != null) {
-												image.setImageBitmap(bitmap);
-											} else {
-												image.setImageResource(R.drawable.bg_show11);
+						if(userJson.has("pic_path")){
+							String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
+							ivUserPhoto.setTag(photoUrl);
+							Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
+									new ImageCallback() {
+										@Override
+										public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+											ImageView image = (ImageView) ivUserPhoto.findViewWithTag(imageUrl);
+											Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(imageDrawable, 0.5f);
+											if (image != null) {
+												if (imageDrawable != null) {
+													image.setImageBitmap(bitmap);
+												} else {
+													image.setImageResource(R.drawable.bg_show11);
+												}
 											}
 										}
-									}
-								});
-						if (cacheDrawble != null) {
-							Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(cacheDrawble, 0.5f);
-							ivUserPhoto.setImageBitmap(bitmap);
-						} else {
+									});
+							if (cacheDrawble != null) {
+								Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(cacheDrawble, 0.5f);
+								ivUserPhoto.setImageBitmap(bitmap);
+							} else {
+								ivUserPhoto.setImageResource(R.drawable.bg_show11);
+							}
+						}else{
 							ivUserPhoto.setImageResource(R.drawable.bg_show11);
 						}
 
