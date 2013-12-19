@@ -47,7 +47,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 	private LinearLayout viewMyNews;
 	private LinearLayout viewMyCollectEvent;
 	private ImageView ivUserPhoto;
-	private TextView tvAge, tvAddress, tvNickName, tvSignature;
+	private TextView tvAge, tvAddress,tvArea, tvNickName, tvSignature;
 
 	private Button btnLeftMenu;
 
@@ -77,6 +77,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		tvSignature = (TextView) this.findViewById(R.id.tvSignature);
 		tvAge = (TextView) this.findViewById(R.id.tvAge);
 		tvAddress = (TextView) this.findViewById(R.id.tvAddress);
+		tvArea = (TextView) this.findViewById(R.id.tvArea);
 		tvNickName = (TextView) this.findViewById(R.id.tvNickName);
 		ivUserPhoto = (ImageView) this.findViewById(R.id.ivUserPhoto);
 		ivSex = (ImageView) this.findViewById(R.id.ivSex);
@@ -192,12 +193,14 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 						String signaTure = userJson.getString("signature");
 						String birthday = userJson.getString("birthday");
 						String NickName = user.getString("nick_name");
-						String address = userJson.getString("county");
-						int sex = userJson.getInt("sex");
-						if (sex == 1) {
-							ivSex.setBackgroundResource(R.drawable.ic_sex_man);
-						} else {
-							ivSex.setBackgroundResource(R.drawable.ic_sex_girl);
+						String address = userJson.getString("c");
+						if(!userJson.getString("sex").equals("null")){
+							int sex = userJson.getInt("sex");
+							if (sex == 1) {
+								ivSex.setBackgroundResource(R.drawable.ic_sex_man);
+							} else {
+								ivSex.setBackgroundResource(R.drawable.ic_sex_girl);
+							}
 						}
 						if (signaTure.equals("null")) {
 							tvSignature.setText("主人很懒未设置哦");
@@ -255,7 +258,8 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 
 					}
 				} catch (JSONException e) {
-					showShortToast(R.string.connect_server_exception);
+					showShortToast(R.string.json_exception);
+					ivUserPhoto.setImageResource(R.drawable.bg_show11);
 				}
 			} else {
 				showShortToast(R.string.connect_server_exception);
