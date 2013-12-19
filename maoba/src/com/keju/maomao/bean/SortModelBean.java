@@ -2,10 +2,13 @@ package com.keju.maomao.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.text.TextUtils;
 
 public class SortModelBean implements Serializable{
 	
@@ -17,12 +20,24 @@ public class SortModelBean implements Serializable{
 	private String cityName;//城市名字
 	private int provinceId;
 	
+	private List<SortModelBean> list = new ArrayList<SortModelBean>();
+	
+	public SortModelBean(int id, String cityName) {
+		super();
+		this.cityName = cityName;
+	}
+	
 	public SortModelBean(JSONObject obj) throws JSONException {
 		if (obj.has("province_id")) {
 			this.provinceId = obj.getInt("province_id");
 		}
 		if (obj.has("name")) {
 			this.cityName = obj.getString("name");
+		}
+		
+		if (obj.has("city") && !TextUtils.isEmpty(obj.getString("city"))) {
+			this.list.add(new SortModelBean(0, this.cityName));
+			this.list.addAll(SortModelBean.constractList(obj.getJSONArray("city")));
 		}
 	}
 

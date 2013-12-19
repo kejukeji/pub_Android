@@ -36,13 +36,21 @@
             android:id="@+id/tvCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/IvCity"
+            android:layout_marginRight="5dp"
+            android:text="城市切换"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/IvCity"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/white"
-            android:layout_marginRight="12dp"
-            android:textSize="16sp"
-            android:text="城市切换"
-            />
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_city_change" />
 
     </RelativeLayout>
 	<ScrollView android:layout_width="fill_parent" android:layout_height="wrap_content" android:scrollbars="none" >

@@ -153,7 +153,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		rlMain = (LinearLayout) findViewById(R.id.rlMain);
 		viewSettingTitle = (LinearLayout) findViewById(R.id.viewSettingTitle);
 		tvNewMessagePoint = (TextView) findViewById(R.id.tv_new_message_point);
-
+		
 		tvCity = (TextView) this.findViewById(R.id.tvCity);
 		tvCity.setOnClickListener(this);
 		if (SharedPrefUtil.getCityName(MainActivity.this) == null) {

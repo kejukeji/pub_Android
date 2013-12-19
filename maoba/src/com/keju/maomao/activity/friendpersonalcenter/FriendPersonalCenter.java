@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.keju.maomao.activity.personalcenter;
+package com.keju.maomao.activity.friendpersonalcenter;
 
 import java.util.Calendar;
 
@@ -43,16 +43,16 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 	private Button btnLeftMenu;
 	private TextView tvSignature;// 个性签名
 	private TextView tvAge, tvAddress, tvNickName, tvCollectNum;
-	
-	private LinearLayout viewDrink,viewGiveOneTheEye,viewSendGife,viewSendNews; // 喝一杯/眉目传情/送礼物/发私信/
 
-	private ImageView ivUserPhoto,ivSex;
-	private LinearLayout viewCollectBar,viewFriendGift;
+	private LinearLayout viewDrink, viewGiveOneTheEye, viewSendGife, viewSendNews; // 喝一杯/眉目传情/送礼物/发私信/
+
+	private ImageView ivUserPhoto, ivSex;
+	private LinearLayout viewCollectBar, viewFriendGift;
 
 	private int userId;
 	private String NickName;
-	
-	private TextView tvDistance,tvGrade,tvIntegral,tvGiftCount;//距离/等级/积分/礼物个数
+
+	private TextView tvDistance, tvGrade, tvIntegral, tvGiftCount;// 距离/等级/积分/礼物个数
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +73,15 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		tvNickName = (TextView) this.findViewById(R.id.tvNickName);
 		tvCollectNum = (TextView) this.findViewById(R.id.tvCollectNum);
 		ivUserPhoto = (ImageView) this.findViewById(R.id.ivUserPhoto);
-		ivSex= (ImageView) this.findViewById(R.id.ivSex);
-		
-		viewDrink=(LinearLayout) this.findViewById(R.id.viewDrink);
-		viewGiveOneTheEye=(LinearLayout) this.findViewById(R.id.viewGiveOneTheEye);
-		viewSendGife=(LinearLayout) this.findViewById(R.id.viewSendGife);
+		ivSex = (ImageView) this.findViewById(R.id.ivSex);
+
+		viewDrink = (LinearLayout) this.findViewById(R.id.viewDrink);
+		viewGiveOneTheEye = (LinearLayout) this.findViewById(R.id.viewGiveOneTheEye);
+		viewSendGife = (LinearLayout) this.findViewById(R.id.viewSendGife);
 		viewSendNews = (LinearLayout) this.findViewById(R.id.viewSendNews);
-		
+
 		viewFriendGift = (LinearLayout) this.findViewById(R.id.viewFriendGift);
 		viewCollectBar = (LinearLayout) this.findViewById(R.id.viewCollectBar);
-		
 
 		if (NetUtil.checkNet(FriendPersonalCenter.this)) {
 			new GetUserInfor().execute();
@@ -101,7 +100,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		viewGiveOneTheEye.setOnClickListener(this);
 		viewSendGife.setOnClickListener(this);
 		viewSendNews.setOnClickListener(this);
-      
+
 		viewFriendGift.setOnClickListener(this);
 		viewCollectBar.setOnClickListener(this);
 
@@ -124,6 +123,18 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 			b1.putInt(Constants.EXTRA_DATA, userId);
 			b1.putString("NICK_NAME", NickName);
 			openActivity(PrivateLetterActivity.class, b1);
+			break;
+		case R.id.viewFriendGift:
+			openActivity(GetGiftActivity.class);
+			break;
+		case R.id.viewDrink:
+			Bundle b2 = new Bundle();
+			b2.putInt(Constants.EXTRA_DATA, userId);
+			openActivity(SendInviteActivity.class,b2);
+			break;
+		case R.id.viewSendGife:
+			openActivity(SendGiftActivity.class);
+			break;
 		default:
 			break;
 		}
@@ -166,9 +177,9 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						String birthday = userJson.getString("birthday");
 						int sex = userJson.getInt("sex");
 						NickName = user.getString("nick_name");
-						if(sex==1){
+						if (sex == 1) {
 							ivSex.setBackgroundResource(R.drawable.ic_sex_man);
-						}else{
+						} else {
 							ivSex.setBackgroundResource(R.drawable.ic_sex_girl);
 						}
 						String address = userJson.getString("county");
@@ -275,10 +286,11 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		}
 
 	}
+
 	/***
-	 *
-	 *获取用户在猫吧的详细信息
-	 *
+	 * 
+	 * 获取用户在猫吧的详细信息
+	 * 
 	 */
 	private class GetUserBaseInforTask extends AsyncTask<Void, Void, JSONObject> {
 
@@ -295,29 +307,28 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			super.onPostExecute(result);
-			if(result!=null){
-	            try {
-					if(result.getInt("status")==Constants.REQUEST_SUCCESS){
+			if (result != null) {
+				try {
+					if (result.getInt("status") == Constants.REQUEST_SUCCESS) {
 						JSONObject objUser = result.getJSONObject("user");
-//						 tvMyColBarCount.setText(objUser.getInt("collect_pub_count")+"");
-//						 tvDistance.setText(objUser.getInt("reputation")+"");
-						 tvGiftCount.setText(objUser.getString("level_description"+"件"));
-						 tvGrade.setText(objUser.getString("level_description"));
-						 tvIntegral.setText(objUser.getInt("credit")+"");
+						// tvMyColBarCount.setText(objUser.getInt("collect_pub_count")+"");
+						// tvDistance.setText(objUser.getInt("reputation")+"");
+						tvGiftCount.setText(objUser.getString("level_description" + "件"));
+						tvGrade.setText(objUser.getString("level_description"));
+						tvIntegral.setText(objUser.getInt("credit") + "");
 					}
 				} catch (JSONException e) {
-					e.printStackTrace(); 
+					e.printStackTrace();
 					showShortToast(R.string.json_exception);
-				}			
-    				
-			}else{
+				}
+
+			} else {
 				showShortToast(R.string.connect_server_exception);
 			}
-			
+
 		}
 
 	}
-
 
 	// Activity从后台重新回到前台时被调用
 	@Override

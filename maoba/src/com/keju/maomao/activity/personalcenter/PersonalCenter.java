@@ -51,11 +51,13 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 
 	private Button btnLeftMenu;
 
-	private TextView tvExperiencePrice, tvGrade,tvLevel, tvIntegral, tvInvite, tvGift, tvConvey, tvPrivateLett,
+	private TextView tvExperiencePrice, tvGrade, tvLevel, tvIntegral, tvInvite, tvGift, tvConvey, tvPrivateLett,
 			tvMyColBarCount, tvMyColEventCount;
 
 	private ImageView ivPersonalSetting;// 个人资料设置或修改
-	private ImageView ivSex;//男女
+	private ImageView ivSex;// 男女
+
+	private LinearLayout viewInvite, viewGreeting, viewGift;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +93,10 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		tvPrivateLett = (TextView) this.findViewById(R.id.tvPrivateLett);
 		tvMyColBarCount = (TextView) this.findViewById(R.id.tvMyColBarCount);
 		tvMyColEventCount = (TextView) this.findViewById(R.id.tvMyColEventCount);
-		
 
-		if (NetUtil.checkNet(PersonalCenter.this)) {
-			new GetUserInfor().execute();
-			new GetUserBaseInforTask().execute();
-		} else {
-			showShortToast(R.string.NoSignalException);
-		}
+		viewInvite = (LinearLayout) this.findViewById(R.id.viewInvite);
+		viewGreeting = (LinearLayout) this.findViewById(R.id.viewGreeting);
+		viewGift = (LinearLayout) this.findViewById(R.id.viewGift);
 
 	}
 
@@ -109,6 +107,16 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		viewMyNews.setOnClickListener(this);
 
 		ivPersonalSetting.setOnClickListener(this);
+		viewInvite.setOnClickListener(this);
+		viewGreeting.setOnClickListener(this);
+		viewGift.setOnClickListener(this);
+
+		if (NetUtil.checkNet(PersonalCenter.this)) {
+			new GetUserInfor().execute();
+			new GetUserBaseInforTask().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
 	}
 
 	@Override
@@ -132,6 +140,15 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.viewMyCollectEvent:
 			openActivity(CollectionOfEventListActivity.class);
+			break;
+		case R.id.viewInvite:
+			openActivity(MyInviteActivity.class);
+			break;
+		case R.id.viewGreeting:
+			openActivity(MyGreetingActivity.class);
+			break;
+		case R.id.viewGift:
+			openActivity(MyGiftActivity.class);
 			break;
 		default:
 			break;
@@ -177,9 +194,9 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 						String NickName = user.getString("nick_name");
 						String address = userJson.getString("county");
 						int sex = userJson.getInt("sex");
-						if(sex==1){
+						if (sex == 1) {
 							ivSex.setBackgroundResource(R.drawable.ic_sex_man);
-						}else{
+						} else {
 							ivSex.setBackgroundResource(R.drawable.ic_sex_girl);
 						}
 						if (signaTure.equals("null")) {
@@ -246,10 +263,11 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		}
 
 	}
+
 	/***
-	 *
-	 *获取用户在猫吧的详细信息
-	 *
+	 * 
+	 * 获取用户在猫吧的详细信息
+	 * 
 	 */
 	private class GetUserBaseInforTask extends AsyncTask<Void, Void, JSONObject> {
 
@@ -267,30 +285,30 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			super.onPostExecute(result);
-			if(result!=null){
-	            try {
-					if(result.getInt("status")==Constants.REQUEST_SUCCESS){
+			if (result != null) {
+				try {
+					if (result.getInt("status") == Constants.REQUEST_SUCCESS) {
 						JSONObject objUser = result.getJSONObject("user");
-						 tvMyColEventCount.setText(objUser.getInt("collect_activity_count")+"");
-						 tvMyColBarCount.setText(objUser.getInt("collect_pub_count")+"");
-						 tvInvite.setText(objUser.getInt("invitation")+"");						 
-						 tvGift.setText(objUser.getInt("invitation")+"");
-						 tvConvey.setText(objUser.getInt("greeting_count")+"");
-						 tvPrivateLett.setText(objUser.getInt("private_letter_count")+"");
-						 tvExperiencePrice.setText(objUser.getInt("reputation")+"");
-						 tvGrade.setText(objUser.getString("level_description"));
-						 tvLevel.setText(objUser.getString("level"));
-						 tvIntegral.setText(objUser.getInt("credit")+"");
+						tvMyColEventCount.setText(objUser.getInt("collect_activity_count") + "");
+						tvMyColBarCount.setText(objUser.getInt("collect_pub_count") + "");
+						tvInvite.setText(objUser.getInt("invitation") + "");
+						tvGift.setText(objUser.getInt("gift") + "");
+						tvConvey.setText(objUser.getInt("greeting_count") + "");
+						tvPrivateLett.setText(objUser.getInt("private_letter_count") + "");
+						tvExperiencePrice.setText(objUser.getInt("reputation") + "");
+						tvGrade.setText(objUser.getString("level_description"));
+						tvLevel.setText(objUser.getString("level"));
+						tvIntegral.setText(objUser.getInt("credit") + "");
 					}
 				} catch (JSONException e) {
-					e.printStackTrace(); 
+					e.printStackTrace();
 					showShortToast(R.string.json_exception);
-				}			
-     				
-			}else{
+				}
+
+			} else {
 				showShortToast(R.string.connect_server_exception);
 			}
-			
+
 		}
 
 	}

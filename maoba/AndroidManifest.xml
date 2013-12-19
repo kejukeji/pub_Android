@@ -82,7 +82,14 @@
          <activity android:name=".activity.news.PrivateLetterActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          <!--个人中心 -->
          <activity android:name=".activity.personalcenter.PersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
-         <activity android:name=".activity.personalcenter.FriendPersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.personalcenter.MyInviteActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
+         <activity android:name=".activity.personalcenter.MyGreetingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
+         <activity android:name=".activity.personalcenter.MyGiftActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
+         <!--好友中心 -->
+         <activity android:name=".activity.friendpersonalcenter.FriendPersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.friendpersonalcenter.GetGiftActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.friendpersonalcenter.SendInviteActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
+         <activity android:name=".activity.friendpersonalcenter.SendGiftActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          <!--设置 -->
          <activity android:name=".activity.setting.SettingAboutActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          <activity android:name=".activity.setting.SettingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>

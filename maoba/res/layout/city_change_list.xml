@@ -43,15 +43,18 @@
                 android:background="#F8F8F8"
                 android:gravity="center_vertical"
                 android:text="GPS定位城市" 
-                android:visibility="gone"/>
+               android:visibility="gone"
+               />
 
             <TextView
+                android:id="@+id/tvPositioncity"
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:text="芜湖" 
-                android:visibility="gone"/>
+                 android:visibility="gone"
+                />
 
             <ListView
                 android:id="@+id/countryList"

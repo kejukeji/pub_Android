@@ -34,8 +34,8 @@ import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
 import com.keju.maomao.activity.event.EventDetailActivity;
+import com.keju.maomao.activity.friendpersonalcenter.FriendPersonalCenter;
 import com.keju.maomao.activity.mapview.LocationMapActivity;
-import com.keju.maomao.activity.personalcenter.FriendPersonalCenter;
 import com.keju.maomao.activity.personalcenter.PersonalCenter;
 import com.keju.maomao.bean.BarBean;
 import com.keju.maomao.helper.BusinessHelper;
@@ -368,27 +368,29 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 							if (!result.getString("activity").equals("null")) {
 								objEvent = result.getJSONObject("activity");
 								// 加载活动图片
-								String imageUrl = BusinessHelper.PIC_BASE_URL + objEvent.getString("pic_path");
-								ivEvent.setTag(imageUrl);
-								Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(imageUrl,
-										new ImageCallback() {
+								if(objEvent.has("pic_path")){
+									String imageUrl = BusinessHelper.PIC_BASE_URL + objEvent.getString("pic_path");
+									ivEvent.setTag(imageUrl);
+									Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(imageUrl,
+											new ImageCallback() {
 
-											@Override
-											public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-												ImageView image = (ImageView) ivEvent.findViewWithTag(imageUrl);
-												if (image != null) {
-													if (imageDrawable != null) {
-														ivEvent.setImageDrawable(imageDrawable);
-													} else {
-														ivEvent.setImageResource(R.drawable.ic_default);
+												@Override
+												public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+													ImageView image = (ImageView) ivEvent.findViewWithTag(imageUrl);
+													if (image != null) {
+														if (imageDrawable != null) {
+															ivEvent.setImageDrawable(imageDrawable);
+														} else {
+															ivEvent.setImageResource(R.drawable.ic_default);
+														}
 													}
 												}
-											}
-										});
-								if (cacheDrawable != null) {
-									ivEvent.setImageDrawable(cacheDrawable);
-								} else {
-									ivEvent.setImageResource(R.drawable.ic_default);
+											});
+									if (cacheDrawable != null) {
+										ivEvent.setImageDrawable(cacheDrawable);
+									} else {
+										ivEvent.setImageResource(R.drawable.ic_default);
+									}
 								}
 								tvEventTitle.setText(objEvent.getString("activity_info"));
 								tvEventEndTime.setText(objEvent.getString("end_date"));
@@ -396,6 +398,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 								viewEventShow.setVisibility(View.VISIBLE);
 								
 								iscollect = objEvent.getBoolean("is_collect");
+								
 							} else {
 								viewEventShow.setVisibility(View.GONE);
 								return;

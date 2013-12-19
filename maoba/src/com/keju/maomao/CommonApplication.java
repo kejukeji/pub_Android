@@ -51,9 +51,11 @@ public class CommonApplication extends Application {
 	LocationData locData = null;
 	public LocationClient mLocationClient = null;
 	public MyLocationListenner myListener = new MyLocationListenner();
-	
-	private MKSearch mSearch; //搜索定位 
+
+	private MKSearch mSearch; // 搜索定位
 	private MKSearchListener mSearchListener;
+
+	private String city;// 定位城市
 	/**
 	 * 数据库操作类
 	 * 
@@ -104,11 +106,11 @@ public class CommonApplication extends Application {
 		option.disableCache(true);
 		option.setCoorType("bd09ll"); // 设置坐标类型
 		mLocationClient.setLocOption(option);
-		
+
 		mSearch = new MKSearch();
 		mSearchListener = new MySearchListener();
 		mSearch.init(mBMapManager, mSearchListener);
-		
+
 		mLocationClient.start();
 	}
 
@@ -166,16 +168,19 @@ public class CommonApplication extends Application {
 		/**
 		 * 根据经纬度搜索地址信息结果
 		 * 
-		 * @param result 搜索结果
+		 * @param result
+		 *            搜索结果
 		 * 
-		 * @param iError 错误号（0表示正确返回）
-		 *            
+		 * @param iError
+		 *            错误号（0表示正确返回）
+		 * 
 		 * 
 		 */
 		@Override
 		public void onGetAddrResult(MKAddrInfo result, int error) {
-			 MKGeocoderAddressComponent kk = result.addressComponents;
-			 String city = kk.province;
+			MKGeocoderAddressComponent kk = result.addressComponents;
+			city = kk.province;
+			setCity(city);
 
 		}
 
@@ -223,6 +228,14 @@ public class CommonApplication extends Application {
 
 	public BDLocation getLastLocation() {
 		return lastLocation;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	/**

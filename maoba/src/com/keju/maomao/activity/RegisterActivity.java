@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.keju.maomao.CommonApplication;
 import com.keju.maomao.Constants;
@@ -43,6 +44,8 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 	private int logintype;// 登陆方式标志位
 
 	private Tencent mTencent;
+	
+	private LinearLayout viewBackLogin;
 
 	private static final String SCOPE = "all";
 
@@ -72,6 +75,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 
 		ivQQLogin = (ImageView) this.findViewById(R.id.ivQQLogin);
 		ivQQLogin.setOnClickListener(this);
+		
+		viewBackLogin = (LinearLayout)this.findViewById(R.id.viewBackLogin);
+		viewBackLogin.setOnClickListener(this);
 
 	}
 
@@ -102,6 +108,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 			} else {
 				showShortToast(R.string.NoSignalException);
 			}
+			break;
+		case R.id.viewBackLogin:
+			finish();
 			break;
 		case R.id.ivSinaLogin:// 已不再用
 			if (SharedPrefUtil.checkWeiboBind(RegisterActivity.this)) {
@@ -139,6 +148,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener {
 				mTencent.login(this, SCOPE, listener);
 			}
 			break;
+		 
 		default:
 			break;
 		}

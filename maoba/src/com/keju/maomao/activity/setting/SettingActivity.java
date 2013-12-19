@@ -1,7 +1,11 @@
 package com.keju.maomao.activity.setting;
 
+import java.io.File;
+
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -9,9 +13,11 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.keju.maomao.Constants;
 import com.keju.maomao.R;
 import com.keju.maomao.activity.LoginActivity;
 import com.keju.maomao.activity.base.BaseActivity;
+import com.keju.maomao.util.FileUtil;
 import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.SharedPrefUtil;
 import com.umeng.update.UmengUpdateAgent;
@@ -28,8 +34,10 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private ImageButton ibLeft;
 	private TextView tvTitle;
 	private LinearLayout rlNotice, rlAbout, rlVersionTest, rlFeedback;
-	private LinearLayout rlClearCache;//清除缓存
+	private LinearLayout rlClearCache;// 清除缓存
 	private Button btnLogout;
+
+	private File photoDir;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +60,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		rlNotice = (LinearLayout) findViewById(R.id.rlNotice);
 		rlNotice.setOnClickListener(this);
-		rlClearCache = (LinearLayout)this.findViewById(R.id.rlClearCache);
+		rlClearCache = (LinearLayout) this.findViewById(R.id.rlClearCache);
 		rlClearCache.setOnClickListener(this);
 		rlAbout = (LinearLayout) findViewById(R.id.rlAbout);
 		rlAbout.setOnClickListener(this);
@@ -73,7 +81,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.rlClearCache:
-//			rlClearCache
+			new ClearCacheTask().execute();
 			break;
 		case R.id.rlNotice:
 			openActivity(SettingNoticeActivity.class);
@@ -138,10 +146,39 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 				}
 			});
-
 			break;
 		default:
 			break;
 		}
 	}
+
+	/***
+	 * 
+	 * 清除缓存
+	 */
+	private class ClearCacheTask extends AsyncTask<Void, Void, Boolean> {
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd("正在清除....");
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			photoDir = new File(Environment.getExternalStorageDirectory() + "/" + Constants.APP_DIR_NAME);
+				return FileUtil.deleteFiles(photoDir);
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			dismissPd();
+			if (result == true) {
+				showShortToast("清除成功");
+			} else {
+				showShortToast("你已清除了");
+			}
+		}
+	}
+
 }

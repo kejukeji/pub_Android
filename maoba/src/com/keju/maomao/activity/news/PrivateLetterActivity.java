@@ -46,7 +46,7 @@ import com.keju.maomao.Constants;
 import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
-import com.keju.maomao.activity.personalcenter.FriendPersonalCenter;
+import com.keju.maomao.activity.friendpersonalcenter.FriendPersonalCenter;
 import com.keju.maomao.bean.LetterBean;
 import com.keju.maomao.bean.ResponseBean;
 import com.keju.maomao.helper.BusinessHelper;

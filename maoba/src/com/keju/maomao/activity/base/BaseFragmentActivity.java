@@ -132,4 +132,25 @@ public class BaseFragmentActivity extends FragmentActivity {
 		}
 		return mAlertDialog;
 	}
+	
+	/**
+	 * 显示提醒dialog
+	 * @param pTitle
+	 * @param pMessage
+	 * @param pOkClickListener
+	 * @param pCancelClickListener
+	 * @param pDismissListener
+	 * @return
+	 */
+	protected AlertDialog showAlertDialog(String pTitle, String pMessage,
+			DialogInterface.OnClickListener pOkClickListener, DialogInterface.OnClickListener pCancelClickListener,
+			DialogInterface.OnDismissListener pDismissListener) {
+		mAlertDialog = new AlertDialog.Builder(this).setTitle(pTitle).setMessage(pMessage)
+				.setPositiveButton(android.R.string.ok, pOkClickListener)
+				.setNegativeButton(android.R.string.cancel, pCancelClickListener).show();
+		if (pDismissListener != null) {
+			mAlertDialog.setOnDismissListener(pDismissListener);
+		}
+		return mAlertDialog;
+	}
 }

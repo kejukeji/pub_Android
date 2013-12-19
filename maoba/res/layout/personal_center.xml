@@ -268,6 +268,7 @@
                 android:paddingTop="10dp" >
 
                 <LinearLayout
+                    android:id="@+id/viewInvite"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="25dp"
@@ -294,6 +295,7 @@
                     android:background="@drawable/main_bottom_line" />
 
                 <LinearLayout
+                    android:id="@+id/viewGift"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
@@ -321,6 +323,7 @@
                     android:background="@drawable/main_bottom_line" />
 
                 <LinearLayout
+                    android:id="@+id/viewGreeting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"

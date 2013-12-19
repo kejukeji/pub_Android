@@ -28,10 +28,12 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.keju.maomao.CommonApplication;
 import com.keju.maomao.Constants;
 import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
+import com.keju.maomao.bean.BarBean;
 import com.keju.maomao.bean.SortModelBean;
 import com.keju.maomao.helper.BusinessHelper;
 import com.keju.maomao.util.CharacterParser;
@@ -57,6 +59,10 @@ public class CityChangActivity extends BaseActivity implements OnClickListener {
 	private TextView dialog; // 显示手触摸字母时放大显示控件
 	private SortAdapter adapter;
 	private ClearEditText mClearEditText; // 重写editText控件
+	
+	private TextView tvPositioncity;
+	private CommonApplication app;
+	
 
 	/**
 	 * 汉字转换成拼音的类
@@ -75,14 +81,19 @@ public class CityChangActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.city_change_list);
+		app = (CommonApplication) getApplication();
 		findView();
 		fillData();
+		app.addActivity(this);
 	}
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
-
+		
+		tvPositioncity = (TextView)this.findViewById(R.id.tvPositioncity);
+		tvPositioncity.setText(app.getCity());
+		
 		// 实例化汉字转拼音类
 		characterParser = CharacterParser.getInstance();
 		pinyinComparator = new PinyinComparator();
@@ -131,7 +142,11 @@ public class CityChangActivity extends BaseActivity implements OnClickListener {
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 		tvTitle.setText("城市切换");
-
+		
+//		cityList = new ArrayList<SortModelBean>();
+//		cityList.add(new SortModelBean(0, "定位城市"));
+//		cityList.add(new SortModelBean(1, app.getCity()));
+		
 		if (NetUtil.checkNet(this)) {
 			new GetCityTask().execute();
 		} else {

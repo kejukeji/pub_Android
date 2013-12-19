@@ -14,32 +14,35 @@ import android.content.Context;
 
 /**
  * 文件处理工具类
+ * 
  * @author Zhoujun
  * 
  */
 public class FileUtil {
 	/**
 	 * 读取assets下的文本数据
+	 * 
 	 * @param fileName
 	 * @return
 	 */
-	public static String getStringFromAssets(Context context,String fileName){ 
-        try { 
-            InputStreamReader inputReader = new InputStreamReader(context.getResources().getAssets().open(fileName) ); 
-            BufferedReader bufReader = new BufferedReader(inputReader);
-            String line="";
-            String Result="";
-            while((line = bufReader.readLine()) != null)
-                Result += line;
-            return Result;
-        } catch (Exception e) { 
-            e.printStackTrace(); 
-        }
-        return null;
+	public static String getStringFromAssets(Context context, String fileName) {
+		try {
+			InputStreamReader inputReader = new InputStreamReader(context.getResources().getAssets().open(fileName));
+			BufferedReader bufReader = new BufferedReader(inputReader);
+			String line = "";
+			String Result = "";
+			while ((line = bufReader.readLine()) != null)
+				Result += line;
+			return Result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
-	
+
 	/**
 	 * 读取文本流文件
+	 * 
 	 * @param is
 	 * @return
 	 */
@@ -56,55 +59,59 @@ public class FileUtil {
 			return "";
 		}
 	}
-	
+
 	/**
-	 * 获得文件大小 
+	 * 获得文件大小
+	 * 
 	 * @param filePath
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public static long getFileSize(File f) throws IOException{
-		long s=0;
-        if (f.exists()) {
-            FileInputStream fis = null;
-            fis = new FileInputStream(f);
-            s= fis.available();
-        } 
-        return s;
+	public static long getFileSize(File f) throws IOException {
+		long s = 0;
+		if (f.exists()) {
+			FileInputStream fis = null;
+			fis = new FileInputStream(f);
+			s = fis.available();
+		}
+		return s;
 	}
+
 	/**
 	 * 格式化文件大小
+	 * 
 	 * @param fileS
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public static String formatFileSize(File f) {//转换文件大小
+	public static String formatFileSize(File f) {// 转换文件大小
 		String fileSizeString = "";
-		try{
+		try {
 			long fileS = getFileSize(f);
-	        DecimalFormat df = new DecimalFormat("#.00");
-	        if (fileS < 1024) {
-	            fileSizeString = df.format((double) fileS) + "b";
-	        } else if (fileS < 1048576) {
-	            fileSizeString = df.format((double) fileS / 1024) + "kb";
-	        } else if (fileS < 1073741824) {
-	            fileSizeString = df.format((double) fileS / 1048576) + "mb";
-	        } else {
-	            fileSizeString = df.format((double) fileS / 1073741824) + "gb";
-	        }
-		}catch(Exception e){
+			DecimalFormat df = new DecimalFormat("#.00");
+			if (fileS < 1024) {
+				fileSizeString = df.format((double) fileS) + "b";
+			} else if (fileS < 1048576) {
+				fileSizeString = df.format((double) fileS / 1024) + "kb";
+			} else if (fileS < 1073741824) {
+				fileSizeString = df.format((double) fileS / 1048576) + "mb";
+			} else {
+				fileSizeString = df.format((double) fileS / 1073741824) + "gb";
+			}
+		} catch (Exception e) {
 		}
-        return fileSizeString;
-    }
-	
+		return fileSizeString;
+	}
+
 	/**
 	 * 拷贝资源文件到sd卡
+	 * 
 	 * @param context
 	 * @param resId
-	 * @param databaseFilename  如数据库文件拷贝到sd卡中
+	 * @param databaseFilename
+	 *            如数据库文件拷贝到sd卡中
 	 */
-	public static void copyResToSdcard(Context context, int resId,
-			String databaseFilename) {// name为sd卡下制定的路径
+	public static void copyResToSdcard(Context context, int resId, String databaseFilename) {// name为sd卡下制定的路径
 		try {
 			// 不存在得到数据库输入流对象
 			InputStream is = context.getResources().openRawResource(resId);
@@ -122,4 +129,26 @@ public class FileUtil {
 		} catch (Exception e) {
 		}
 	}
+
+	/**
+	 * 递归删除某个目录下所有文件；
+	 */
+	public static Boolean deleteFiles(File file) {
+		if (file.isFile() || file.list().length == 0) {
+//			file.delete();
+		} else {
+			if (file.length() != 0) {
+				File[] files = file.listFiles();
+				for (File f : files) {
+					deleteFiles(f);
+					f.delete();
+				}
+//				file.delete();
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

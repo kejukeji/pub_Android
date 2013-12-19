@@ -13,6 +13,7 @@ import com.keju.maomao.Constants;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.bean.BarBean;
 import com.keju.maomao.bean.EventBean;
+import com.keju.maomao.bean.FriendPersonalCentreBean;
 import com.keju.maomao.bean.LetterBean;
 import com.keju.maomao.bean.NewsBean;
 import com.keju.maomao.bean.ProvinceBean;
@@ -999,4 +1000,105 @@ public class BusinessHelper {
 	}
 	
 
+	/**
+	 * 获取好友发送礼物列表接口
+	 * 
+	 * @param userId 用户的id
+	 * 
+	 * @return
+	 * @throws SystemException
+	 */
+
+	public ResponseBean<FriendPersonalCentreBean> getGiftList() throws SystemException {
+		List<PostParameter> p = new ArrayList<PostParameter>();
+		ResponseBean<FriendPersonalCentreBean> response;
+		try {
+			JSONObject obj;
+			obj = httpClient.get(BASE_URL + "sender/gift/view", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			int status = obj.getInt("status");
+			if (status == Constants.REQUEST_SUCCESS) {
+				response = new ResponseBean<FriendPersonalCentreBean>(obj);
+				List<FriendPersonalCentreBean> list = null;
+				if (!TextUtils.isEmpty(obj.getString("gift"))) {
+					list = FriendPersonalCentreBean.constractList(obj.getJSONArray("gift"));
+				} else {
+					list = new ArrayList<FriendPersonalCentreBean>();
+				}
+				response.setObjList(list);
+
+			} else {
+				response = new ResponseBean<FriendPersonalCentreBean>(Constants.REQUEST_FAILD, obj.getString("message"));
+			}
+		} catch (SystemException e1) {
+			response = new ResponseBean<FriendPersonalCentreBean>(Constants.REQUEST_FAILD, "服务器连接失败");
+		} catch (JSONException e) {
+			response = new ResponseBean<FriendPersonalCentreBean>(Constants.REQUEST_FAILD, "json解析错误");
+		}
+		return response;
+
+	}
+	
+	/**
+	 * 和一杯发送邀请接口
+	 * 
+	 * @param sendeId 发送者id
+	 * @param receiverId 接受者id
+	 * @return
+	 * @throws SystemException
+	 */
+	public JSONObject sendInvite(int sendeId,int receiverId) throws SystemException {
+		return httpClient.get(
+				BASE_URL + "sender/invite",
+				new PostParameter[] {new PostParameter("sender_id", sendeId),
+						new PostParameter("receiver_id", receiverId) }).asJSONObject(); 
+				
+	}
+	
+	/**
+	 * 获取邀约数据接口
+	 * 
+	 * @param user 
+	 * @param page   页数
+	 * @return
+	 * @throws SystemException
+	 */
+
+	public JSONObject getInviterList( int userId, int pageIndex) throws SystemException{
+		return httpClient.get(BASE_URL + "invitation/view",
+				new PostParameter[] { new PostParameter("user_id", userId), 
+				new PostParameter("page", pageIndex)})
+				.asJSONObject();
+	}
+	
+	
+	/**
+	 * 获取传情数据接口
+	 * 
+	 * @param user 
+	 * @param page   页数
+	 * @return
+	 * @throws SystemException
+	 */
+
+	public JSONObject getGreetingList(int userId, int pageIndex) throws SystemException{
+		return httpClient.get(BASE_URL + "greeting/view",
+				new PostParameter[] { new PostParameter("user_id", userId), 
+				new PostParameter("page", pageIndex)})
+				.asJSONObject();
+	}
+	/**
+	 * 获取礼物数据接口
+	 * 
+	 * @param user 
+	 * @param page   页数
+	 * @return
+	 * @throws SystemException
+	 */
+
+	public JSONObject getGiftList(int userId, int pageIndex) throws SystemException{
+		return httpClient.get(BASE_URL + "gift/view",
+				new PostParameter[] { new PostParameter("user_id", userId), 
+				new PostParameter("page", pageIndex)})
+				.asJSONObject();
+	}
 }

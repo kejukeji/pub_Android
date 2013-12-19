@@ -277,7 +277,8 @@
                 android:layout_marginRight="15dp"
                 android:background="@drawable/bg_event"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                 android:visibility="gone" >
 
                 <LinearLayout
                     android:id="@+id/viewEvent"

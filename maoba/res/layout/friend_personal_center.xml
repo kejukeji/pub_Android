@@ -234,8 +234,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="15dp"
                             android:layout_marginRight="5dp"
-                            android:layout_marginTop="5dp"
-                           />
+                            android:layout_marginTop="5dp" />
 
                         <TextView
                             android:id="@+id/tvAge"
@@ -261,18 +260,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_invite_and_gift"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="10dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
                 android:paddingTop="10dp" >
 
                 <LinearLayout
                     android:id="@+id/viewDrink"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="25dp"
-                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="0.8"
                     android:gravity="center"
                     android:orientation="horizontal" >
 
@@ -280,20 +278,21 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="喝一杯" />
-                </LinearLayout>
+                        android:text="喝一杯"
+                        android:textColor="#3C3C3C"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="45dp"
-                    android:background="@drawable/main_bottom_line" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/main_bottom_line" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/viewGiveOneTheEye"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal" >
@@ -301,21 +300,23 @@
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
                         android:singleLine="true"
-                        android:text="眉目传情" />
-                </LinearLayout>
+                        android:text="眉目传情"
+                        android:textColor="#3C3C3C"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="45dp"
-                    android:background="@drawable/main_bottom_line" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/main_bottom_line" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/viewSendGife"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal" >
@@ -323,29 +324,35 @@
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
                         android:singleLine="true"
-                        android:text="送个礼物" />
-                </LinearLayout>
+                        android:text="送个礼物"
+                        android:textColor="#3C3C3C"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="45dp"
-                    android:background="@drawable/main_bottom_line" />
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/main_bottom_line" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/viewSendNews"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal" >
 
                     <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
                         android:singleLine="true"
-                        android:text="发信息" />
+                        android:text="发信息"
+                        android:textColor="#3C3C3C"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -370,22 +377,24 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:layout_weight="1.5"
                         android:text="礼物"
-                        android:textSize="18sp" />
+                        android:textSize="20sp" />
 
                     <TextView
-                         android:layout_width="wrap_content"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="共收到"
                         android:textSize="18sp"
                         android:textStyle="normal" />
-                      <TextView
+
+                    <TextView
                         android:id="@+id/tvGiftCount"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
                         android:layout_marginRight="20dp"
+                        android:layout_weight="0.5"
                         android:text="10件"
                         android:textSize="18sp"
                         android:textStyle="normal" />
@@ -411,9 +420,10 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
                         android:layout_weight="1.5"
                         android:text="酒吧收藏"
-                        android:textSize="18sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/tvCollectNum"
