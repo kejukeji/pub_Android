@@ -224,7 +224,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 							tvAddress.setText("未设置");
 						} else {
 							String address1 = StringUtil.stringCut(address);
-							tvAddress.setText(address1);// 酒吧地址
+							tvAddress.setText(address1);
 						}
 						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 						ivUserPhoto.setTag(photoUrl);
@@ -255,7 +255,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 
 					}
 				} catch (JSONException e) {
-					ivUserPhoto.setImageResource(R.drawable.bg_show11);
+					showShortToast(R.string.connect_server_exception);
 				}
 			} else {
 				showShortToast(R.string.connect_server_exception);

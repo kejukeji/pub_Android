@@ -697,7 +697,7 @@ public class BusinessHelper {
 	 * @throws SystemException
 	 */
 	public JSONObject GetUserBaseInfor(int uid) throws SystemException {
-		return httpClient.get(BASE_URL + "person/center", new PostParameter[] { 
+		return httpClient.get(BASE_URL + "personal/center", new PostParameter[] { 
 				new PostParameter("user_id", uid),})
 				.asJSONObject();
 	}
@@ -1064,7 +1064,7 @@ public class BusinessHelper {
 	 */
 
 	public JSONObject getInviterList( int userId, int pageIndex) throws SystemException{
-		return httpClient.get(BASE_URL + "invitation/view",
+		return httpClient.get(BASE_URL + "invitation/receiver",
 				new PostParameter[] { new PostParameter("user_id", userId), 
 				new PostParameter("page", pageIndex)})
 				.asJSONObject();
@@ -1095,10 +1095,10 @@ public class BusinessHelper {
 	 * @throws SystemException
 	 */
 
-	public JSONObject getGiftList(int userId, int pageIndex) throws SystemException{
-		return httpClient.get(BASE_URL + "gift/view",
+	public JSONObject getGiftList(int userId, int pageIndex,String giftType) throws SystemException{
+		return httpClient.get(BASE_URL + "gift/receiver",
 				new PostParameter[] { new PostParameter("user_id", userId), 
-				new PostParameter("page", pageIndex)})
+				new PostParameter("page", pageIndex),new PostParameter("gift_type", giftType)})
 				.asJSONObject();
 	}
 }

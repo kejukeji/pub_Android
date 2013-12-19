@@ -56,6 +56,7 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 	private View vFooter;
 	private ProgressBar pbFooter;
 	private TextView tvFooterMore;
+	private String giftType = "personal";
 
 
 	private boolean isLoad = false;// 是否正在加载数据
@@ -101,7 +102,7 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 		lvgiftList.setFooterDividersEnabled(false);
 
 		if (NetUtil.checkNet(MyGiftActivity.this)) {
-			new GetGreetingListTask().execute();
+			new GetGiftListTask().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
@@ -141,7 +142,7 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 			if (scrollState == OnScrollListener.SCROLL_STATE_IDLE && isLoadMore) {
 				if (NetUtil.checkNet(MyGiftActivity.this)) {
 					if (!isLoad && !isComplete) {
-						new GetGreetingListTask().execute();
+						new GetGiftListTask().execute();
 					}
 				} else {
 					showShortToast(R.string.NoSignalException);
@@ -156,7 +157,7 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 	 * 
 	 * 获取邀约的数据
 	 */
-	private class GetGreetingListTask extends AsyncTask<Void, Void, JSONObject> {
+	private class GetGiftListTask extends AsyncTask<Void, Void, JSONObject> {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -167,7 +168,7 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 		protected JSONObject doInBackground(Void... params) {
 			int userId = SharedPrefUtil.getUid(MyGiftActivity.this);
 			try {
-				return new BusinessHelper().getGiftList(1, pageIndex);
+				return new BusinessHelper().getGiftList(1, pageIndex,giftType);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
