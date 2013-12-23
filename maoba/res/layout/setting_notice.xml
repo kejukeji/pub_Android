@@ -27,7 +27,6 @@
         <CheckBox
             android:id="@+id/cbNewMessage"
             style="@style/checkbox"
-            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical" />
@@ -101,7 +100,6 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/bg_setting"
         android:orientation="horizontal"
-        android:visibility="gone"
         >
 
         <TextView

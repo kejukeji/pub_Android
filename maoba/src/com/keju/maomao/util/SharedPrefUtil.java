@@ -37,6 +37,11 @@ public class SharedPrefUtil {
     public static final String PROVINCEID="province_id"; //保存选择的省得id
     public static final String IS_FIRST_CITYACTIVITY="is_first_cityactivity"; //是不是第一次进入城市切换界面
     
+    public static final String SAVE_RING_URL = "save_ring_url";//保存用户选择的铃声url
+    public static final String IS_PLAY_RING="is_play_ring"; //是否播放铃声
+    public static final String IS_VIBRATE = "is_vibrate"; //是否振动
+    public static final String IS_ACCEPT_NEW_LETTER = "is_accept_new_letter";//是否接受新消息
+    
     
    
     
@@ -202,7 +207,78 @@ public class SharedPrefUtil {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 		return sp.getString(PASSWORD, null);
 	}
+	
+	/**
+	 * 保存用户选择的铃声url
+	 * 
+	 * @param context
+	 * @param ringUrl
+	 */
+	public static void setRingUrl(Context context, String ringUrl) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putString(SAVE_RING_URL, ringUrl);
+		e.commit();
+	}
 
+	public static String getRingUrl(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getString(SAVE_RING_URL, null);
+	}
+	
+	/**
+	 * 保存用户选择的铃声url
+	 * 
+	 * @param context
+	 * @param ringUrl
+	 */
+	public static void setPlayRing(Context context, Boolean isPlayRing) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor e = sp.edit();
+		e.putBoolean(IS_PLAY_RING, isPlayRing);
+		e.commit();
+	}
+
+	public static Boolean getPlayRing(Context context) {
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+		return sp.getBoolean(IS_PLAY_RING, true);
+	}
+		/**
+		 * 保存用户选择是否振动
+		 * 
+		 * @param context
+		 * @param ringUrl
+		 */
+		public static void setVibrate(Context context, Boolean isVibrate) {
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+			Editor e = sp.edit();
+			e.putBoolean(IS_VIBRATE, isVibrate);
+			e.commit();
+		}
+
+		public static Boolean getVibrate(Context context) {
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+			return sp.getBoolean(IS_VIBRATE, true);
+		}
+		
+		/**
+		 * 保存用户选择是否接受新消息
+		 * 
+		 * @param context
+		 * @param ringUrl
+		 */
+		public static void setNewLetter(Context context, Boolean isNewLetter) {
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+			Editor e = sp.edit();
+			e.putBoolean(IS_ACCEPT_NEW_LETTER, isNewLetter);
+			e.commit();
+		}
+
+		public static Boolean getNewLetter(Context context) {
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+			return sp.getBoolean(IS_ACCEPT_NEW_LETTER, true);
+		}
+	
 	// -----------------------------新浪微博验证信息-----------------
 	/**
 	 * 获取新浪微博openid

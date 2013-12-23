@@ -35,7 +35,7 @@ public class BusinessHelper {
 	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
 	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
 	//本地服务器
-//	public static final String BASE_URL1 = "http://192.168.0.126:5000/restful/";
+	public static final String BASE_URL1 = "http://192.168.0.105:5000/restful/";
 //	public static final String PIC_BASE_URL = "http://192.168.0.126:5000";
 	//生产服务器
 //	public static final String BASE_URL = "http://61.188.37.228:8081/restful/";
@@ -963,7 +963,7 @@ public class BusinessHelper {
 		ResponseBean<EventBean> response;
 		JSONObject obj;
 		try {
-			obj = httpClient.get(BASE_URL + "collect/activity/list", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			obj = httpClient.get(BASE_URL1 + "collect/activity/list", p.toArray(new PostParameter[p.size()])).asJSONObject();
 			int status = obj.getInt("status");
 			if (status == Constants.REQUEST_SUCCESS) {
 				response = new ResponseBean<EventBean>(obj);

@@ -186,7 +186,6 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 			}
 		}
 	};
-
 	/***
 	 * 活动收藏
 	 * 
@@ -258,7 +257,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 	}
 
 	/**
-	 * 删除收藏
+	 * 删除活動收藏
 	 * 
 	 * @author Zhouyong
 	 * 
@@ -278,7 +277,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 		protected JSONObject doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(CollectionOfEventListActivity.this);
 			try {
-				return new BusinessHelper().DelBar(uid, list.get(position).getEventId());
+				return new BusinessHelper().collectEvent(list.get(position).getEventId(),uid);
 			} catch (SystemException e) {
 				return null;
 			}
@@ -404,10 +403,8 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 					alert.show();
 				}
 			});
-
 			return convertView;
 		}
-
 	}
 
 	class ViewHolder {

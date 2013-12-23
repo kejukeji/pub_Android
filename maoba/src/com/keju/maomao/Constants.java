@@ -97,4 +97,7 @@ public class Constants {
 	public static final int DISTRICT=8;
 	
 	public static final int REQUEST_CODE_CHOOSE_AREA = 9;//选择地区
+
+	public static final int REQUEST_CODE_PICK_RINGTONE = 1;	// 用于选择铃声后作相应的判断标记
+
 }

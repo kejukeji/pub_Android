@@ -1,5 +1,9 @@
 package com.keju.maomao.activity.setting;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,8 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.keju.maomao.Constants;
 import com.keju.maomao.R;
 import com.keju.maomao.activity.base.BaseActivity;
+import com.keju.maomao.util.SharedPrefUtil;
 
 /**
  * @author ZhouYongJian
@@ -26,11 +32,12 @@ public class SettingNoticeActivity extends BaseActivity implements OnClickListen
 	private LinearLayout viewChoiseRing;
 	private CheckBox cbShake;
 	private CheckBox cbNewMessage;
-	private CheckBox cbRing;
+	private CheckBox cbRing;// 铃声
 	private ImageView ivChoiseRing;
-	private boolean isReceive = true;
-	private boolean isRing = false;
 	private String mCustomRingtone;
+
+	// 保存铃声的Uri的字符串形式
+	private String mRingtoneUri = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,24 +60,56 @@ public class SettingNoticeActivity extends BaseActivity implements OnClickListen
 		cbRing = (CheckBox) this.findViewById(R.id.cbRing);
 		cbShake = (CheckBox) this.findViewById(R.id.cbShake);
 		ivChoiseRing = (ImageView) this.findViewById(R.id.ivChoiseRing);
+		// 判断是否接受信息的铃声和振动选择
+		if (SharedPrefUtil.getNewLetter(SettingNoticeActivity.this)) {
+			// 判断是否振动
+			if (SharedPrefUtil.getVibrate(SettingNoticeActivity.this)) {
+				cbShake.setButtonDrawable(R.drawable.btn_check_on_normal);
+			} else {
+				cbShake.setButtonDrawable(R.drawable.btn_check_off_normal);
+			}
+			// 判断铃声
+			if (SharedPrefUtil.getPlayRing(SettingNoticeActivity.this)) {
+				viewChoiseRing.setVisibility(View.VISIBLE);
+				cbRing.setButtonDrawable(R.drawable.btn_check_on_normal);
+			} else {
+				viewChoiseRing.setVisibility(View.GONE);
+				cbRing.setButtonDrawable(R.drawable.btn_check_off_normal);
+			}
+			cbNewMessage.setButtonDrawable(R.drawable.btn_check_on_normal);
+			viewRing.setVisibility(View.VISIBLE);
+			viewShake.setVisibility(View.VISIBLE);
+
+		} else {
+			cbNewMessage.setButtonDrawable(R.drawable.btn_check_off_normal);
+			viewChoiseRing.setVisibility(View.GONE);
+			viewRing.setVisibility(View.GONE);
+			viewShake.setVisibility(View.GONE);
+
+		}
+
 	}
 
 	private void fillData() {
 		tvTitle.setText("新消息提醒");
+		// 接受新消息
 		viewChoiseRing.setOnClickListener(this);
 		cbNewMessage.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				SharedPrefUtil.setNewLetter(SettingNoticeActivity.this, isChecked);
 				if (isChecked) {
-					isReceive = true;
-					viewRing.setVisibility(View.VISIBLE);
-					viewShake.setVisibility(View.VISIBLE);
-					if (isReceive && isRing) {
+					cbNewMessage.setButtonDrawable(R.drawable.btn_check_on_normal);
+					if (SharedPrefUtil.getPlayRing(SettingNoticeActivity.this)) {
 						viewChoiseRing.setVisibility(View.VISIBLE);
 					}
+					viewRing.setVisibility(View.VISIBLE);
+					viewShake.setVisibility(View.VISIBLE);
+
+					isChecked = false;
 				} else {
-					isReceive = false;
+					cbNewMessage.setButtonDrawable(R.drawable.btn_check_off_normal);
 					viewRing.setVisibility(View.GONE);
 					viewShake.setVisibility(View.GONE);
 					viewChoiseRing.setVisibility(View.GONE);
@@ -78,22 +117,36 @@ public class SettingNoticeActivity extends BaseActivity implements OnClickListen
 				}
 			}
 		});
+		// 铃声
 		cbRing.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				SharedPrefUtil.setPlayRing(SettingNoticeActivity.this, isChecked);
 				if (isChecked) {
-					isRing = true;
-					if (isReceive && isRing) {
-						viewChoiseRing.setVisibility(View.VISIBLE);
-					}
+					viewChoiseRing.setVisibility(View.VISIBLE);
+					cbRing.setButtonDrawable(R.drawable.btn_check_on_normal);
 				} else {
-					isRing = false;
 					viewChoiseRing.setVisibility(View.GONE);
+					cbRing.setButtonDrawable(R.drawable.btn_check_off_normal);
 				}
 			}
 		});
+		// 振动
 		cbShake.setOnClickListener(this);
+		cbShake.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				SharedPrefUtil.setVibrate(SettingNoticeActivity.this, isChecked);
+				if (isChecked) {
+					cbShake.setButtonDrawable(R.drawable.btn_check_on_normal);
+				} else {
+					cbShake.setButtonDrawable(R.drawable.btn_check_off_normal);
+				}
+
+			}
+		});
 	}
 
 	@Override
@@ -103,10 +156,62 @@ public class SettingNoticeActivity extends BaseActivity implements OnClickListen
 			finish();
 			break;
 		case R.id.viewChoiseRing:
-
+			doPickRingtone();
 			break;
 		default:
 			break;
+		}
+	}
+
+	/***
+	 * 调用系统铃声
+	 */
+	private void doPickRingtone() {
+		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+		// Allow user to pick 'Default'
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+		// Show only ringtones
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE);
+		// Don't show 'Silent'
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
+
+		Uri ringtoneUri;
+		if (mRingtoneUri != null) {
+			ringtoneUri = Uri.parse(mRingtoneUri);
+		} else {
+			// Otherwise pick default ringtone Uri so that something is
+			// selected.
+			ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+		}
+
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, ringtoneUri);
+
+		// Launch!
+		// startActivityForResult(intent, REQUEST_CODE_PICK_RINGTONE);
+		startActivityForResult(intent, Constants.REQUEST_CODE_PICK_RINGTONE);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != Activity.RESULT_OK) {
+			return;
+		}
+
+		switch (requestCode) {
+		case Constants.REQUEST_CODE_PICK_RINGTONE: {
+			Uri pickedUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+			handleRingtonePicked(pickedUri);
+			break;
+		}
+		}
+	}
+
+	private void handleRingtonePicked(Uri pickedUri) {
+		if (pickedUri == null || RingtoneManager.isDefault(pickedUri)) {
+			mRingtoneUri = null;
+		} else {
+			mRingtoneUri = pickedUri.toString();
+			SharedPrefUtil.setRingUrl(SettingNoticeActivity.this, mRingtoneUri);
 		}
 	}
 

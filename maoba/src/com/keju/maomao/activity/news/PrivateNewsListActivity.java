@@ -145,12 +145,17 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
-			if (NetUtil.checkNet(PrivateNewsListActivity.this)) {
-				isFilter = true;
-				new ClearTask().execute();
-			} else {
-				showShortToast(R.string.NoSignalException);
+			if(newsListBean.size()>0){
+				if (NetUtil.checkNet(PrivateNewsListActivity.this)) {
+					isFilter = true;
+					new ClearTask().execute();
+				} else {
+					showShortToast(R.string.NoSignalException);
+				}
+			}else{
+				showShortToast("无数据无需清空哦");
 			}
+			
 			break;
 		default:
 			break;

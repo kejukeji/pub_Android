@@ -23,6 +23,8 @@
 	<!-- 友盟: 获取用户手机的IMEI，用来唯一的标识用户。(如果您的应用会运行在无法读取IMEI的平板上，我们会将mac地址作为用户的唯一标识，请添加权限： android.permission.ACCESS_WIFI_STATE ) -->
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<uses-permission android:name="android.permission.READ_LOGS"></uses-permission>
+	 <!-- 手机振动权限-->
+	<uses-permission android:name="android.permission.VIBRATE" /> 
     <application
         android:icon="@drawable/ic_launcher"
         android:allowBackup="true"

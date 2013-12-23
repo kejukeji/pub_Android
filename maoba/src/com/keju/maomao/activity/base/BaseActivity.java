@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -21,8 +22,8 @@ import com.keju.maomao.util.LogUtil;
 import com.umeng.analytics.MobclickAgent;
 
 /**
- * 基础父类activity
- * 说明：大部分的activity需要继承该类，提供一些常用的方法；
+ * 基础父类activity 说明：大部分的activity需要继承该类，提供一些常用的方法；
+ * 
  * @author Zhoujun
  * @version 创建时间：2013-6-17 上午10:26:56
  */
@@ -93,6 +94,7 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 推荐给好友（系统自带的分享方式）
+	 * 
 	 * @param url
 	 * @param shareTitle
 	 */
@@ -109,6 +111,7 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 显示toast（时间短）
+	 * 
 	 * @param pResId
 	 */
 	protected void showShortToast(int pResId) {
@@ -117,6 +120,7 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 显示toast（时间长）
+	 * 
 	 * @param pResId
 	 */
 	protected void showLongToast(String pMsg) {
@@ -125,6 +129,7 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 显示toast（时间短）
+	 * 
 	 * @param pMsg
 	 */
 	protected void showShortToast(String pMsg) {
@@ -133,6 +138,7 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 判断
+	 * 
 	 * @param pExtraKey
 	 * @return
 	 */
@@ -142,8 +148,10 @@ public class BaseActivity extends Activity {
 		}
 		return false;
 	}
+
 	/**
 	 * 跳转activity
+	 * 
 	 * @param pClass
 	 */
 	protected void openActivity(Class<?> pClass) {
@@ -152,6 +160,7 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 跳转activity ，绑定数据
+	 * 
 	 * @param pClass
 	 * @param pBundle
 	 */
@@ -165,7 +174,9 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 打开activity（打开某种action）
-	 * @param pAction activity动作
+	 * 
+	 * @param pAction
+	 *            activity动作
 	 */
 	protected void openActivity(String pAction) {
 		openActivity(pAction, null);
@@ -173,8 +184,11 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 打开activity（打开某种action）
-	 * @param pAction activity动作
-	 * @param pBundle 数据
+	 * 
+	 * @param pAction
+	 *            activity动作
+	 * @param pBundle
+	 *            数据
 	 */
 	protected void openActivity(String pAction, Bundle pBundle) {
 		Intent intent = new Intent(pAction);
@@ -200,8 +214,10 @@ public class BaseActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 显示提醒dialog
+	 * 
 	 * @param TitleID
 	 * @param Message
 	 * @return
@@ -210,8 +226,10 @@ public class BaseActivity extends Activity {
 		mAlertDialog = new AlertDialog.Builder(this).setTitle(TitleID).setMessage(Message).show();
 		return mAlertDialog;
 	}
+
 	/**
 	 * 显示提醒dialog
+	 * 
 	 * @param pTitelResID
 	 * @param pMessage
 	 * @param pOkClickListener
@@ -222,8 +240,10 @@ public class BaseActivity extends Activity {
 		String title = getResources().getString(pTitelResID);
 		return showAlertDialog(title, pMessage, pOkClickListener, null, null);
 	}
+
 	/**
 	 * 显示提醒dialog
+	 * 
 	 * @param pTitle
 	 * @param pMessage
 	 * @param pOkClickListener
@@ -242,8 +262,10 @@ public class BaseActivity extends Activity {
 		}
 		return mAlertDialog;
 	}
+
 	/**
-	 *  显示提醒dialog
+	 * 显示提醒dialog
+	 * 
 	 * @param pTitle
 	 * @param pMessage
 	 * @param pOkClickListener
@@ -251,9 +273,8 @@ public class BaseActivity extends Activity {
 	 * @param pDismissListener
 	 * @return
 	 */
-	protected AlertDialog showAlertDialog(int pTitle, int pMessage,
-			DialogInterface.OnClickListener pOkClickListener, DialogInterface.OnClickListener pCancelClickListener,
-			DialogInterface.OnDismissListener pDismissListener) {
+	protected AlertDialog showAlertDialog(int pTitle, int pMessage, DialogInterface.OnClickListener pOkClickListener,
+			DialogInterface.OnClickListener pCancelClickListener, DialogInterface.OnDismissListener pDismissListener) {
 		mAlertDialog = new AlertDialog.Builder(this).setTitle(pTitle).setMessage(pMessage)
 				.setPositiveButton(android.R.string.ok, pOkClickListener)
 				.setNegativeButton(android.R.string.cancel, pCancelClickListener).show();
@@ -262,8 +283,10 @@ public class BaseActivity extends Activity {
 		}
 		return mAlertDialog;
 	}
+
 	/**
 	 * 显示提醒dialog
+	 * 
 	 * @param pTitle
 	 * @param pMessage
 	 * @param pPositiveButtonLabel
@@ -287,6 +310,7 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 显示进度dialog
+	 * 
 	 * @param pTitelResID
 	 * @param pMessage
 	 * @param pCancelClickListener
@@ -297,8 +321,10 @@ public class BaseActivity extends Activity {
 		String title = getResources().getString(pTitelResID);
 		return showProgressDialog(title, pMessage, pCancelClickListener);
 	}
+
 	/**
 	 * 显示进度dialog
+	 * 
 	 * @param pTitle
 	 * @param pMessage
 	 * @param pCancelClickListener
@@ -313,20 +339,21 @@ public class BaseActivity extends Activity {
 
 	/**
 	 * 隐藏键盘
+	 * 
 	 * @param view
 	 */
 	protected void hideKeyboard(View view) {
 		InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 	}
+
 	/**
 	 * 显示键盘；
 	 */
-	protected void showKeyborad(){
-		 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+	protected void showKeyborad() {
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 	}
-
 
 	/**
 	 * 关闭activity加入动画
@@ -342,33 +369,49 @@ public class BaseActivity extends Activity {
 	public void defaultFinish() {
 		super.finish();
 	}
+
 	private ProgressDialog pd;
+
 	/**
 	 * 显示progressDialog
 	 */
-	protected void showPd(String message){
-		if(pd == null){
+	protected void showPd(String message) {
+		if (pd == null) {
 			pd = new ProgressDialog(this);
 		}
 		pd.setMessage(message);
 		pd.show();
 	}
+
 	/**
 	 * 显示progressDialog
 	 */
-	protected void showPd(int msgId){
-		if(pd == null){
+	protected void showPd(int msgId) {
+		if (pd == null) {
 			pd = new ProgressDialog(this);
 		}
 		pd.setMessage(getString(msgId));
 		pd.show();
 	}
+
 	/**
 	 * 关闭progressDialog
 	 */
-	protected void dismissPd(){
-		if(pd != null){
+	protected void dismissPd() {
+		if (pd != null) {
 			pd.dismiss();
 		}
+	}
+
+	// 处理back键无动画效果问题
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+			this.finish(); // finish当前activity
+			overridePendingTransition(0, R.anim.roll_down);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

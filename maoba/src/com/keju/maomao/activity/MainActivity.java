@@ -1,5 +1,6 @@
 package com.keju.maomao.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -12,6 +13,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Display;
@@ -309,29 +313,33 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 						} else {
 							tvsignaTure.setText(signaTure);
 						}
-						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
-						ivSettingUserPhoto.setTag(photoUrl);
-						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
-								new ImageCallback() {
-									@Override
-									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-										ImageView image = (ImageView) ivSettingUserPhoto.findViewWithTag(imageUrl);
-										Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(imageDrawable, 0.5f);
+						if (userJson.has("pic_path")) {
+							String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
+							ivSettingUserPhoto.setTag(photoUrl);
+							Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
+									new ImageCallback() {
+										@Override
+										public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+											ImageView image = (ImageView) ivSettingUserPhoto.findViewWithTag(imageUrl);
+											Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(imageDrawable, 0.5f);
 
-										if (image != null) {
-											if (imageDrawable != null) {
-												image.setImageBitmap(bitmap);
-											} else {
-												image.setImageResource(R.drawable.left_menu_userimage);
+											if (image != null) {
+												if (imageDrawable != null) {
+													image.setImageBitmap(bitmap);
+												} else {
+													image.setImageResource(R.drawable.bg_show11);
+												}
 											}
 										}
-									}
-								});
-						if (cacheDrawble != null) {
-							Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(cacheDrawble, 0.5f);
-							ivSettingUserPhoto.setImageBitmap(bitmap);
+									});
+							if (cacheDrawble != null) {
+								Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(cacheDrawble, 0.5f);
+								ivSettingUserPhoto.setImageBitmap(bitmap);
+							} else {
+								ivSettingUserPhoto.setImageResource(R.drawable.bg_show11);
+							}
 						} else {
-							ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
+							ivSettingUserPhoto.setImageResource(R.drawable.bg_show11);
 						}
 
 					} else {
@@ -339,10 +347,10 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 
 					}
 				} catch (JSONException e) {
-					ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
+					showShortToast("json解析失败");
 				}
 			} else {
-				ivSettingUserPhoto.setImageResource(R.drawable.left_menu_userimage);
+				ivSettingUserPhoto.setImageResource(R.drawable.bg_show11);
 				tvsignaTure.setText("未设置");
 			}
 		}
@@ -378,6 +386,17 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 							tvNewMessagePoint.setVisibility(View.GONE);
 						} else {
 							tvNewMessagePoint.setVisibility(View.VISIBLE);
+							if(SharedPrefUtil.getNewLetter(MainActivity.this)&&SharedPrefUtil.getPlayRing(MainActivity.this)&&SharedPrefUtil.getVibrate(MainActivity.this)){
+								PlayRing();
+								AndroidUtil.Vibrate(MainActivity.this,100);
+							}else if(SharedPrefUtil.getNewLetter(MainActivity.this)&&SharedPrefUtil.getPlayRing(MainActivity.this)){
+								PlayRing();
+							}else if(SharedPrefUtil.getNewLetter(MainActivity.this)&&SharedPrefUtil.getVibrate(MainActivity.this)){
+								AndroidUtil.Vibrate(MainActivity.this,100);
+							}else{
+								
+							}
+							
 						}
 					}
 				} catch (JSONException e) {
@@ -389,6 +408,37 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 
 	}
 
+	/**
+	 * 播放铃声
+	 * 
+	 * 
+	 */
+	private void PlayRing() {
+		String RingUrl = SharedPrefUtil.getRingUrl(MainActivity.this);
+		 MediaPlayer mMediaPlayer = new MediaPlayer();
+		 Uri uri = Uri.parse(RingUrl);
+         try {
+			mMediaPlayer.setDataSource(MainActivity.this, uri);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+         try {
+			mMediaPlayer.prepare();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+         mMediaPlayer.start();//开始播放
+	}
+	
 	/**
 	 * 获取首页数据
 	 * 
