@@ -26,6 +26,7 @@
     <string name="connect_server_exception">服务器连接失败</string>
     <string name="no_login">请登录后再使用该功能</string>
     
+    <string name="send_eye"></string>
      <!-- JazzyViewPager -->
     <string-array name="jazzy_effects">
         <item>Standard</item>

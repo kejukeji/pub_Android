@@ -68,56 +68,72 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:paddingBottom="100dp"
-                android:paddingLeft="5dp"
-                android:paddingTop="30dp" >
-
-                <TextView
-                    android:id="@+id/tvAddress"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:ellipsize="end"
-                    android:lineSpacingExtra="1dp"
-                    android:maxEms="9"
-                    android:text="上海市 黄浦区"
-                    android:textColor="#FF8D01"
-                    android:textSize="@dimen/eventList" />
+                android:paddingLeft="5dp" >
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
                     android:orientation="vertical" >
 
                     <TextView
+                        android:id="@+id/tvAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:text="距离"
+                        android:ellipsize="end"
+                        android:lineSpacingExtra="1dp"
+                        android:maxEms="9"
+                        android:singleLine="true"
                         android:textColor="#FF8D01"
-                        android:textSize="@dimen/eventList" />
-
+                        android:textSize="@dimen/BasicTextSize" />
                     <TextView
-                        android:id="@+id/tvDistance"
+                        android:id="@+id/tvArea"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2.3千米"
+                        android:layout_marginTop="2dp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="经验值"
+                        android:textColor="#FF8D01"
+                        android:textSize="@dimen/BasicTextSize"
+                         android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tvExperiencePrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:ellipsize="end"
+                        android:lineSpacingExtra="1dp"
+                        android:maxEms="9"
+                        android:text="300280"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/eventList"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvLevel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
                         android:ellipsize="end"
                         android:text="等级"
                         android:textColor="#FF8D01"
@@ -127,30 +143,30 @@
                         android:id="@+id/tvGrade"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="资深泡客"
+                        android:layout_marginTop="2dp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
                     android:orientation="vertical" >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:paddingLeft="5dp"
                         android:text="积分"
                         android:textColor="#FF8D01"
-                        android:textSize="@dimen/eventList" />
+                        android:textSize="@dimen/BasicTextSize" />
 
                     <TextView
                         android:id="@+id/tvIntegral"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1030"
+                        android:layout_marginTop="2dp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
                 </LinearLayout>
@@ -257,10 +273,9 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_invite_and_gift"
-                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp" >
@@ -268,91 +283,79 @@
                 <LinearLayout
                     android:id="@+id/viewDrink"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="0.8"
-                    android:gravity="center"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true"
-                        android:text="喝一杯"
-                        android:textColor="#3C3C3C"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="45dp"
-                        android:background="@drawable/main_bottom_line" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/viewGiveOneTheEye"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="horizontal" >
+                    android:orientation="vertical" >
 
                     <TextView
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
                         android:singleLine="true"
-                        android:text="眉目传情"
-                        android:textColor="#3C3C3C"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="45dp"
-                        android:background="@drawable/main_bottom_line" />
+                        android:text="喝一杯" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
 
                 <LinearLayout
-                    android:id="@+id/viewSendGife"
+                     android:id="@+id/viewGiveOneTheEye"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="horizontal" >
+                    android:orientation="vertical" >
+
 
                     <TextView
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
+                        android:textColor="#EE1A78"
                         android:singleLine="true"
-                        android:text="送个礼物"
-                        android:textColor="#3C3C3C"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="45dp"
-                        android:background="@drawable/main_bottom_line" />
+                        android:text="眉目传情" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
+
+                <LinearLayout
+                    android:id="@+id/viewSendGift"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="送个小礼" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/main_bottom_line" />
 
                 <LinearLayout
                     android:id="@+id/viewSendNews"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal" >
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
 
                     <TextView
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
                         android:singleLine="true"
-                        android:text="发信息"
-                        android:textColor="#3C3C3C"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:text="发信息" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -395,7 +398,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
                         android:layout_weight="0.5"
-                        android:text="10件"
                         android:textSize="18sp"
                         android:textStyle="normal" />
 
@@ -431,7 +433,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
                         android:layout_weight="1"
-                        android:text="43"
                         android:textSize="18sp"
                         android:textStyle="normal" />
 

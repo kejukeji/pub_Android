@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.keju.maomao"
     android:versionCode="1"
-    android:versionName="v1.0beta" >
+    android:versionName="V1.0.1" >
 
     <uses-sdk  android:minSdkVersion="7"
         android:targetSdkVersion="10" />

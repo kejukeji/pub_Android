@@ -168,7 +168,7 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 		protected JSONObject doInBackground(Void... params) {
 			int userId = SharedPrefUtil.getUid(MyGiftActivity.this);
 			try {
-				return new BusinessHelper().getGiftList(1, pageIndex,giftType);
+				return new BusinessHelper().getGiftList(userId, pageIndex,giftType);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}

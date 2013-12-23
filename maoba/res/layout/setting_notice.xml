@@ -13,20 +13,24 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
+        android:background="@drawable/bg_setting"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/tvAccept"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="不接受推送消息"
+            android:text="接受新消息"
             android:textColor="#1d4869" />
 
-        <RadioButton
-            android:id="@+id/rbChose"
+        <CheckBox
+            android:id="@+id/cbNewMessage"
+            style="@style/checkbox"
+            android:checked="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
     </LinearLayout>
 
     <View
@@ -34,6 +38,88 @@
         android:layout_height="1dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/personal_line_repeat" />
+        android:background="@drawable/personal_line_repeat"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/viewShake"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_setting"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="震动提醒（当有通知震动提示）"
+            android:textColor="#1d4869" />
+
+        <CheckBox
+            android:id="@+id/cbShake"
+            style="@style/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/viewRing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_setting"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="声音提醒（当有通知声音提示）"
+            android:textColor="#1d4869" />
+
+        <CheckBox
+            android:id="@+id/cbRing"
+            style="@style/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/viewChoiseRing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_setting"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="提醒铃声（当有通知时的提示铃声）"
+            android:textColor="#1d4869" />
+
+        <ImageView
+            android:id="@+id/ivChoiseRing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/ic_grey_right_arrow" />
+    </LinearLayout>
 
 </LinearLayout>

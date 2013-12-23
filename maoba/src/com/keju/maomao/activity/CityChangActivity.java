@@ -7,12 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -29,15 +24,11 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.keju.maomao.CommonApplication;
-import com.keju.maomao.Constants;
 import com.keju.maomao.R;
-import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
-import com.keju.maomao.bean.BarBean;
 import com.keju.maomao.bean.SortModelBean;
-import com.keju.maomao.helper.BusinessHelper;
+import com.keju.maomao.db.DataBaseAdapter;
 import com.keju.maomao.util.CharacterParser;
-import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.PinyinComparator;
 import com.keju.maomao.util.SharedPrefUtil;
 import com.keju.maomao.view.citychangeview.ClearEditText;
@@ -59,11 +50,14 @@ public class CityChangActivity extends BaseActivity implements OnClickListener {
 	private TextView dialog; // 显示手触摸字母时放大显示控件
 	private SortAdapter adapter;
 	private ClearEditText mClearEditText; // 重写editText控件
-	
-	private TextView tvPositioncity;
-	private CommonApplication app;
-	
 
+	private TextView tvPositioncity;
+	private int positionProvinceId;// 定位省的id
+	private CommonApplication app;
+
+	private DataBaseAdapter dba;
+  
+	private Boolean isLocationCity;//是否定位到了当前城市 作为定位成丝的点击判断
 	/**
 	 * 汉字转换成拼音的类
 	 */
@@ -81,6 +75,9 @@ public class CityChangActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.city_change_list);
+
+		dba = ((CommonApplication) this.getApplicationContext()).getDbAdapter();
+
 		app = (CommonApplication) getApplication();
 		findView();
 		fillData();
@@ -88,12 +85,19 @@ public class CityChangActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void findView() {
+		app.initBMapInfo();
+		
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		
-		tvPositioncity = (TextView)this.findViewById(R.id.tvPositioncity);
-		tvPositioncity.setText(app.getCity());
-		
+		tvPositioncity = (TextView) this.findViewById(R.id.tvPositioncity);
+		if (app.getCity() == null) {
+			tvPositioncity.setText("无法地位到当前城市");
+			isLocationCity = false;
+		} else {
+			tvPositioncity.setText(app.getCity());
+			isLocationCity = true;
+		}
 		// 实例化汉字转拼音类
 		characterParser = CharacterParser.getInstance();
 		pinyinComparator = new PinyinComparator();
@@ -142,16 +146,25 @@ public class CityChangActivity extends BaseActivity implements OnClickListener {
 		ibLeft.setImageResource(R.drawable.ic_btn_left);
 		ibLeft.setOnClickListener(this);
 		tvTitle.setText("城市切换");
-		
-//		cityList = new ArrayList<SortModelBean>();
-//		cityList.add(new SortModelBean(0, "定位城市"));
-//		cityList.add(new SortModelBean(1, app.getCity()));
-		
-		if (NetUtil.checkNet(this)) {
-			new GetCityTask().execute();
-		} else {
-			showShortToast(R.string.NoSignalException);
-		}
+		// 地位城市
+		tvPositioncity.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(isLocationCity){
+					positionProvinceId = dba.findProvinceId(app.getCity()); // 根据城市名去数据库寻找对应的省id
+					SharedPrefUtil.setCityName(CityChangActivity.this, app.getCity());
+					SharedPrefUtil.setProvinceId(CityChangActivity.this, positionProvinceId);
+					Intent intent = new Intent();
+					intent.putExtra("PROVINCEID", positionProvinceId);
+					intent.putExtra("CITYNAME", app.getCity());
+
+					setResult(RESULT_OK, intent);
+					finish();
+				}
+				
+			}
+		});
+		getCity();
 	}
 
 	@Override
@@ -177,92 +190,75 @@ public class CityChangActivity extends BaseActivity implements OnClickListener {
 			if (position >= cityList.size()) {
 				return;
 			}
-			//这里要利用adapter.getItem(position)来获取当前position所对应的对象 否则筛选选择的不能对应
-			
-		    String cityName	=((SortModelBean)adapter.getItem(position)).getCityName();
-		    int provinceId = ((SortModelBean)adapter.getItem(position)).getProvinceId();
+			// 这里要利用adapter.getItem(position)来获取当前position所对应的对象 否则筛选选择的不能对应
+
+			String cityName = ((SortModelBean) adapter.getItem(position)).getCityName();
+			int provinceId = ((SortModelBean) adapter.getItem(position)).getProvinceId();
 			Intent intent = new Intent();
-			intent.putExtra("PROVINCEID", cityName);
-			intent.putExtra("CITYNAME", provinceId);
-            
+			intent.putExtra("PROVINCEID", provinceId);
+			intent.putExtra("CITYNAME", cityName);
 			SharedPrefUtil.setCityName(CityChangActivity.this, cityName);
 			SharedPrefUtil.setProvinceId(CityChangActivity.this, provinceId);
-			if (SharedPrefUtil.isFistCityActivity(CityChangActivity.this)) {
-				intent.setClass(CityChangActivity.this, MainActivity.class);
-				SharedPrefUtil.setFistLogined(CityChangActivity.this);
-                startActivity(intent);
-			} else {
-				setResult(RESULT_OK, intent);
-			}
+
+			setResult(RESULT_OK, intent);
 			finish();
 		}
 
 	};
 
 	/**
-	 * 获取所有城市
-	 * 
+	 * 从数据库获取城市
 	 */
-	private class GetCityTask extends AsyncTask<Void, Void, JSONObject> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			showPd(R.string.loading);
-		}
-
-		@Override
-		protected JSONObject doInBackground(Void... params) {
-			try {
-				return new BusinessHelper().getCity();
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(JSONObject result) {
-			super.onPostExecute(result);
-			dismissPd();
-			if (result != null) {
-				try {
-					if (result.getInt("status") == Constants.REQUEST_SUCCESS) {
-						JSONArray cityArr = result.getJSONArray("city");
-						if (cityArr != null) {
-							ArrayList<SortModelBean> cityBean = (ArrayList<SortModelBean>) SortModelBean
-									.constractList(cityArr);
-							cityList.addAll(cityBean);
-							filledData(cityBean);
-							SourceDateList = cityList;
-
-							// 根据a-z进行排序源数据
-							Collections.sort(SourceDateList, pinyinComparator);
-							adapter = new SortAdapter(SourceDateList);
-							sortListView.setAdapter(adapter);
-						}
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-					showShortToast(R.string.json_exception);
-				}
-			} else {
-				showShortToast(R.string.connect_server_exception);
-			}
-		}
-
+	private void getCity() {
+		cityList = dba.findAllCitys();
+		filledData(cityList);
+		SourceDateList = cityList;
+		// 根据a-z进行排序源数据
+		Collections.sort(SourceDateList, pinyinComparator);
+		adapter = new SortAdapter(SourceDateList);
+		sortListView.setAdapter(adapter);
 	}
 
 	/**
+	 * 获取所有城市
+	 * 
+	 * 
+	 * private class GetCityTask extends AsyncTask<Void, Void, JSONObject> {
+	 * 
+	 * @Override protected void onPreExecute() { super.onPreExecute();
+	 *           showPd(R.string.loading); }
+	 * @Override protected JSONObject doInBackground(Void... params) { try {
+	 *           return new BusinessHelper().getCity(); } catch (SystemException
+	 *           e) { e.printStackTrace(); } return null; }
+	 * @Override protected void onPostExecute(JSONObject result) {
+	 *           super.onPostExecute(result); dismissPd(); if (result != null) {
+	 *           try { if (result.getInt("status") == Constants.REQUEST_SUCCESS)
+	 *           { JSONArray cityArr = result.getJSONArray("city"); if (cityArr
+	 *           != null) { ArrayList<SortModelBean> cityBean =
+	 *           (ArrayList<SortModelBean>) SortModelBean
+	 *           .constractList(cityArr); cityList.addAll(cityBean);
+	 *           filledData(cityBean); SourceDateList = cityList;
+	 * 
+	 *           // 根据a-z进行排序源数据 Collections.sort(SourceDateList,
+	 *           pinyinComparator); adapter = new SortAdapter(SourceDateList);
+	 *           sortListView.setAdapter(adapter); } } } catch (JSONException e)
+	 *           { e.printStackTrace(); showShortToast(R.string.json_exception);
+	 *           } } else { showShortToast(R.string.connect_server_exception); }
+	 *           }
+	 * 
+	 *           }
+	 */
+	/**
 	 * 为ListView填充数据
 	 * 
-	 * @param cityBean
+	 * @param cityList2
 	 * @return
 	 */
-	private List<SortModelBean> filledData(ArrayList<SortModelBean> cityBean) {
+	private List<SortModelBean> filledData(List<SortModelBean> cityList2) {
 		List<SortModelBean> mSortList = new ArrayList<SortModelBean>();
 
-		for (int i = 0; i < cityBean.size(); i++) {
-			SortModelBean sortModel = cityBean.get(i);
+		for (int i = 0; i < cityList2.size(); i++) {
+			SortModelBean sortModel = cityList2.get(i);
 			// sortModel.setName(cityBean.);
 			// 汉字转换成拼音
 			String pinyin = characterParser.getSelling(sortModel.getCityName());

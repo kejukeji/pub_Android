@@ -34,7 +34,7 @@
                 android:paddingBottom="10dp"
                 android:paddingLeft="15dp"
                 android:paddingTop="10dp"
-                android:text="推送通知提醒"
+                android:text="新消息提醒"
                 android:textColor="#1d4869" />
 
             <ImageView

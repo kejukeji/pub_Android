@@ -6,7 +6,9 @@ package com.keju.maomao.activity.friendpersonalcenter;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ProgressDialog;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import com.keju.maomao.bean.FriendPersonalCentreBean;
 import com.keju.maomao.bean.ResponseBean;
 import com.keju.maomao.helper.BusinessHelper;
 import com.keju.maomao.util.NetUtil;
+import com.keju.maomao.util.SharedPrefUtil;
 
 /**
  * 发送礼物界面
@@ -44,31 +47,31 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 	private Button btnRight;
 	private TextView tvTitle;
 
-//	private FriendPersonalCentreBean bean;
 	private ArrayList<FriendPersonalCentreBean> giftBean = new ArrayList<FriendPersonalCentreBean>();
 	private GridView gvGife;
 
 	private GiftAdapter adapter;
 
-	private ProgressDialog pd;
-
 	Display display;
+	private int receiverId;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.send_gift_list);
-		
+		receiverId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		display = this.getWindowManager().getDefaultDisplay();
 		findView();
 		fillData();
 	}
+
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
 		btnRight = (Button) this.findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
 		gvGife = (GridView) findViewById(R.id.gvGife);
-		
+
 	}
 
 	private void fillData() {
@@ -86,7 +89,7 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
-		
+
 	}
 
 	@Override
@@ -102,16 +105,13 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 		}
 
 	}
+
 	public class GetGiftTask extends AsyncTask<Void, Void, ResponseBean<FriendPersonalCentreBean>> {
 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (pd == null) {
-				pd = new ProgressDialog(SendGiftActivity.this);
-			}
-			pd.setMessage(getString(R.string.loading));
-			pd.show();
+			showPd(R.string.loading);
 		}
 
 		@Override
@@ -126,9 +126,7 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 		@Override
 		protected void onPostExecute(ResponseBean<FriendPersonalCentreBean> result) {
 			super.onPostExecute(result);
-			if (pd != null) {
-				pd.dismiss();
-			}
+			dismissPd();
 			if (result != null) {
 				if (result.getStatus() != Constants.REQUEST_FAILD) {
 					List<FriendPersonalCentreBean> tempList = result.getObjList();
@@ -182,12 +180,12 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-//			final ViewHolder holderUse = holder;
+			// final ViewHolder holderUse = holder;
 			int itemWidth = (display.getWidth() - 4 * 10) / 4;
 			android.view.ViewGroup.LayoutParams param = holder.ivGiftPhoto.getLayoutParams();
 			param.width = itemWidth;
 			param.height = itemWidth;
-			
+
 			holder.tvGiftName.setText(bean.getGiftName());
 			holder.tvIntegral.setText(bean.getIntegral());
 			holder.ivGiftPhoto.setLayoutParams(param);
@@ -217,16 +215,74 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 			holder.ivGiftPhoto.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					if (NetUtil.checkNet(SendGiftActivity.this)) {
+						new SendGiftTask(bean.getGiftId()).execute();
+					} else {
+						showShortToast(R.string.NoSignalException);
+					}
 				}
 			});
 			return convertView;
 		}
-
 	}
 
 	class ViewHolder {
 		private ImageView ivGiftPhoto;
-		private TextView tvGiftName,tvIntegral;
+		private TextView tvGiftName, tvIntegral;
+	}
+
+	/***
+	 * 
+	 * 发送礼物接口
+	 * 
+	 */
+
+	private class SendGiftTask extends AsyncTask<Void, Void, JSONObject> {
+		private int giftId;
+
+		/**
+		 * @param giftId
+		 */
+		public SendGiftTask(int giftId) {
+			this.giftId = giftId;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd(R.string.loading);
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			int senderId = SharedPrefUtil.getUid(SendGiftActivity.this);
+			try {
+				return new BusinessHelper().sendGift(senderId, receiverId, giftId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			dismissPd();
+			if (result != null) {
+				try {
+					if (result.getInt("status") == Constants.REQUEST_SUCCESS) {
+						showShortToast("发送成功");
+					} else {
+						showShortToast("发送失败");
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else {
+				showShortToast(R.string.connect_server_exception);
+			}
+		}
+
 	}
 
 }

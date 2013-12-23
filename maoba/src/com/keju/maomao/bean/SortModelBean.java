@@ -57,7 +57,9 @@ public class SortModelBean implements Serializable{
 		return list;
 	}
 	
-	
+	public SortModelBean(){
+		super();
+	}
 	// Json解析的
 	public String getCityName() {
 		return cityName;

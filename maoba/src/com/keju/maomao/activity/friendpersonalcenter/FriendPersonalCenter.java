@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +33,7 @@ import com.keju.maomao.util.ImageUtil;
 import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.SharedPrefUtil;
 import com.keju.maomao.util.StringUtil;
+import com.keju.maomao.view.toast.TipsToast;
 
 /**
  * 他人的个人中心
@@ -44,7 +46,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 	private TextView tvSignature;// 个性签名
 	private TextView tvAge, tvAddress, tvNickName, tvCollectNum;
 
-	private LinearLayout viewDrink, viewGiveOneTheEye, viewSendGife, viewSendNews; // 喝一杯/眉目传情/送礼物/发私信/
+	private LinearLayout viewDrink, viewGiveOneTheEye, viewSendGift, viewSendNews; // 喝一杯/眉目传情/送礼物/发私信/
 
 	private ImageView ivUserPhoto, ivSex;
 	private LinearLayout viewCollectBar, viewFriendGift;
@@ -52,8 +54,9 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 	private int userId;
 	private String NickName;
 
-	private TextView tvDistance, tvGrade, tvIntegral, tvGiftCount;// 距离/等级/积分/礼物个数
-
+	private TextView tvDistance, tvGrade, tvArea, tvIntegral, tvGiftCount;// 距离/等级/积分/礼物个数
+	
+	private static TipsToast tipsToast;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,14 +73,18 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 
 		tvAge = (TextView) this.findViewById(R.id.tvAge);
 		tvAddress = (TextView) this.findViewById(R.id.tvAddress);
+		tvArea = (TextView) this.findViewById(R.id.tvArea);
 		tvNickName = (TextView) this.findViewById(R.id.tvNickName);
+		tvGrade =(TextView) this.findViewById(R.id.tvGrade);
+		tvIntegral=(TextView) this.findViewById(R.id.tvIntegral);
 		tvCollectNum = (TextView) this.findViewById(R.id.tvCollectNum);
+		tvGiftCount = (TextView) this.findViewById(R.id.tvGiftCount);
 		ivUserPhoto = (ImageView) this.findViewById(R.id.ivUserPhoto);
 		ivSex = (ImageView) this.findViewById(R.id.ivSex);
 
 		viewDrink = (LinearLayout) this.findViewById(R.id.viewDrink);
 		viewGiveOneTheEye = (LinearLayout) this.findViewById(R.id.viewGiveOneTheEye);
-		viewSendGife = (LinearLayout) this.findViewById(R.id.viewSendGife);
+		viewSendGift = (LinearLayout) this.findViewById(R.id.viewSendGift);
 		viewSendNews = (LinearLayout) this.findViewById(R.id.viewSendNews);
 
 		viewFriendGift = (LinearLayout) this.findViewById(R.id.viewFriendGift);
@@ -98,7 +105,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 
 		viewDrink.setOnClickListener(this);
 		viewGiveOneTheEye.setOnClickListener(this);
-		viewSendGife.setOnClickListener(this);
+		viewSendGift.setOnClickListener(this);
 		viewSendNews.setOnClickListener(this);
 
 		viewFriendGift.setOnClickListener(this);
@@ -125,15 +132,26 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 			openActivity(PrivateLetterActivity.class, b1);
 			break;
 		case R.id.viewFriendGift:
-			openActivity(GetGiftActivity.class);
-			break;
-		case R.id.viewDrink:
 			Bundle b2 = new Bundle();
 			b2.putInt(Constants.EXTRA_DATA, userId);
-			openActivity(SendInviteActivity.class,b2);
+			openActivity(GetGiftActivity.class, b2);
 			break;
-		case R.id.viewSendGife:
-			openActivity(SendGiftActivity.class);
+		case R.id.viewDrink:
+			Bundle b3 = new Bundle();
+			b3.putInt(Constants.EXTRA_DATA, userId);
+			openActivity(SendInviteActivity.class, b3);
+			break;
+		case R.id.viewSendGift:
+			Bundle b4 = new Bundle();
+			b4.putInt(Constants.EXTRA_DATA, userId);
+			openActivity(SendGiftActivity.class, b4);
+			break;
+		case R.id.viewGiveOneTheEye:
+			if (NetUtil.checkNet(FriendPersonalCenter.this)) {
+				new SendGiveOneTheEyeTask().execute();
+			} else {
+				showShortToast(R.string.NoSignalException);
+			}
 			break;
 		default:
 			break;
@@ -208,8 +226,12 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						if (address.equals("$$")) {
 							tvAddress.setText("未设置");
 						} else {
-//							String address1 = StringUtil.stringCut(address);
-//							tvAddress.setText(address1);
+							try {
+								String[] address1 = StringUtil.stringCut(address);
+								tvAddress.setText(address1[0]);
+								tvArea.setText(address1[1]);
+							} catch (Exception e) {
+							}
 						}
 						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 						ivUserPhoto.setTag(photoUrl);
@@ -281,7 +303,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 				}
 
 			} else {
-				// showShortToast(R.string.connect_server_exception);
+				 showShortToast(R.string.connect_server_exception);
 			}
 		}
 
@@ -313,7 +335,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						JSONObject objUser = result.getJSONObject("user");
 						// tvMyColBarCount.setText(objUser.getInt("collect_pub_count")+"");
 						// tvDistance.setText(objUser.getInt("reputation")+"");
-						tvGiftCount.setText(objUser.getString("level_description" + "件"));
+						tvGiftCount.setText(objUser.getInt("gift")+"件");
 						tvGrade.setText(objUser.getString("level_description"));
 						tvIntegral.setText(objUser.getInt("credit") + "");
 					}
@@ -330,6 +352,66 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 
 	}
 
+	/***
+	 * 
+	 * 给人抛媚眼接口
+	 */
+	private class SendGiveOneTheEyeTask extends AsyncTask<Void, Void, JSONObject> {
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd("正在抛媚眼");
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			int senderId = SharedPrefUtil.getUid(FriendPersonalCenter.this);
+			try {
+				return new BusinessHelper().sendGiveOneTheEye(senderId, userId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			dismissPd();
+			if (result != null) {
+				try {
+					if (result.getInt("status") == Constants.REQUEST_SUCCESS) {
+						showTips(R.drawable.ic_send_one_eye,R.string.send_eye);
+					} else {
+						showShortToast("抛媚眼失败");
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else {
+				showShortToast(R.string.connect_server_exception);
+			}
+		}
+
+	}
+	/***
+	 * 自定义toast
+	 * @param iconResId
+	 * 
+	 */
+	private void showTips(int iconResId,int msgResId) {
+		if (tipsToast != null) {
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+				tipsToast.cancel();
+			}
+		} else {
+			tipsToast = TipsToast.makeText(getApplication().getBaseContext(), msgResId, TipsToast.LENGTH_SHORT);
+		}
+		tipsToast.show();
+		tipsToast.setIcon(iconResId);
+		tipsToast.setText(msgResId);
+	}
+	
 	// Activity从后台重新回到前台时被调用
 	@Override
 	protected void onRestart() {

@@ -23,6 +23,7 @@ import com.keju.maomao.activity.base.BaseActivity;
 import com.keju.maomao.helper.BusinessHelper;
 import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.SharedPrefUtil;
+import com.keju.maomao.util.StringUtil;
 
 /**
  * 昵称界面
@@ -74,6 +75,10 @@ public class NickNameActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.btnRight:
 			nickname = edNickname.getText().toString();
+			if(StringUtil.isBlank(nickname)){
+				showShortToast("输入新昵称才可以修改哦");
+				return;
+			}
 			Intent nicknameIntent = new Intent();
 			nicknameIntent.putExtra("NICKNAMEINPUT", nickname);
 			setResult(Activity.RESULT_OK, nicknameIntent);

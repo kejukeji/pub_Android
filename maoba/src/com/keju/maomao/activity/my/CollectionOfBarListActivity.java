@@ -63,21 +63,22 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 
 	private int pageIndex = 1;
 	private ProgressDialog pd;
-	
-	private boolean isEdit = false;//是不是点击编辑
+
+	private boolean isEdit = false;// 是不是点击编辑
 
 	private int userId;
 
 	private boolean isLoadMore = false;
 	private boolean isLoad = false;// 是否正在加载数据
 	private boolean isComplete = false;// 是否加载完了；
-	
+
+	private int uid ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collection_bar_list);
-		
+
 		userId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		findView();
 		fillData();
@@ -86,8 +87,9 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 	}
 
 	private void findView() {
+		uid = SharedPrefUtil.getUid(CollectionOfBarListActivity.this);
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		btnRight = (Button)this.findViewById(R.id.btnRight);
+		btnRight = (Button) this.findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		lvCollBarList = (ListView) findViewById(R.id.lvCollBarList);
 
@@ -130,13 +132,16 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
-			isEdit = !isEdit;
-			if (isEdit) {
-				btnRight.setText("完成");
-			} else {
-				btnRight.setText("编辑");
+			if (userId == uid) {
+				isEdit = !isEdit;
+				if (isEdit) {
+					btnRight.setText("完成");
+				} else {
+					btnRight.setText("编辑");
+				}
+				adapter.notifyDataSetChanged();
 			}
-			adapter.notifyDataSetChanged();
+
 		default:
 			break;
 		}
@@ -268,6 +273,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 			isLoad = false;
 		}
 	}
+
 	/**
 	 * 收藏
 	 * 
@@ -276,6 +282,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 	 */
 	private class DelTask extends AsyncTask<Void, Void, JSONObject> {
 		private int position;
+
 		/**
 		 * @param position
 		 */
@@ -286,7 +293,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
-			int uid = SharedPrefUtil.getUid(CollectionOfBarListActivity.this);
+
 			try {
 				return new BusinessHelper().DelBar(uid, list.get(position).getBar_id());
 			} catch (SystemException e) {
@@ -342,7 +349,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final int clickPosition = position;
 			ViewHolder holder = null;
-			 BarBean bean = list.get(position);
+			BarBean bean = list.get(position);
 			if (convertView == null) {
 				holder = new ViewHolder();
 				convertView = getLayoutInflater().inflate(R.layout.collection_bar_item, null);
@@ -356,7 +363,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-           
+
 			holder.tvCollBarName.setText(bean.getBar_Name());
 			holder.tvCollTime.setText(bean.getCollectTime());
 
@@ -380,12 +387,13 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 				holder.ivCollImage.setImageDrawable(cacheDrawble);
 			} else {
 				holder.ivCollImage.setImageResource(R.drawable.ic_default);
-			}if (isEdit) {
+			}
+			if (isEdit) {
 				holder.ivDel.setVisibility(View.VISIBLE);
 			} else {
 				holder.ivDel.setVisibility(View.GONE);
 			}
-			
+
 			holder.ivDel.setOnClickListener(new View.OnClickListener() {
 
 				@Override
@@ -397,9 +405,9 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
-							if(NetUtil.checkNet(CollectionOfBarListActivity.this)){
+							if (NetUtil.checkNet(CollectionOfBarListActivity.this)) {
 								new DelTask(clickPosition).execute();
-							}else{
+							} else {
 								showShortToast(R.string.NoSignalException);
 							}
 						}
@@ -446,7 +454,7 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 
 	class ViewHolder {
 		private TextView tvCollBarName, tvCollDistanceLabel, tvCollTime;
-		private ImageView ivCollImage,ivDel;
+		private ImageView ivCollImage, ivDel;
 	}
 
 }

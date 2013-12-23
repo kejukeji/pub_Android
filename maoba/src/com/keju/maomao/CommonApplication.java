@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.location.Location;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -113,6 +114,20 @@ public class CommonApplication extends Application {
 
 		mLocationClient.start();
 	}
+
+//	/**
+//	 * 当位置发生变化时触发此方法
+//	 * 
+//	 * @param location
+//	 *            当前位置
+//	 */
+//	public void onLocationChanged(Location location) {
+//		if (location != null) {
+//			// 将当前位置转换成地理坐标点
+//			mSearch.reverseGeocode(new GeoPoint((int) (location.getLatitude() * 1e6),
+//					(int) (location.getLongitude() * 1e6)));
+//		}
+//	}
 
 	/**
 	 * 监听函数，有更新位置的时候，格式化成字符串，输出到屏幕中

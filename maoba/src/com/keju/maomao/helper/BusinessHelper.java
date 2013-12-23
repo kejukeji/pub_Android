@@ -353,7 +353,6 @@ public class BusinessHelper {
 				List<BarBean> list = null;
 				if (!TextUtils.isEmpty(obj.getString("list"))) {
 					list = BarBean.constractList(obj.getJSONArray("list"));
-
 				} else {
 					list = new ArrayList<BarBean>();
 				}
@@ -1081,7 +1080,7 @@ public class BusinessHelper {
 	 */
 
 	public JSONObject getGreetingList(int userId, int pageIndex) throws SystemException{
-		return httpClient.get(BASE_URL + "greeting/view",
+		return httpClient.get(BASE_URL + "greeting/receiver",
 				new PostParameter[] { new PostParameter("user_id", userId), 
 				new PostParameter("page", pageIndex)})
 				.asJSONObject();
@@ -1100,5 +1099,32 @@ public class BusinessHelper {
 				new PostParameter[] { new PostParameter("user_id", userId), 
 				new PostParameter("page", pageIndex),new PostParameter("gift_type", giftType)})
 				.asJSONObject();
+	}
+
+	/**
+	 * 发送礼物接口
+	 * @param senderId
+	 * @param receiverId
+	 * @param giftId
+	 * @return
+	 */
+	public JSONObject sendGift(int senderId, int receiverId, int giftId) throws SystemException{
+		return httpClient.get(
+				BASE_URL + "sender/gift",
+				new PostParameter[] {new PostParameter("sender_id", senderId),
+						new PostParameter("receiver_id", receiverId),new PostParameter("gift_id", giftId) }).asJSONObject(); 
+	}
+
+	/**
+	 * 抛媚眼接口
+	 * @param senderId
+	 * @param userId
+	 * @return
+	 */
+	public JSONObject sendGiveOneTheEye(int senderId, int receiverId) throws SystemException{
+		return httpClient.get(
+				BASE_URL + "sender/greeting",
+				new PostParameter[] {new PostParameter("sender_id", senderId),
+						new PostParameter("receiver_id", receiverId)}).asJSONObject();
 	}
 }

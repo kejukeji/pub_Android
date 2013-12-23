@@ -41,6 +41,7 @@ import com.keju.maomao.activity.news.NewsActivity;
 import com.keju.maomao.activity.personalcenter.PersonalCenter;
 import com.keju.maomao.activity.setting.SettingActivity;
 import com.keju.maomao.bean.BarTypeBean;
+import com.keju.maomao.db.DataBaseAdapter;
 import com.keju.maomao.helper.BusinessHelper;
 import com.keju.maomao.util.AndroidUtil;
 import com.keju.maomao.util.ImageUtil;
@@ -82,42 +83,22 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	private TextView tvCity;// 城市切换
 	private int provinceId;// 省得id
 	private String cityName;
+	private DataBaseAdapter dba;// 数据库
+
+	private Boolean isCityActicity = false; // 是否为城市切换界面带过来的数据
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		app = (CommonApplication) getApplication();
+		dba = ((CommonApplication) this.getApplicationContext()).getDbAdapter();
 		Display display = this.getWindowManager().getDefaultDisplay();
 		screenWidth = display.getWidth();
 		initSlidingMenu();
 		findView();
 		fillData();
 		app.addActivity(this);
-	}
-
-	/**
-	 * 城市切换的数据回调
-	 */
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
-			switch (requestCode) {
-			case Constants.INDEX:
-				provinceId = data.getIntExtra("PROVINCEID", Constants.INDEX);
-				cityName = data.getStringExtra("CITYNAME");
-				if (cityName == null) {
-					tvCity.setText("城市切换");
-				} else {
-					tvCity.setText(cityName);
-				}
-				break;
-			default:
-				break;
-			}
-		}
-
 	}
 
 	/**
@@ -137,6 +118,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	}
 
 	private void findView() {
+		app.initBMapInfo();
 
 		btnLeftMenu = (Button) findViewById(R.id.btnLeftMenu);// 头部界面左边按钮控件
 		btnLeftMenu.setOnClickListener(this);
@@ -153,14 +135,27 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		rlMain = (LinearLayout) findViewById(R.id.rlMain);
 		viewSettingTitle = (LinearLayout) findViewById(R.id.viewSettingTitle);
 		tvNewMessagePoint = (TextView) findViewById(R.id.tv_new_message_point);
-		
+
 		tvCity = (TextView) this.findViewById(R.id.tvCity);
 		tvCity.setOnClickListener(this);
-		if (SharedPrefUtil.getCityName(MainActivity.this) == null) {
-			tvCity.setText("城市切换");
+
+		if (isCityActicity) {
+
 		} else {
-			tvCity.setText(SharedPrefUtil.getCityName(MainActivity.this));
+			if (SharedPrefUtil.getCityName(MainActivity.this) == null) {
+				SharedPrefUtil.setCityName(MainActivity.this, app.getCity());
+				provinceId = dba.findProvinceId(app.getCity());
+				SharedPrefUtil.setProvinceId(MainActivity.this, provinceId);
+				if (app.getCity() == null) {
+					tvCity.setText("城市切换");
+				} else {
+					tvCity.setText(app.getCity());
+				}
+			} else {
+				tvCity.setText(SharedPrefUtil.getCityName(MainActivity.this));
+			}
 		}
+
 		rlCollect.setOnClickListener(this);
 		rlInfromation.setOnClickListener(this);
 		rlSetting.setOnClickListener(this);
@@ -251,10 +246,34 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			Intent intent = new Intent();
 			intent.setClass(MainActivity.this, CityChangActivity.class);
 			startActivityForResult(intent, Constants.INDEX);
-			// openActivity(CityChangActivity.class);
 			break;
 		default:
 			break;
+		}
+
+	}
+
+	/**
+	 * 城市切换的数据回调
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case Constants.INDEX:
+				provinceId = data.getIntExtra("PROVINCEID", 0);
+				cityName = data.getStringExtra("CITYNAME");
+				if (cityName == null) {
+					tvCity.setText("城市切换");
+				} else {
+					tvCity.setText(cityName);
+				}
+				isCityActicity = true;
+				break;
+			default:
+				break;
+			}
 		}
 
 	}

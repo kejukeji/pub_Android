@@ -32,11 +32,11 @@ public class FriendPersonalCentreBean implements Serializable {
 		if (obj.has("id")) {
 			this.giftId = obj.getInt("id");
 		}
-		if (obj.has("name")) {
-			this.giftName = obj.getString("name");
+		if (obj.has("words")) {
+			this.giftName = obj.getString("words");
 		}
-		if (obj.has("pic_path")) {
-			this.giftphotoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
+		if (obj.has("gift_pic_path")) {
+			this.giftphotoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("gift_pic_path");
 		}
 		if (obj.has("cost")) {
 			this.integral = obj.getString("cost");

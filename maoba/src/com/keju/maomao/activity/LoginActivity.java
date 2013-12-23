@@ -254,7 +254,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 						}
 						SharedPrefUtil.setUid(LoginActivity.this, uid);
 						showShortToast("登录成功");
-						openActivity(CityChangActivity.class);
+						openActivity(MainActivity.class);
+//						openActivity(CityChangActivity.class);
 						finish();
 					} else {
 						if(result.getString("message").equals("不存在这个open_id")){

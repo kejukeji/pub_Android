@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 标题栏字体的style -->
     <style name="StyleBarTitle">
@@ -42,4 +42,8 @@
         <item name="android:windowEnterAnimation">@anim/popshow_anim</item>  
         <item name="android:windowExitAnimation">@anim/pophidden_anim</item>  
     </style>
+    
+	<style name="checkbox" parent="@android:style/Widget.CompoundButton.CheckBox">
+	   <item name="android:button">@drawable/cbox_setting_notice_selector</item>
+	</style>
 </resources>

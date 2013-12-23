@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -59,30 +58,28 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 	private TextView tvFooterMore;
 
 	private int pageIndex = 1;
-	private ProgressDialog pd;
-	
-	private boolean isEdit = false;//是不是点击编辑
 
-//	private int userId;
+	private boolean isEdit = false;// 是不是点击编辑
+
+	// private int userId;
 
 	private boolean isLoadMore = false;
 	private boolean isLoad = false;// 是否正在加载数据
 	private boolean isComplete = false;// 是否加载完了；
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.collection_event_list);
-		
-//		userId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
+
+		// userId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		findView();
 		fillData();
 	}
 
 	private void findView() {
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-		btnRight = (Button)this.findViewById(R.id.btnRight);
+		btnRight = (Button) this.findViewById(R.id.btnRight);
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 		lvCollEventList = (ListView) findViewById(R.id.lvCollEventList);
 
@@ -190,6 +187,10 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 		}
 	};
 
+	/***
+	 * 活动收藏
+	 * 
+	 */
 	private class GetCollEventListTask extends AsyncTask<Void, Void, ResponseBean<EventBean>> {
 		@Override
 		protected void onPreExecute() {
@@ -199,11 +200,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 				pbFooter.setVisibility(View.VISIBLE);
 				tvFooterMore.setText(R.string.loading);
 			} else {
-				if (pd == null) {
-					pd = new ProgressDialog(CollectionOfEventListActivity.this);
-				}
-				pd.setMessage(getString(R.string.loading));
-				pd.show();
+				showPd(R.string.loading);
 			}
 
 		}
@@ -212,11 +209,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 		protected ResponseBean<EventBean> doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(CollectionOfEventListActivity.this);
 			try {
-//				if (uid == userId) {
-					return new BusinessHelper().getcollectEvent(1, pageIndex);
-//				} else {
-//					return new BusinessHelper().getcollectBar(userId, pageIndex);
-//				}
+				return new BusinessHelper().getcollectEvent(uid, pageIndex);
 			} catch (SystemException e) {
 			}
 
@@ -225,9 +218,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 
 		protected void onPostExecute(ResponseBean<EventBean> result) {
 			super.onPostExecute(result);
-			if (pd != null) {
-				pd.dismiss();
-			}
+			dismissPd();
 			pbFooter.setVisibility(View.GONE);
 			if (result.getStatus() != Constants.REQUEST_FAILD) {
 				List<EventBean> tempList = result.getObjList();
@@ -265,14 +256,16 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 			isLoad = false;
 		}
 	}
+
 	/**
-	 * 收藏
+	 * 删除收藏
 	 * 
 	 * @author Zhouyong
 	 * 
 	 */
 	private class DelTask extends AsyncTask<Void, Void, JSONObject> {
 		private int position;
+
 		/**
 		 * @param position
 		 */
@@ -339,7 +332,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final int clickPosition = position;
 			ViewHolder holder = null;
-			 EventBean bean = list.get(position);
+			EventBean bean = list.get(position);
 			if (convertView == null) {
 				holder = new ViewHolder();
 				convertView = getLayoutInflater().inflate(R.layout.collection_event_item, null);
@@ -352,7 +345,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-           
+
 			holder.tvCollEventName.setText(bean.getEventTitle());
 			holder.tvCollTime.setText(bean.getCollectTime());
 
@@ -376,12 +369,13 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 				holder.ivCollImage.setImageDrawable(cacheDrawble);
 			} else {
 				holder.ivCollImage.setImageResource(R.drawable.ic_default);
-			}if (isEdit) {
+			}
+			if (isEdit) {
 				holder.ivDel.setVisibility(View.VISIBLE);
 			} else {
 				holder.ivDel.setVisibility(View.GONE);
 			}
-			
+
 			holder.ivDel.setOnClickListener(new View.OnClickListener() {
 
 				@Override
@@ -393,9 +387,9 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
-							if(NetUtil.checkNet(CollectionOfEventListActivity.this)){
+							if (NetUtil.checkNet(CollectionOfEventListActivity.this)) {
 								new DelTask(clickPosition).execute();
-							}else{
+							} else {
 								showShortToast(R.string.NoSignalException);
 							}
 						}
@@ -418,7 +412,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 
 	class ViewHolder {
 		private TextView tvCollEventName, tvCollTime;
-		private ImageView ivCollImage,ivDel;
+		private ImageView ivCollImage, ivDel;
 	}
 
 }

@@ -40,11 +40,7 @@ public class Constants {
 	 * intent code
 	 */
 	public static final String EXTRA_DATA = "extra_data";// 跳转绑定的数据；
-	public static final String INTENT_BIRTHDAY = "com.maoba.intent.action.BirthdaySetActivity";
-	public static final String INTENT_SIGNATURE = "com.maoba.intent.action.PersonalizedSignatureActivity";
-	public static final String INTENT_NICKNAME = "com.maoba.intent.action.NickNameActivity";
-	public static final String INTENT_PASSWORD="com.maoba.intent.action.ChangingPasswordActivity";
-    public static final int INDEX = 0;//调转回掉 标志位
+    public static final int INDEX = 1;//跳转回掉 标志位
 	/**
 	 * 分页数据
 	 */

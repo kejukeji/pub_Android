@@ -580,8 +580,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 						if (address.equals("$$")) {
 							tvDistrict.setText("未设置");
 						} else {
-//							String address1 = StringUtil.stringCut(address);
-//							tvDistrict.setText(address1);
+							String[] address1 = StringUtil.stringCut(address);
+							tvDistrict.setText(address1[0]+address1[1]);
 						}
 
 						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");

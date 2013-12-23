@@ -88,7 +88,6 @@
                         android:lineSpacingExtra="1dp"
                         android:maxEms="9"
                         android:singleLine="true"
-                        android:text="上海市"
                         android:textColor="#FF8D01"
                         android:textSize="@dimen/BasicTextSize" />
                     <TextView
@@ -96,7 +95,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="浦东新区"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
                 </LinearLayout>
@@ -123,7 +121,6 @@
                         android:ellipsize="end"
                         android:lineSpacingExtra="1dp"
                         android:maxEms="9"
-                        android:text="300280"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
 
@@ -133,7 +130,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:ellipsize="end"
-                        android:text="LV.9"
                         android:textColor="#FF8D01"
                         android:textSize="@dimen/eventList" />
 
@@ -142,7 +138,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="资深泡客"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
                 </LinearLayout>
@@ -166,7 +161,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="1030"
                         android:textColor="@color/white"
                         android:textSize="@dimen/eventList" />
                 </LinearLayout>
@@ -293,7 +287,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
-                        android:text="103" />
+                       />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -320,7 +314,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
-                        android:text="103" />
+                       />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -347,7 +341,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
-                        android:text="103" />
+                         />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -374,7 +368,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
-                        android:text="13" />
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -422,7 +416,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
-                        android:text="33"
                         android:textSize="18sp"
                         android:textStyle="normal" />
                 </LinearLayout>
@@ -457,7 +450,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
-                        android:text="43"
                         android:textSize="18sp"
                         android:textStyle="normal" />
                 </LinearLayout>

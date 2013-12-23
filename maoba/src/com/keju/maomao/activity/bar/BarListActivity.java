@@ -116,8 +116,8 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private CommonApplication app;
 
 	private TextView tvNearbyBar;// 附近酒啊
-	
-	private int provinceId;	
+
+	private int provinceId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -126,10 +126,14 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		app = (CommonApplication) getApplication();
 		bean = (BarTypeBean) getIntent().getExtras().getSerializable(Constants.EXTRA_DATA);
-		
-		if((int) getIntent().getExtras().getInt("PROVINCEID")==0){
-			provinceId = SharedPrefUtil.getProvinceId(BarListActivity.this);
-		}else{
+
+		if ((int) getIntent().getExtras().getInt("PROVINCEID") == 0) {
+			if (SharedPrefUtil.getProvinceId(BarListActivity.this) == 0) {
+				showShortToast("没有定位到当前城市，请到首页切换相应的城市");
+			} else {
+				provinceId = SharedPrefUtil.getProvinceId(BarListActivity.this);
+			}
+		} else {
 			provinceId = (int) getIntent().getExtras().getInt("PROVINCEID");
 		}
 		findView();
@@ -460,7 +464,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		protected ResponseBean<BarBean> doInBackground(Void... params) {
 
 			try {
-				return new BusinessHelper().getBarList(bean.getId(),provinceId,cityId, pageIndex);
+				return new BusinessHelper().getBarList(bean.getId(), provinceId, cityId, pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}

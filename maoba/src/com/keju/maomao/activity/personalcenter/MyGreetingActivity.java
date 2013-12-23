@@ -167,7 +167,7 @@ public class MyGreetingActivity extends BaseActivity implements OnClickListener 
 		protected JSONObject doInBackground(Void... params) {
 			int userId = SharedPrefUtil.getUid(MyGreetingActivity.this);
 			try {
-				return new BusinessHelper().getGreetingList(1, pageIndex);
+				return new BusinessHelper().getGreetingList(userId, pageIndex);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
