@@ -119,7 +119,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		friendId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		nick_Name = (String) getIntent().getExtras().getString("NICK_NAME");
 		friendUrl = (String) getIntent().getExtras().getString("FREIND_URL");
-		
+
 		setContentView(R.layout.private_news_layoute);
 		findView();
 		fillData();
@@ -151,10 +151,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		vFace01 = (LinearLayout) this.findViewById(R.id.view_face01);
 		vFace02 = (LinearLayout) this.findViewById(R.id.view_face02);
-		
-//		letterAdapter = new LetterAdapter(friendUrl);
-//		lvPersonalLetter.setAdapter(letterAdapter);
-		
+
+		// letterAdapter = new LetterAdapter(friendUrl);
+		// lvPersonalLetter.setAdapter(letterAdapter);
 
 	}
 
@@ -175,7 +174,8 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		// PullService.isCurrActivity = true;
 		initNotifyHandler();
-
+		startNotifyTask();
+		
 		letterBeans = new ArrayList<LetterBean>();
 		letterAdapter = new LetterAdapter(friendUrl);
 		lvPersonalLetter.setAdapter(letterAdapter);
@@ -183,7 +183,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		if (NetUtil.checkNet(PrivateLetterActivity.this)) {
 			new ListLetterTask().execute();
-			
+
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
@@ -207,7 +207,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		case R.id.btnRight:
 			Bundle b = new Bundle();
 			b.putSerializable(Constants.EXTRA_DATA, friendId);
-		    openActivity(FriendPersonalCenter.class,b);
+			openActivity(FriendPersonalCenter.class, b);
 			break;
 		case R.id.btnSend:// 发送
 			try {
@@ -302,7 +302,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		@Override
 		protected ResponseBean<LetterBean> doInBackground(Void... params) {
 			try {
-				return new BusinessHelper().getLetterList(friendId,userId);
+				return new BusinessHelper().getLetterList(friendId, userId);
 			} catch (SystemException e) {
 			}
 			return null;
@@ -319,7 +319,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 						letterBeans.clear();
 						letterBeans.addAll(letterList);
 						// 安时间排序
-//						sortNotifyListByTime(letterBeans);
+						// sortNotifyListByTime(letterBeans);
 						letterAdapter.notifyDataSetChanged();
 						lvPersonalLetter.onRefreshComplete();
 						lvPersonalLetter.setSelection(letterBeans.size() - 1);
@@ -421,11 +421,12 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 								if (obj != null) {
 									LetterBean bean = new LetterBean(obj);
 									if (bean != null) {
-//										String sendUrl = null;
+										// String sendUrl = null;
 										String sendTime = obj.getString("sender_time");
-//										if(obj.has("receiver_path")){
-//											 sendUrl = obj.getString("receiver_path");
-//										}
+										// if(obj.has("receiver_path")){
+										// sendUrl =
+										// obj.getString("receiver_path");
+										// }
 										letterAdapter = new LetterAdapter(sendTime, friendUrl);
 										lvPersonalLetter.setAdapter(letterAdapter);
 										letterBeans.add(bean);
@@ -473,6 +474,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 			this.sendTime = sendTime;
 			this.sendUrl = sendUrl;
 		}
+
 		/**
 		 * 
 		 */
@@ -536,16 +538,20 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 			// viewHolder.tvLetter.setText(bean.getContent());
 			if (userId == bean.getSenderId()) {
-				viewHolder.tvSendTime.setText(sendTime);
+				if (sendTime == null) {
+					viewHolder.tvSendTime.setText(bean.getSendTime());
+				} else {
+					viewHolder.tvSendTime.setText(sendTime);
+				}
 			} else {
 				viewHolder.tvSendTime.setText(bean.getSendTime());
 			}
 
 			String photoUrl = null;
 			if (userId == bean.getSenderId()) {
-				photoUrl = bean.getFriendUrl();//发送者的图片
+				photoUrl = bean.getFriendUrl();// 发送者的图片
 			} else {
-				photoUrl = BusinessHelper.PIC_BASE_URL + sendUrl;//接受者的图片 好友的图片
+				photoUrl = BusinessHelper.PIC_BASE_URL + sendUrl;// 接受者的图片 好友的图片
 			}
 			viewHolder.ivUserPhoto.setTag(photoUrl);
 			Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(photoUrl, new ImageCallback() {
@@ -598,7 +604,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 					if (beans != null) {
 						letterBeans.clear();
 						letterBeans.addAll(beans);
-						sortNotifyListByTime(letterBeans);
+						// sortNotifyListByTime(letterBeans);
 						letterAdapter.notifyDataSetChanged();
 						lvPersonalLetter.onRefreshComplete();
 						if (beans.size() > 0) {
@@ -667,7 +673,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		super.onResume();
 		MobclickAgent.onResume(this);
 		if (NetUtil.checkNet(this)) {
-//			startNotifyTask();
+			// startNotifyTask();
 		}
 	}
 

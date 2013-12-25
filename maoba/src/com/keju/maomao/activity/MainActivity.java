@@ -94,7 +94,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	private Boolean isCityActicity = false; // 是否为城市切换界面带过来的数据
 
 	private Handler iLetterHandler;
-	private TimerTask letterTimerTask;
+	private TimerTask letterTimerTask=null;
 	private Timer letterTimer;
 	private final static int HANDLER_DATA = 11;
 	private boolean isLoaded = false;
@@ -178,7 +178,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 
 	private void fillData() {
 		initNotifyHandler();
-		
+//		startNotifyTask();
 		barTypeList = new ArrayList<BarTypeBean>();
 		adapter = new Adapter();
 		gvBarType.setAdapter(adapter);
@@ -445,7 +445,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			mMediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+			mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
 			try {
 				mMediaPlayer.prepare();
 			} catch (IllegalStateException e) {
@@ -663,7 +663,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 										int privateMessageCount = result.getInt("direct_count");
 										int finalCount = systemMessageCount + privateMessageCount;
 										if (finalCount == 0) {
-											
+											tvNewMessagePoint.setVisibility(View.GONE);
 										} else {
 											if (SharedPrefUtil.getNewLetter(MainActivity.this)
 													&& SharedPrefUtil.getPlayRing(MainActivity.this)
@@ -679,7 +679,7 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 											} else {
 
 											}
-
+											tvNewMessagePoint.setVisibility(View.VISIBLE);
 										}
 											Message msg = new Message();
 											msg.what = HANDLER_DATA;
@@ -712,7 +712,12 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	}
 	
 	@Override
-	public void onDestroy() {
+	protected void onPause() {
+		super.onPause();
+		stopNotifyTimer();
+	}
+	@Override
+	protected void onDestroy() {
 		super.onDestroy();
 		stopNotifyTimer();
 	}

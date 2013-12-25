@@ -150,8 +150,13 @@ public class NewsActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		tvSystemNews.setText("");
-		tvPrivateNews.setText("");
+//		tvSystemNews.setText("");
+//		tvPrivateNews.setText("");
+		if (NetUtil.checkNet(NewsActivity.this)) {
+			new SysNewsListTask().execute();
+		} else {
+			showShortToast(R.string.NoSignalException);
+		}
 	}
 
 }
