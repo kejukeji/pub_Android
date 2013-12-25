@@ -96,6 +96,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 	private int friendId;
 	private String nick_Name;
+	private String friendUrl;
 
 	// 表情
 	private ScrollView scrollViewFace;
@@ -117,6 +118,8 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		userId = SharedPrefUtil.getUid(PrivateLetterActivity.this);
 		friendId = (int) getIntent().getExtras().getInt(Constants.EXTRA_DATA);
 		nick_Name = (String) getIntent().getExtras().getString("NICK_NAME");
+		friendUrl = (String) getIntent().getExtras().getString("FREIND_URL");
+		
 		setContentView(R.layout.private_news_layoute);
 		findView();
 		fillData();
@@ -148,6 +151,10 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		vFace01 = (LinearLayout) this.findViewById(R.id.view_face01);
 		vFace02 = (LinearLayout) this.findViewById(R.id.view_face02);
+		
+//		letterAdapter = new LetterAdapter(friendUrl);
+//		lvPersonalLetter.setAdapter(letterAdapter);
+		
 
 	}
 
@@ -170,16 +177,16 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		initNotifyHandler();
 
 		letterBeans = new ArrayList<LetterBean>();
-		letterAdapter = new LetterAdapter();
+		letterAdapter = new LetterAdapter(friendUrl);
 		lvPersonalLetter.setAdapter(letterAdapter);
 		lvPersonalLetter.setonRefreshListener(onRefreshListener);
 
 		if (NetUtil.checkNet(PrivateLetterActivity.this)) {
 			new ListLetterTask().execute();
+			
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
-		// initNotifyHandler();
 
 	}
 
@@ -414,12 +421,12 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 								if (obj != null) {
 									LetterBean bean = new LetterBean(obj);
 									if (bean != null) {
-										String sendUrl = null;
+//										String sendUrl = null;
 										String sendTime = obj.getString("sender_time");
-										if(obj.has("receiver_path")){
-											 sendUrl = obj.getString("receiver_path");
-										}
-										letterAdapter = new LetterAdapter(sendTime, sendUrl);
+//										if(obj.has("receiver_path")){
+//											 sendUrl = obj.getString("receiver_path");
+//										}
+										letterAdapter = new LetterAdapter(sendTime, friendUrl);
 										lvPersonalLetter.setAdapter(letterAdapter);
 										letterBeans.add(bean);
 										letterAdapter.notifyDataSetChanged();
@@ -466,11 +473,11 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 			this.sendTime = sendTime;
 			this.sendUrl = sendUrl;
 		}
-
 		/**
 		 * 
 		 */
-		public LetterAdapter() {
+		public LetterAdapter(String sendUrl) {
+			this.sendUrl = sendUrl;
 		}
 
 		@Override
@@ -536,9 +543,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 			String photoUrl = null;
 			if (userId == bean.getSenderId()) {
-				photoUrl = BusinessHelper.PIC_BASE_URL + sendUrl;
+				photoUrl = bean.getFriendUrl();//发送者的图片
 			} else {
-				photoUrl = bean.getFriendUrl();
+				photoUrl = BusinessHelper.PIC_BASE_URL + sendUrl;//接受者的图片 好友的图片
 			}
 			viewHolder.ivUserPhoto.setTag(photoUrl);
 			Drawable cacheDrawable = AsyncImageLoader.getInstance().loadDrawable(photoUrl, new ImageCallback() {
@@ -660,7 +667,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		super.onResume();
 		MobclickAgent.onResume(this);
 		if (NetUtil.checkNet(this)) {
-			startNotifyTask();
+//			startNotifyTask();
 		}
 	}
 

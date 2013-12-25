@@ -9,15 +9,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.keju.maomao.AsyncImageLoader;
@@ -48,15 +56,18 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 
 	private LinearLayout viewDrink, viewGiveOneTheEye, viewSendGift, viewSendNews; // 喝一杯/眉目传情/送礼物/发私信/
 
-	private ImageView ivUserPhoto, ivSex;
+	private ImageView ivUserPhoto, ivSex, ivFriendMassage;
 	private LinearLayout viewCollectBar, viewFriendGift;
 
 	private int userId;
 	private String NickName;
-
+	private String friendUrl;
 	private TextView tvDistance, tvGrade, tvArea, tvIntegral, tvGiftCount;// 距离/等级/积分/礼物个数
-	
-	private static TipsToast tipsToast;
+
+	private String title[] = { "屏蔽改好友", "举报检举", "取消" };
+
+	private static TipsToast tipsToast;// 自定义toast
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,12 +82,14 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		btnLeftMenu = (Button) this.findViewById(R.id.btnLeftMenu);
 		tvSignature = (TextView) this.findViewById(R.id.tvSignature);
 
+		ivFriendMassage = (ImageView) this.findViewById(R.id.ivFriendMassage);
+		ivFriendMassage.setOnClickListener(this);
 		tvAge = (TextView) this.findViewById(R.id.tvAge);
 		tvAddress = (TextView) this.findViewById(R.id.tvAddress);
 		tvArea = (TextView) this.findViewById(R.id.tvArea);
 		tvNickName = (TextView) this.findViewById(R.id.tvNickName);
-		tvGrade =(TextView) this.findViewById(R.id.tvGrade);
-		tvIntegral=(TextView) this.findViewById(R.id.tvIntegral);
+		tvGrade = (TextView) this.findViewById(R.id.tvGrade);
+		tvIntegral = (TextView) this.findViewById(R.id.tvIntegral);
 		tvCollectNum = (TextView) this.findViewById(R.id.tvCollectNum);
 		tvGiftCount = (TextView) this.findViewById(R.id.tvGiftCount);
 		ivUserPhoto = (ImageView) this.findViewById(R.id.ivUserPhoto);
@@ -129,6 +142,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 			Bundle b1 = new Bundle();
 			b1.putInt(Constants.EXTRA_DATA, userId);
 			b1.putString("NICK_NAME", NickName);
+			b1.putSerializable("FREIND_URL", friendUrl);
 			openActivity(PrivateLetterActivity.class, b1);
 			break;
 		case R.id.viewFriendGift:
@@ -153,10 +167,52 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 				showShortToast(R.string.NoSignalException);
 			}
 			break;
+		case R.id.ivFriendMassage:
+			Rect frame = new Rect();
+			getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+			int state_heght = frame.top;// 状态栏的高度
+			int y = ivFriendMassage.getBottom() + state_heght;
+			int x = getWindowManager().getDefaultDisplay().getWidth() / 4;
+			showPopupWindow(x, y);
+			break;
 		default:
 			break;
 		}
 
+	}
+
+	/**
+	 * 
+	 * 显示好友管理
+	 * */
+	private PopupWindow popupWindow;
+	public void showPopupWindow(int x, int y) {
+		LinearLayout layout = (LinearLayout) LayoutInflater.from(FriendPersonalCenter.this).inflate(
+				R.layout.friend_massage_list, null);
+		ListView listView = (ListView) layout.findViewById(R.id.lv_dialog);
+		listView.setAdapter(new ArrayAdapter<String>(FriendPersonalCenter.this, R.layout.friend_massage_item,
+				R.id.tv_text, title));
+		
+		popupWindow = new PopupWindow(FriendPersonalCenter.this);
+		popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.click));
+		popupWindow.setWidth(getWindowManager().getDefaultDisplay().getWidth() / 2);
+		popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
+		popupWindow.setHeight(300);
+		popupWindow.setOutsideTouchable(true);
+		popupWindow.setFocusable(true);
+		popupWindow.setContentView(layout);
+		// showAsDropDown会把里面的view作为参照物，所以要那满屏幕parent
+		// popupWindow.showAsDropDown(findViewById(R.id.tv_title), x, 10);
+		popupWindow.showAtLocation(findViewById(R.id.rlCommon), Gravity.LEFT | Gravity.TOP, x+130, y+18);// 需要指定Gravity，默认情况是center.
+
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				popupWindow.dismiss();
+				popupWindow = null;
+			}
+		});
 	}
 
 	/**
@@ -233,6 +289,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 							} catch (Exception e) {
 							}
 						}
+						friendUrl = userJson.getString("pic_path");
 						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 						ivUserPhoto.setTag(photoUrl);
 						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
@@ -303,7 +360,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 				}
 
 			} else {
-				 showShortToast(R.string.connect_server_exception);
+				showShortToast(R.string.connect_server_exception);
 			}
 		}
 
@@ -335,7 +392,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						JSONObject objUser = result.getJSONObject("user");
 						// tvMyColBarCount.setText(objUser.getInt("collect_pub_count")+"");
 						// tvDistance.setText(objUser.getInt("reputation")+"");
-						tvGiftCount.setText(objUser.getInt("gift")+"件");
+						tvGiftCount.setText(objUser.getInt("gift") + "件");
 						tvGrade.setText(objUser.getString("level_description"));
 						tvIntegral.setText(objUser.getInt("credit") + "");
 					}
@@ -381,7 +438,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 			if (result != null) {
 				try {
 					if (result.getInt("status") == Constants.REQUEST_SUCCESS) {
-						showTips(R.drawable.ic_send_one_eye,R.string.send_eye);
+						showTips(R.drawable.ic_send_one_eye, R.string.send_eye);
 					} else {
 						showShortToast("抛媚眼失败");
 					}
@@ -394,12 +451,14 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		}
 
 	}
+
 	/***
 	 * 自定义toast
+	 * 
 	 * @param iconResId
 	 * 
 	 */
-	private void showTips(int iconResId,int msgResId) {
+	private void showTips(int iconResId, int msgResId) {
 		if (tipsToast != null) {
 			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 				tipsToast.cancel();
@@ -411,7 +470,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		tipsToast.setIcon(iconResId);
 		tipsToast.setText(msgResId);
 	}
-	
+
 	// Activity从后台重新回到前台时被调用
 	@Override
 	protected void onRestart() {

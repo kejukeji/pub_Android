@@ -483,7 +483,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				barList.clear(); // 就是如果是筛选 就清除listview数据
 			}
 			if (result.getStatus() != Constants.REQUEST_FAILD) {
-				// 这里获取到十条数据
 				List<BarBean> tempList = result.getObjList();
 				if (pageIndex == 1) {
 					hotList.addAll(result.getObjList1());

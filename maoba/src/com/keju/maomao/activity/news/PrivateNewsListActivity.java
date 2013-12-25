@@ -72,6 +72,8 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 	private List<NewsBean> newsListBean = new ArrayList<NewsBean>();
 	private NewsListAdapter newsAdapter;
 	
+	private String friendUrl;//好友的图片的Url
+	
 	private Map<String, Integer> faceMap = new HashMap<String, Integer>();
 	private int[] faceRes = new int[] { R.drawable.ic_face_001, R.drawable.ic_face_002, R.drawable.ic_face_003,
 			R.drawable.ic_face_004, R.drawable.ic_face_005, R.drawable.ic_face_006, R.drawable.ic_face_007,
@@ -155,7 +157,6 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 			}else{
 				showShortToast("无数据无需清空哦");
 			}
-			
 			break;
 		default:
 			break;
@@ -173,9 +174,11 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 				return;
 			}
 			NewsBean bean = newsListBean.get(arg2);
+			friendUrl = bean.getUserUrl();
 			Bundle b = new Bundle();
 			b.putSerializable(Constants.EXTRA_DATA, bean.getFriendId());
 			b.putSerializable("NICK_NAME", bean.getNickName());
+			b.putSerializable("FREIND_URL", friendUrl);
 			openActivity(PrivateLetterActivity.class, b);
 		}
 	};
@@ -326,7 +329,8 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 
 		private void fillData(View convertView, int position, ViewHolder viewHolder) {
 			NewsBean bean = newsListBean.get(position);
-			setImageByUrl(viewHolder.ivUserPhoto, bean.getUserUrl());
+//			friendUrl = bean.getUserUrl();
+			setImageByUrl(viewHolder.ivUserPhoto,BusinessHelper.PIC_BASE_URL+bean.getUserUrl());
         
 			if (position % 2 == 0) {
 				// convertView.setBackgroundResource(R.drawable.bg_repeat);

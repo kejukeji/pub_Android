@@ -18,6 +18,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
@@ -90,6 +92,12 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	private DataBaseAdapter dba;// 数据库
 
 	private Boolean isCityActicity = false; // 是否为城市切换界面带过来的数据
+
+	private Handler iLetterHandler;
+	private TimerTask letterTimerTask;
+	private Timer letterTimer;
+	private final static int HANDLER_DATA = 11;
+	private boolean isLoaded = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -169,6 +177,8 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	}
 
 	private void fillData() {
+		initNotifyHandler();
+		
 		barTypeList = new ArrayList<BarTypeBean>();
 		adapter = new Adapter();
 		gvBarType.setAdapter(adapter);
@@ -386,17 +396,21 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 							tvNewMessagePoint.setVisibility(View.GONE);
 						} else {
 							tvNewMessagePoint.setVisibility(View.VISIBLE);
-							if(SharedPrefUtil.getNewLetter(MainActivity.this)&&SharedPrefUtil.getPlayRing(MainActivity.this)&&SharedPrefUtil.getVibrate(MainActivity.this)){
-								PlayRing();
-								AndroidUtil.Vibrate(MainActivity.this,100);
-							}else if(SharedPrefUtil.getNewLetter(MainActivity.this)&&SharedPrefUtil.getPlayRing(MainActivity.this)){
-								PlayRing();
-							}else if(SharedPrefUtil.getNewLetter(MainActivity.this)&&SharedPrefUtil.getVibrate(MainActivity.this)){
-								AndroidUtil.Vibrate(MainActivity.this,100);
-							}else{
-								
-							}
-							
+//							if (SharedPrefUtil.getNewLetter(MainActivity.this)
+//									&& SharedPrefUtil.getPlayRing(MainActivity.this)
+//									&& SharedPrefUtil.getVibrate(MainActivity.this)) {
+//								PlayRing();
+//								AndroidUtil.Vibrate(MainActivity.this, 100);
+//							} else if (SharedPrefUtil.getNewLetter(MainActivity.this)
+//									&& SharedPrefUtil.getPlayRing(MainActivity.this)) {
+//								PlayRing();
+//							} else if (SharedPrefUtil.getNewLetter(MainActivity.this)
+//									&& SharedPrefUtil.getVibrate(MainActivity.this)) {
+//								AndroidUtil.Vibrate(MainActivity.this, 100);
+//							} else {
+//
+//							}
+
 						}
 					}
 				} catch (JSONException e) {
@@ -414,31 +428,35 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	 * 
 	 */
 	private void PlayRing() {
-		String RingUrl = SharedPrefUtil.getRingUrl(MainActivity.this);
-		 MediaPlayer mMediaPlayer = new MediaPlayer();
-		 Uri uri = Uri.parse(RingUrl);
-         try {
-			mMediaPlayer.setDataSource(MainActivity.this, uri);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		String ringUrl = SharedPrefUtil.getRingUrl(MainActivity.this);
+		if (ringUrl == null) {
+
+		} else {
+			MediaPlayer mMediaPlayer = new MediaPlayer();
+			Uri uri = Uri.parse(ringUrl);
+			try {
+				mMediaPlayer.setDataSource(MainActivity.this, uri);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			mMediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+			try {
+				mMediaPlayer.prepare();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			mMediaPlayer.start();// 开始播放
 		}
-         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
-         try {
-			mMediaPlayer.prepare();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-         mMediaPlayer.start();//开始播放
 	}
-	
+
 	/**
 	 * 获取首页数据
 	 * 
@@ -608,6 +626,96 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		}
 	}
 
+	private void initNotifyHandler() {
+		iLetterHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				int what = msg.what;
+				switch (what) {
+				case HANDLER_DATA:
+					JSONObject beans =  (JSONObject) msg.obj;
+					break;
+
+				default:
+					break;
+				}
+				super.handleMessage(msg);
+			}
+		};
+	}
+
+	private void startNotifyTask() {
+		if (letterTimerTask == null) {
+			letterTimerTask = new TimerTask() {
+				@Override
+				public void run() {
+					try {
+						if (NetUtil.checkNet(MainActivity.this)) {
+							if (!isLoaded) {
+								isLoaded = true;
+								int uid = SharedPrefUtil.getUid(MainActivity.this);
+								BusinessHelper businessHelper = new BusinessHelper();
+								 JSONObject result = businessHelper.getSysLetter1(uid);;
+								if (result != null) {
+									if (result.getInt("status") != Constants.REQUEST_FAILD) {
+
+										int systemMessageCount = result.getInt("system_count");
+										int privateMessageCount = result.getInt("direct_count");
+										int finalCount = systemMessageCount + privateMessageCount;
+										if (finalCount == 0) {
+											
+										} else {
+											if (SharedPrefUtil.getNewLetter(MainActivity.this)
+													&& SharedPrefUtil.getPlayRing(MainActivity.this)
+													&& SharedPrefUtil.getVibrate(MainActivity.this)) {
+												PlayRing();
+												AndroidUtil.Vibrate(MainActivity.this, 100);
+											} else if (SharedPrefUtil.getNewLetter(MainActivity.this)
+													&& SharedPrefUtil.getPlayRing(MainActivity.this)) {
+												PlayRing();
+											} else if (SharedPrefUtil.getNewLetter(MainActivity.this)
+													&& SharedPrefUtil.getVibrate(MainActivity.this)) {
+												AndroidUtil.Vibrate(MainActivity.this, 100);
+											} else {
+
+											}
+
+										}
+											Message msg = new Message();
+											msg.what = HANDLER_DATA;
+											msg.obj = result;
+											iLetterHandler.sendMessage(msg);
+									}
+								} else {
+									showShortToast("链接服务器失败");
+								}
+								isLoaded = false;
+							}
+						}
+					} catch (Exception e) {
+					}
+				}
+			};
+			letterTimer = new Timer();
+			letterTimer.schedule(letterTimerTask, 0, 5 * 1000);
+		}
+	}
+
+	private void stopNotifyTimer() {
+		if (letterTimer != null) {
+			letterTimer.cancel();
+			letterTimer = null;
+		}
+		if (letterTimerTask != null) {
+			letterTimerTask = null;
+		}
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		stopNotifyTimer();
+	}
 	/**
 	 * 连续按两次返回键就退出
 	 */
@@ -620,13 +728,13 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			if (NetUtil.checkNet(this)) {
 				new GetUserInfor().execute();
 				new GetNewMessage().execute();
+				startNotifyTask();
 			} else {
 				showShortToast(R.string.NoSignalException);
 			}
 		}
 		keyBackClickCount = 0;
 	}
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {

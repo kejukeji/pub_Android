@@ -35,8 +35,8 @@ public class BusinessHelper {
 	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
 	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
 	//本地服务器
-	public static final String BASE_URL1 = "http://192.168.0.105:5000/restful/";
-//	public static final String PIC_BASE_URL = "http://192.168.0.126:5000";
+//	public static final String BASE_URL = "http://192.168.0.105:5000/restful/";
+//	public static final String PIC_BASE_URL = "http://192.168.0.105:5000";
 	//生产服务器
 //	public static final String BASE_URL = "http://61.188.37.228:8081/restful/";
 //	public static final String PIC_BASE_URL = "http://61.188.37.228:8081";
@@ -145,7 +145,8 @@ public class BusinessHelper {
 		List<PostParameter> p = new ArrayList<PostParameter>();
 		if (barTypeId > 0) {
 			p.add(new PostParameter("type_id", barTypeId));
-		}if(provinceId >=0){
+		}
+		if(provinceId >=0){
 		  p.add(new PostParameter("province_id", provinceId));
 		}
 		p.add(new PostParameter("city_id", cityId));
@@ -156,8 +157,6 @@ public class BusinessHelper {
 			obj = httpClient.get(BASE_URL + "pub/list/detail", p.toArray(new PostParameter[p.size()])).asJSONObject();
 			int status = obj.getInt("status");
 			if (status == Constants.REQUEST_SUCCESS) {
-//				Context context = ;
-//				SharedPrefUtil.setPubCount(context, obj.getInt("pub_count"));
 				response = new ResponseBean<BarBean>(obj);
 				List<BarBean> list = null;
 				List<BarBean> list1 = null;
@@ -165,7 +164,12 @@ public class BusinessHelper {
 				if (!TextUtils.isEmpty(obj.getString("pub_list"))) {
 					list = BarBean.constractList(obj.getJSONArray("pub_list"));// 酒吧列表
 					list1 = BarBean.constractList(obj.getJSONArray("picture_list"));// 推荐酒吧列表
-					list2 = BarBean.constractList(obj.getJSONArray("county")); //筛选的地区
+					try {
+						list2 = BarBean.constractList(obj.getJSONArray("county")); //筛选的地区
+					} catch (Exception e) {
+//					 JSONObject obj1 =obj.getJSONObject("county");
+//					 response.setObj(obj1);
+					}
 				} else {
 					list = new ArrayList<BarBean>();
 					list1 = new ArrayList<BarBean>();
@@ -182,7 +186,7 @@ public class BusinessHelper {
 			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "服务器连接失败");
 		} catch (JSONException e) {
 			e.printStackTrace();
-		//	response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
+			response = new ResponseBean<BarBean>(Constants.REQUEST_FAILD, "json解析错误");
 		}
 		return response;
 
@@ -963,7 +967,7 @@ public class BusinessHelper {
 		ResponseBean<EventBean> response;
 		JSONObject obj;
 		try {
-			obj = httpClient.get(BASE_URL1 + "collect/activity/list", p.toArray(new PostParameter[p.size()])).asJSONObject();
+			obj = httpClient.get(BASE_URL + "collect/activity/list", p.toArray(new PostParameter[p.size()])).asJSONObject();
 			int status = obj.getInt("status");
 			if (status == Constants.REQUEST_SUCCESS) {
 				response = new ResponseBean<EventBean>(obj);

@@ -29,6 +29,7 @@
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/ivUserPhoto"
             android:background="@drawable/bg_letter_right"
+            android:textSize="18sp"
             android:text="你好，周末有空吗?" />
     </RelativeLayout>
 

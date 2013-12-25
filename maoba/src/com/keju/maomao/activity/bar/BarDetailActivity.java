@@ -391,6 +391,8 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 									} else {
 										ivEvent.setImageResource(R.drawable.ic_default);
 									}
+								}else{
+									ivEvent.setImageResource(R.drawable.ic_default);
 								}
 								tvEventTitle.setText(objEvent.getString("activity_info"));
 								tvEventEndTime.setText(objEvent.getString("end_date"));

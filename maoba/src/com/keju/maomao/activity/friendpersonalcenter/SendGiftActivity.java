@@ -106,6 +106,11 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 
 	}
 
+	/**
+	 * 获取礼物
+	 * 
+	 * */
+
 	public class GetGiftTask extends AsyncTask<Void, Void, ResponseBean<FriendPersonalCentreBean>> {
 
 		@Override

@@ -148,7 +148,7 @@ public class GetGiftActivity extends BaseActivity implements OnClickListener {
 										giftBean.addAll(inviteBean);
 										adapter.notifyDataSetChanged(); // 通知更新
 									} else {
-										showShortToast("还没有人给你送礼物哦");
+										showShortToast("还没有人给他送礼物哦");
 									}
 									adapter.notifyDataSetChanged();
 								}

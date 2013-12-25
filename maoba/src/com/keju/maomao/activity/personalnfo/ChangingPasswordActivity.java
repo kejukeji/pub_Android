@@ -16,11 +16,13 @@ import android.widget.TextView;
 
 import com.keju.maomao.Constants;
 import com.keju.maomao.R;
+import com.keju.maomao.R.string;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
 import com.keju.maomao.helper.BusinessHelper;
 import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.SharedPrefUtil;
+import com.keju.maomao.util.StringUtil;
 
 /**
  * 密码重置界面
@@ -75,35 +77,39 @@ public class ChangingPasswordActivity extends BaseActivity implements OnClickLis
 		case R.id.btnRight:
 			passWord = edPassword.getText().toString().trim();
 			newPassword = edNewPassword.getText().toString().trim();
-			String userPassWord = SharedPrefUtil.getPassword(ChangingPasswordActivity.this);
-			int loginType = SharedPrefUtil.getLoginType(ChangingPasswordActivity.this);{
-				if(loginType==0){
-					if (passWord.equals(userPassWord)) {
-						String nickname = "";
-						String sex = "";
-						String signature = "";
-						String birthday = "";
-						if (NetUtil.checkNet(ChangingPasswordActivity.this)) {
-							new personInfoAddTask(nickname, birthday, sex, signature,newPassword).execute();
-						}
-//						Intent changingPasswordIntent = new Intent();
-//						changingPasswordIntent.putExtra("NEWPASSWORD", newPassword);
-//						setResult(Activity.RESULT_OK, changingPasswordIntent);
-//						finish();
-					} else {
-						showShortToast("你输入的旧密码不正确，请重新输入");
-					}
-				}else{
-					showShortToast("您非普通登录不可修改密码");
-				}
+			if (StringUtil.isBlank(passWord) || StringUtil.isBlank(newPassword)) {
+				showShortToast("密码不能为空");
+				return;
 			}
-			
+			if (newPassword.length() < 6) {
+				showShortToast("新密码请输入大于六位");
+				return;
+			} else {
+				String userPassWord = SharedPrefUtil.getPassword(ChangingPasswordActivity.this);
+				int loginType = SharedPrefUtil.getLoginType(ChangingPasswordActivity.this);
+				{
+					if (loginType == 0) {
+						if (passWord.equals(userPassWord)) {
+							String nickname = "";
+							String sex = "";
+							String signature = "";
+							String birthday = "";
+							if (NetUtil.checkNet(ChangingPasswordActivity.this)) {
+								new personInfoAddTask(nickname, birthday, sex, signature, newPassword).execute();
+							}
+						} else {
+							showShortToast("你输入的旧密码不正确，请重新输入");
+						}
+					} else {
+						showShortToast("您非普通登录不可修改密码");
+					}
+				}
+
+			}
 		default:
 			break;
 		}
 	}
-	
-	
 
 	/**
 	 * 用户修改或添加个人资料
@@ -127,8 +133,7 @@ public class ChangingPasswordActivity extends BaseActivity implements OnClickLis
 		 * @param address
 		 * @param newPassword
 		 */
-		public personInfoAddTask(String nickName, String birthday, String sex, String signature,
-				String newPassword) {
+		public personInfoAddTask(String nickName, String birthday, String sex, String signature, String newPassword) {
 
 			this.nickName = nickName;
 			this.birthday = birthday;
@@ -153,14 +158,14 @@ public class ChangingPasswordActivity extends BaseActivity implements OnClickLis
 			if (loginType == 0) {
 				try {
 					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
-							signature,newPassword,"","","", avatarFile);
+							signature, newPassword, "", "", "", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
 					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, sex,
-							signature,"","","", avatarFile);
+							signature, "", "", "", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
@@ -177,7 +182,7 @@ public class ChangingPasswordActivity extends BaseActivity implements OnClickLis
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_SUCCESS) {
 						showShortToast("修改密码成功");
-					SharedPrefUtil.setPassword(ChangingPasswordActivity.this, newPassword);
+						SharedPrefUtil.setPassword(ChangingPasswordActivity.this, newPassword);
 						finish();
 					} else {
 						showShortToast("修改密码失败");
@@ -192,6 +197,5 @@ public class ChangingPasswordActivity extends BaseActivity implements OnClickLis
 			}
 		}
 	}
-
 
 }

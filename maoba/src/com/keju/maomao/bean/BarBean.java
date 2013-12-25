@@ -121,8 +121,8 @@ public class BarBean implements Serializable {
 		}
 
 		// 筛选
-		if (obj.has("area_id")) {
-			this.cityId = obj.getInt("area_id");
+		if (obj.has("id")) {
+			this.cityId = obj.getInt("id");
 		}
 
 		if (obj.has("name")) {

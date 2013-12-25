@@ -154,7 +154,7 @@ public class EventDetailActivity extends BaseActivity implements OnClickListener
 			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
-			showShortToast("正在执行收藏操作,请稍等...");
+//			showShortToast("正在执行收藏操作,请稍等...");
 			if (NetUtil.checkNet(this)) {
 				new CollectTask().execute();
 				// refreshData();
@@ -192,11 +192,17 @@ public class EventDetailActivity extends BaseActivity implements OnClickListener
 				try {
 					int status = result.getInt("status");
 					if (status == Constants.REQUEST_SUCCESS) {
-						btnRight.setText("已收藏");
-						showShortToast("收藏成功");
+						if (isCollect) {
+							btnRight.setText("收藏");
+							showShortToast("取消收藏成功");
+							isCollect = false;
+						} else {
+							btnRight.setText("已收藏");
+							showShortToast("收藏成功");
+							isCollect = true;
+							
+						}
 					} else {
-						btnRight.setText("收藏");
-						showShortToast("你已经取消");
 					}
 				} catch (JSONException e) {
 					showShortToast(R.string.json_exception);
@@ -231,6 +237,9 @@ public class EventDetailActivity extends BaseActivity implements OnClickListener
 			return null;
 		}
 
+		/* (non-Javadoc)
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			super.onPostExecute(result);
@@ -247,6 +256,7 @@ public class EventDetailActivity extends BaseActivity implements OnClickListener
 							tvEndTime.setText(objEvent.getString("end_date"));
 							tvJionNum.setText(objEvent.getInt("join_people_number") + "");
 							tvEventContent.setText(objEvent.getString("activity_info"));
+//							isCollect = objEvent.getBoolean("is_collect");
 							if (result.has("activity_picture")) {
 								JSONArray showArrList = result.getJSONArray("activity_picture");
 								if (showArrList != null) {
@@ -296,9 +306,6 @@ public class EventDetailActivity extends BaseActivity implements OnClickListener
 			ivBanner.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Bundle b = new Bundle();
-					b.putSerializable(Constants.EXTRA_DATA, bean);
-					openActivity(BarDetailActivity.class, b);
 
 				}
 			});
