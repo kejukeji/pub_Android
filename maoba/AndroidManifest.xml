@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.keju.maomao"
     android:versionCode="1"
-    android:versionName="V1.0.1" >
+    android:versionName="1.0.1" >
 
     <uses-sdk  android:minSdkVersion="7"
         android:targetSdkVersion="10" />
@@ -87,6 +87,7 @@
          <activity android:name=".activity.personalcenter.MyInviteActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
          <activity android:name=".activity.personalcenter.MyGreetingActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
          <activity android:name=".activity.personalcenter.MyGiftActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
+         <activity android:name=".activity.personalcenter.IntegtralActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity> 
          <!--好友中心 -->
          <activity android:name=".activity.friendpersonalcenter.FriendPersonalCenter" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          <activity android:name=".activity.friendpersonalcenter.GetGiftActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
@@ -105,8 +106,7 @@
          <activity android:name=".activity.event.EventListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          <activity android:name=".activity.event.EventDetailActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
          <activity android:name=".activity.my.CollectionOfEventListActivity" android:screenOrientation="portrait" android:configChanges="orientation|keyboardHidden"></activity>
-		 <!-- push服务 -->
-         <service android:name=".service.PullService"></service>
+		 <!-- 铃声振动服务<service android:name=".service.RingService"></service> -->
          <!-- 检测更新 -->
          <service
     	 android:name="com.umeng.common.net.DownloadingService"

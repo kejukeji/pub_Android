@@ -403,15 +403,15 @@ public class BaseActivity extends Activity {
 		}
 	}
 
-	// 处理back键无动画效果问题
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-			this.finish(); // finish当前activity
-			overridePendingTransition(0, R.anim.roll_down);
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+//	// 处理back键无动画效果问题
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+//			this.finish(); // finish当前activity
+//			overridePendingTransition(0, R.anim.roll_down);
+//			return true;
+//		}
+//		return super.onKeyDown(keyCode, event);
+//	}
 }

@@ -22,6 +22,7 @@ import com.keju.maomao.activity.base.BaseActivity;
 import com.keju.maomao.bean.SortModelBean;
 import com.keju.maomao.db.DataBaseAdapter;
 import com.keju.maomao.helper.BusinessHelper;
+import com.keju.maomao.service.RingService;
 import com.keju.maomao.util.NetUtil;
 import com.keju.maomao.util.SharedPrefUtil;
 
@@ -40,12 +41,16 @@ public class LogoActivity extends BaseActivity {
 		dba = ((CommonApplication) getApplicationContext()).getDbAdapter();
 		
 		viewLogo = findViewById(R.id.viewLogo);
+//		Intent intent = new Intent(LogoActivity.this,RingService.class);
+//		startService(intent);
+		
 		if (NetUtil.checkNet(this)) {
 			new GetCityTask().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
 		animation();
+		
 	}
 
 	/**

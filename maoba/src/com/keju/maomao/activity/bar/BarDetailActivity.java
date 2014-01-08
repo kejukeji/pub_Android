@@ -71,6 +71,8 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 	private BarBean bean;
 	private List<BarBean> barDetailList = new ArrayList<BarBean>();// 酒吧详情
 	private List<BarBean> showList = new ArrayList<BarBean>();// 签到
+	
+	private String address;//酒吧地址 上海市&嘉定
 
 	// 活动
 	private LinearLayout viewEvent;
@@ -218,7 +220,6 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			if (isCollectingTask == false) {
@@ -247,10 +248,16 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 					i1++;
 					address1 = add[0];
 				}
-				Intent intent = Intent.getIntent("intent://map/marker?location=" + bean.getLatitude() + ","
-						+ bean.getLongitude() + "&title=" + bean.getBar_Name() + "&content=" + address1
-						+ bean.getBarStreet() + "&src=冒冒#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
-				startActivity(intent);
+				//下面的代码是用户自己选择地图
+				Uri uri = Uri.parse("geo:" + bean.getLatitude() + "," +
+				bean.getLongitude() + "," + address1+ bean.getBarStreet());
+				Intent mIntent = new Intent(Intent.ACTION_VIEW,uri);
+				startActivity(mIntent);
+				//下面的代码是只能进入百度地图
+//				Intent intent = Intent.getIntent("intent://map/marker?location=" + bean.getLatitude() + ","
+//						+ bean.getLongitude() + "&title=" + bean.getBar_Name() + "&content=" + address1
+//						+ bean.getBarStreet() + "&src=冒冒#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+//				startActivity(intent);
 			} catch (Exception e) {
 				if (TextUtils.isEmpty(bean.getLatitude()) || TextUtils.isEmpty(bean.getLongitude())) {
 					showShortToast("酒吧经纬度数据为空");
@@ -259,6 +266,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 				// 跳转到自定义的sdk地图里
 				Intent intent = new Intent(this, LocationMapActivity.class);
 				intent.putExtra(Constants.EXTRA_DATA, bean);
+				intent.putExtra("address", address);
 				startActivity(intent);
 			}
 			break;
@@ -336,7 +344,7 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 						int status = result.getInt("status");
 						if (status == Constants.REQUEST_SUCCESS) {
 							// btnRight.setText(result.getString("is_collect"));
-							String address = result.getString("county");
+							address = result.getString("county");
 							String showCount = result.getString("show_count");
 							tvShowNum.setText( showCount +"人");
 							StringTokenizer token = new StringTokenizer(address, "$");
@@ -394,8 +402,8 @@ public class BarDetailActivity extends BaseActivity implements OnClickListener {
 								}else{
 									ivEvent.setImageResource(R.drawable.ic_default);
 								}
-								tvEventTitle.setText(objEvent.getString("activity_info"));
-								tvEventEndTime.setText(objEvent.getString("end_date"));
+								tvEventTitle.setText(objEvent.getString("title"));
+								tvEventEndTime.setText(objEvent.getString("start_date")+ "—" +objEvent.getString("end_date"));
 								eventId = objEvent.getInt("id");
 								viewEventShow.setVisibility(View.VISIBLE);
 								

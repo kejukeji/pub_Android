@@ -44,12 +44,14 @@ public class LocationMapActivity extends BaseActivity implements OnClickListener
 	
 	private BarBean bean;
 	private OverlayItem overlayItem;
+	private String address;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		MobclickAgent.onError(this);
 		setContentView(R.layout.location_list_in_map);
 		bean = (BarBean) getIntent().getSerializableExtra(Constants.EXTRA_DATA);
+		address = (String)getIntent().getSerializableExtra("address");
 		GeoPoint p1 = new GeoPoint((int) (Double.parseDouble(bean
 					.getLatitude()) * 1E6), (int) (Double.parseDouble(bean
 					.getLongitude()) * 1E6));
@@ -175,7 +177,7 @@ public class LocationMapActivity extends BaseActivity implements OnClickListener
 			mPopView.setVisibility(View.VISIBLE);
 			tvName.setText(bean.getBar_Name());
 			String address1 = null;
-			String address = bean.getBar_Address();
+//			String address = bean.getBar_Address();
 			StringTokenizer token = new StringTokenizer(address, "$");
 			String[] add = new String[3];
 			int i1 = 0;
@@ -184,7 +186,7 @@ public class LocationMapActivity extends BaseActivity implements OnClickListener
 				i1++;
 				address1 = add[0];
 			}
-			tvAddress.setText(address1+bean.getBarStreet());
+			tvAddress.setText(bean.getBarStreet());
 			
 			return true;
 		}

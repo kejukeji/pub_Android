@@ -129,7 +129,6 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			if (userId == uid) {
@@ -293,7 +292,6 @@ public class CollectionOfBarListActivity extends BaseActivity implements OnClick
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
-
 			try {
 				return new BusinessHelper().DelBar(uid, list.get(position).getBar_id());
 			} catch (SystemException e) {

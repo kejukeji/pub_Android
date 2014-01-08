@@ -85,7 +85,6 @@ public class CityActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		default:
 			break;
@@ -225,21 +224,26 @@ public class CityActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
+			String openId = null;
 			int loginType = SharedPrefUtil.getLoginType(CityActivity.this);
+			if (loginType == Constants.LOGIN_QQ) {
+				openId = SharedPrefUtil.getQQOpenid(CityActivity.this);
+			} else if (loginType == Constants.LOGIN_SINA) {
+				openId = SharedPrefUtil.getWeiboUid(CityActivity.this);
+			} else {
+			}
 			int userId = SharedPrefUtil.getUid(CityActivity.this);
-			String openId = SharedPrefUtil.getWeiboUid(CityActivity.this);
 			String password = SharedPrefUtil.getPassword(CityActivity.this);
-			int sex = 0;
 			if (loginType == 0) {
 				try {
-					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
+					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, "",
 							signature,newPassword, provinceId, cityId,countyId,avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, sex,
+					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, "",
 							signature,provinceId, cityId,countyId, avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();

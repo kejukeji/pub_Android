@@ -97,7 +97,6 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 
 		default:
@@ -191,13 +190,13 @@ public class SendGiftActivity extends BaseActivity implements OnClickListener {
 			param.width = itemWidth;
 			param.height = itemWidth;
 
-			holder.tvGiftName.setText(bean.getGiftName());
-			holder.tvIntegral.setText(bean.getIntegral());
+			holder.tvGiftName.setText(bean.getName());
+			holder.tvIntegral.setText(bean.getIntegral()+"积分");
 			holder.ivGiftPhoto.setLayoutParams(param);
-			String giftUrl = bean.getGiftphotoUrl();
+			String giftUrl = bean.getGiftPhoto();
+			
 			holder.ivGiftPhoto.setTag(giftUrl);
 			Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(giftUrl, new ImageCallback() {
-
 				@Override
 				public void imageLoaded(Drawable imageDrawable, String imageUrl) {
 					ImageView image = (ImageView) gvGife.findViewWithTag(imageUrl);

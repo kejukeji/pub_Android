@@ -41,6 +41,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
+            android:lineSpacingExtra="1dp"
+             android:maxEms="9"
             android:textColor="@color/white"
             android:textSize="20sp" />
     </LinearLayout>

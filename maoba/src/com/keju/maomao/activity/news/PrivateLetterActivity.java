@@ -17,9 +17,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,7 +48,6 @@ import com.keju.maomao.Constants;
 import com.keju.maomao.R;
 import com.keju.maomao.SystemException;
 import com.keju.maomao.activity.base.BaseActivity;
-import com.keju.maomao.activity.friendpersonalcenter.FriendPersonalCenter;
 import com.keju.maomao.bean.LetterBean;
 import com.keju.maomao.bean.ResponseBean;
 import com.keju.maomao.helper.BusinessHelper;
@@ -102,6 +103,9 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	private ScrollView scrollViewFace;
 	private LinearLayout vFace01;
 	private LinearLayout vFace02;
+	
+	private Boolean isCliclClear = false;//is点击清除按钮
+	
 	private Map<String, Integer> faceMap = new HashMap<String, Integer>();
 	private int[] faceRes = new int[] { R.drawable.ic_face_001, R.drawable.ic_face_002, R.drawable.ic_face_003,
 			R.drawable.ic_face_004, R.drawable.ic_face_005, R.drawable.ic_face_006, R.drawable.ic_face_007,
@@ -162,7 +166,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		ibLift.setImageResource(R.drawable.ic_btn_left);
 		ibLift.setOnClickListener(this);
-		btnRight.setText("资料");
+		btnRight.setText("清除");
 		btnRight.setBackgroundResource(R.drawable.bg_btn_collection);
 		btnRight.setOnClickListener(this);
 
@@ -175,7 +179,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 		// PullService.isCurrActivity = true;
 		initNotifyHandler();
 		startNotifyTask();
-		
+
 		letterBeans = new ArrayList<LetterBean>();
 		letterAdapter = new LetterAdapter(friendUrl);
 		lvPersonalLetter.setAdapter(letterAdapter);
@@ -183,7 +187,6 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		if (NetUtil.checkNet(PrivateLetterActivity.this)) {
 			new ListLetterTask().execute();
-
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
@@ -194,8 +197,11 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.ibLeft:
+			Intent intent  = new Intent();
+			intent.putExtra("iscliclclear", isCliclClear);
+			setResult(RESULT_OK, intent);
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
+			
 			break;
 		case R.id.ivEmoticon:// 添加表情
 			if (scrollViewFace.getVisibility() == View.VISIBLE) {
@@ -205,9 +211,16 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 			}
 			break;
 		case R.id.btnRight:
-			Bundle b = new Bundle();
-			b.putSerializable(Constants.EXTRA_DATA, friendId);
-			openActivity(FriendPersonalCenter.class, b);
+			// Bundle b = new Bundle();
+			// b.putSerializable(Constants.EXTRA_DATA, friendId);
+			// openActivity(FriendPersonalCenter.class, b);
+
+			if (NetUtil.checkNet(PrivateLetterActivity.this)) {
+				isCliclClear = true;
+				new ClearLetterTask().execute();
+			} else {
+				showShortToast(R.string.NoSignalException);
+			}
 			break;
 		case R.id.btnSend:// 发送
 			try {
@@ -457,6 +470,58 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 	}
 
 	/**
+	 * 清除聊天纪录
+	 * 
+	 * @author zhouyong
+	 * 
+	 */
+
+	private class ClearLetterTask extends AsyncTask<Void, Void, JSONObject> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showPd("正在清除...");
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			try {
+				return new BusinessHelper().clear(userId,friendId);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			super.onPostExecute(result);
+			dismissPd();
+			if (result != null) {
+				try {
+					if (result.getInt("status") == Constants.REQUEST_SUCCESS) {
+						if (result.getString("message").equals("清除成功")) {
+							letterBeans.clear();
+							letterAdapter.notifyDataSetChanged();
+							showShortToast("清除成功");
+						} else {
+							showShortToast("清除失败");
+						}
+					}else{
+						showShortToast(R.string.connect_server_exception);
+					}
+				} catch (JSONException e) {
+					showShortToast(R.string.json_exception);
+				}
+			} else {
+				showShortToast(R.string.connect_server_exception);
+			}
+		}
+
+	}
+
+	/**
 	 * 私信Adapter
 	 * 
 	 * @author zhouyong
@@ -499,7 +564,7 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			LetterBean bean = letterBeans.get(position);
+			final LetterBean bean = letterBeans.get(position);
 			// int sender = bean.getSender();
 			ViewHolder viewHolder = null;
 			if (userId == bean.getSenderId()) {
@@ -564,7 +629,12 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 							ivPhoto.setImageDrawable(imageDrawable);
 							LetterAdapter.this.notifyDataSetChanged();
 						} else {
-							ivPhoto.setImageResource(R.drawable.bg_photo_left);
+							if(userId == bean.getSenderId()){
+								ivPhoto.setImageResource(R.drawable.bg_photo_right);
+							}else{
+								ivPhoto.setImageResource(R.drawable.bg_photo_left);
+							}
+							
 						}
 					}
 				}
@@ -572,7 +642,12 @@ public class PrivateLetterActivity extends BaseActivity implements OnClickListen
 			if (cacheDrawable != null) {
 				viewHolder.ivUserPhoto.setImageDrawable(cacheDrawable);
 			} else {
-				viewHolder.ivUserPhoto.setImageResource(R.drawable.bg_photo_right);
+				if(userId == bean.getSenderId()){
+					viewHolder.ivUserPhoto.setImageResource(R.drawable.bg_photo_right);
+				}else{
+					viewHolder.ivUserPhoto.setImageResource(R.drawable.bg_photo_left);
+				}
+				
 			}
 			return convertView;
 		}

@@ -189,7 +189,6 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 
@@ -319,21 +318,26 @@ public class BirthdaySetActivity extends BaseActivity implements OnClickListener
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
+			String openId = null;
 			int loginType = SharedPrefUtil.getLoginType(BirthdaySetActivity.this);
+			if (loginType == Constants.LOGIN_QQ) {
+				openId = SharedPrefUtil.getQQOpenid(BirthdaySetActivity.this);
+			} else if (loginType == Constants.LOGIN_SINA) {
+				openId = SharedPrefUtil.getWeiboUid(BirthdaySetActivity.this);
+			} else {
+			}
 			int userId = SharedPrefUtil.getUid(BirthdaySetActivity.this);
-			String openId = SharedPrefUtil.getWeiboUid(BirthdaySetActivity.this);
 			String password = SharedPrefUtil.getPassword(BirthdaySetActivity.this);
-			int sex = 0;
 			if (loginType == 0) {
 				try {
-					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
+					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, "",
 							signature, newPassword,"","","", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, sex,
+					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, "",
 							signature,"","","", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();

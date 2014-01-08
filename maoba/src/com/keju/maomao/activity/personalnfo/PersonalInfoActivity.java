@@ -62,13 +62,12 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 	private TextView tvBirthday, tvSex, tvSignature, tvNickName, tvDistrict;
 	private ImageView ivUserImage;
 	private TextView tvModificationPassword;
-     
+
 	private LinearLayout viewImage;
 	private LinearLayout viewBirthday, viewSex, viewSignature, viewNickname, viewChangingPassword, viewdistrict;
 	private File mCurrentPhotoFile;// 照相机拍照得到的图片，临时文件
 	private File avatarFile;// 头像文件
 	private File PHOTO_DIR;// 照相机拍照得到的图片的存储位置
-	static final int DATE_DIALOG_ID = 1;
 
 	private long userId;
 
@@ -109,8 +108,8 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		viewNickname = (LinearLayout) this.findViewById(R.id.viewNickname);
 		viewChangingPassword = (LinearLayout) this.findViewById(R.id.viewChangingPassword);
 		viewdistrict = (LinearLayout) this.findViewById(R.id.viewdistrict);
-        
-		viewImage = (LinearLayout)this.findViewById(R.id.viewImage);
+
+		viewImage = (LinearLayout) this.findViewById(R.id.viewImage);
 		viewImage.setOnClickListener(this);
 		viewdistrict.setOnClickListener(this);
 		viewChangingPassword.setOnClickListener(this);
@@ -186,21 +185,22 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			case Constants.CAMERA_WITH_DATA:// 拍照
 				doCropPhoto(mCurrentPhotoFile);
 				break;
-//			case Constants.BIRTHDAYNUM:
-//				dateReceice = (data.getIntArrayExtra("BRITHDAYSELECTED"));
-//				dateSelected = String.valueOf(dateReceice[0]) + "-"
-//						+ String.valueOf(dateReceice[1] + "-" + String.valueOf(dateReceice[2]));
-//				tvBirthday.setText(dateSelected);
-//				break;
-//			case Constants.SIGNATURENUM:
-//				tvSignature.setText(data.getStringExtra("SIGNATUREINPUT"));
-//				break;
-//			case Constants.NICKNAMENUM:
-//				tvNickName.setText(data.getStringExtra("NICKNAMEINPUT"));
-//				break;
-//			case Constants.PASSWORDNUMBER:
-//				tvModificationPassword.setText(data.getStringExtra("NEWPASSWORD"));
-//				// .(data.getStringExtra("NEWPASSWORD"));
+			// case Constants.BIRTHDAYNUM:
+			// dateReceice = (data.getIntArrayExtra("BRITHDAYSELECTED"));
+			// dateSelected = String.valueOf(dateReceice[0]) + "-"
+			// + String.valueOf(dateReceice[1] + "-" +
+			// String.valueOf(dateReceice[2]));
+			// tvBirthday.setText(dateSelected);
+			// break;
+			// case Constants.SIGNATURENUM:
+			// tvSignature.setText(data.getStringExtra("SIGNATUREINPUT"));
+			// break;
+			// case Constants.NICKNAMENUM:
+			// tvNickName.setText(data.getStringExtra("NICKNAMEINPUT"));
+			// break;
+			// case Constants.PASSWORDNUMBER:
+			// tvModificationPassword.setText(data.getStringExtra("NEWPASSWORD"));
+			// // .(data.getStringExtra("NEWPASSWORD"));
 
 			}
 		}
@@ -211,7 +211,6 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 
@@ -319,25 +318,25 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 			});
 			break;
 		case R.id.viewBirthday:
-		   openActivity(BirthdaySetActivity.class);
-		   //动画效果
-		   overridePendingTransition(R.anim.roll_up, R.anim.roll);
+			openActivity(BirthdaySetActivity.class);
+			// 动画效果
+//			overridePendingTransition(R.anim.roll_up, R.anim.roll);
 			break;
 		case R.id.viewSignature:
-			openActivity(PersonalizedSignatureActivity.class);		
-			overridePendingTransition(R.anim.roll_up, R.anim.roll);
+			Bundle b = new Bundle();
+			b.putString(Constants.EXTRA_DATA, signature);
+			openActivity(PersonalizedSignatureActivity.class, b);
 			break;
 		case R.id.viewNickname:
-			openActivity(NickNameActivity.class);	
-			overridePendingTransition(R.anim.roll_up, R.anim.roll);
+			Bundle b1 = new Bundle();
+			b1.putString(Constants.EXTRA_DATA, nickName);
+			openActivity(NickNameActivity.class, b1);
 			break;
 		case R.id.viewChangingPassword:
-			openActivity(ChangingPasswordActivity.class);	
-			overridePendingTransition(R.anim.roll_up, R.anim.roll);
+			openActivity(ChangingPasswordActivity.class);
 			break;
 		case R.id.viewdistrict:
 			openActivity(ProvinceAcitvity.class);
-			overridePendingTransition(R.anim.roll_up, R.anim.roll);
 		default:
 			break;
 		}
@@ -459,22 +458,28 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
+			String openId = null;
 			int loginType = SharedPrefUtil.getLoginType(PersonalInfoActivity.this);
+			if (loginType == Constants.LOGIN_QQ) {
+				openId = SharedPrefUtil.getQQOpenid(PersonalInfoActivity.this);
+			} else if (loginType == Constants.LOGIN_SINA) {
+				openId = SharedPrefUtil.getWeiboUid(PersonalInfoActivity.this);
+			} else {
+			}
 			int userId = SharedPrefUtil.getUid(PersonalInfoActivity.this);
-			String openId = SharedPrefUtil.getWeiboUid(PersonalInfoActivity.this);
 			String password = SharedPrefUtil.getPassword(PersonalInfoActivity.this);
 			int gender = sex.equals("男") ? 1 : 0;
 			if (loginType == 0) {
 				try {
-					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, gender,
-							signature, newPassword, "", "", "", avatarFile);
+					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday,
+							String.valueOf(gender), signature, newPassword, "", "", "", avatarFile);
 				} catch (SystemException e) {
 
 				}
 			} else {
 				try {
 					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday,
-							gender, signature, "", "", "", avatarFile);
+							String.valueOf(gender), signature, "", "", "", avatarFile);
 				} catch (SystemException e) {
 
 				}
@@ -581,7 +586,7 @@ public class PersonalInfoActivity extends BaseActivity implements OnClickListene
 							tvDistrict.setText("未设置");
 						} else {
 							String[] address1 = StringUtil.stringCut(address);
-							tvDistrict.setText(address1[0]+address1[1]);
+							tvDistrict.setText(address1[0] + address1[1]);
 						}
 
 						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");

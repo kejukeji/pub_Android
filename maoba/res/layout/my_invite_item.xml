@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal" >
 
         <ImageView
@@ -41,12 +41,14 @@
                 android:id="@+id/tvIntegral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                 android:textColor="#7C7C7C"
                 android:text="积分+20" />
 
             <TextView
                 android:id="@+id/tvSendTiem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                 android:textColor="#7C7C7C"
                 android:text="2013-12-07 15:00" />
         </LinearLayout>
     </LinearLayout>

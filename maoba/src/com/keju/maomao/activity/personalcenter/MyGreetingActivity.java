@@ -113,7 +113,6 @@ public class MyGreetingActivity extends BaseActivity implements OnClickListener 
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 
 		default:

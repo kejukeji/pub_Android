@@ -27,6 +27,8 @@ public class StringUtil {
 		}
 	}
 
+
+
 	/**
 	 * 验证邮箱输入是否合法
 	 * 

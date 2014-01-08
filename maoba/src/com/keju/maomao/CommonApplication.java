@@ -87,7 +87,7 @@ public class CommonApplication extends Application {
 		}
 
 		if (!mBMapManager.init(mStrKey, new MyGeneralListener())) {
-			Toast.makeText(this, "BMapManager  初始化错误!", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "BMapManager  初始化错误!", Toast.LENGTH_SHORT).show();
 		}
 
 		mLocationClient = new LocationClient(getApplicationContext());

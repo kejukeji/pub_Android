@@ -94,8 +94,7 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 		greetingList = new ArrayList<PersonalCentreBean>();
 		adapter = new Adapter();
 
-		lvgiftList.addFooterView(vFooter); // 注意
-												// 此句话必须要在setAdapter前面才可以显示上拉查看更多
+		lvgiftList.addFooterView(vFooter); // 注意此句话必须要在setAdapter前面才可以显示上拉查看更多
 		lvgiftList.setAdapter(adapter);
 		lvgiftList.setOnScrollListener(LoadListener);
 		lvgiftList.setDivider(null);
@@ -114,7 +113,6 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 
 		default:
@@ -314,6 +312,7 @@ public class MyGiftActivity extends BaseActivity implements OnClickListener {
 			});
 			if (cacheDrawble1 != null) {
 				holder.ivGiftPhoto.setImageDrawable(cacheDrawble1);
+//				holder.ivSendPhoto.setImageDrawable(cacheDrawble1);
 			} else {
 				holder.ivGiftPhoto.setImageResource(R.drawable.ic_default);
 			}

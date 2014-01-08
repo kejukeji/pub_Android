@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -71,9 +72,11 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 	private ListView ivPrivateList;
 	private List<NewsBean> newsListBean = new ArrayList<NewsBean>();
 	private NewsListAdapter newsAdapter;
-	
-	private String friendUrl;//好友的图片的Url
-	
+
+	private String friendUrl;// 好友的图片的Url
+
+	private Boolean isCliclClear = false; // 是否点击了清除按钮 私信聊天界面的数据回调
+
 	private Map<String, Integer> faceMap = new HashMap<String, Integer>();
 	private int[] faceRes = new int[] { R.drawable.ic_face_001, R.drawable.ic_face_002, R.drawable.ic_face_003,
 			R.drawable.ic_face_004, R.drawable.ic_face_005, R.drawable.ic_face_006, R.drawable.ic_face_007,
@@ -126,8 +129,8 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		tvTitle.setText("我的私信");
 
 		newsAdapter = new NewsListAdapter();
-		ivPrivateList.setAdapter(newsAdapter);
 		ivPrivateList.addFooterView(vFooter);
+		ivPrivateList.setAdapter(newsAdapter);
 		ivPrivateList.setDividerHeight(0);
 		ivPrivateList.setOnScrollListener(LoadListener);
 		ivPrivateList.setOnItemClickListener(itemListener);
@@ -144,23 +147,37 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
-			if(newsListBean.size()>0){
+			if (newsListBean.size() > 0) {
 				if (NetUtil.checkNet(PrivateNewsListActivity.this)) {
 					isFilter = true;
 					new ClearTask().execute();
 				} else {
 					showShortToast(R.string.NoSignalException);
 				}
-			}else{
+			} else {
 				showShortToast("无数据无需清空哦");
 			}
 			break;
 		default:
 			break;
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case Constants.INDEX:
+				isCliclClear = data.getBooleanExtra("iscliclclear", false);
+				break;
+			default:
+				break;
+			}
+		}
+
 	}
 
 	/**
@@ -175,11 +192,15 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 			}
 			NewsBean bean = newsListBean.get(arg2);
 			friendUrl = bean.getUserUrl();
+			Intent intent = new Intent();
+			intent.setClass(PrivateNewsListActivity.this, PrivateLetterActivity.class);
 			Bundle b = new Bundle();
 			b.putSerializable(Constants.EXTRA_DATA, bean.getFriendId());
 			b.putSerializable("NICK_NAME", bean.getNickName());
 			b.putSerializable("FREIND_URL", friendUrl);
-			openActivity(PrivateLetterActivity.class, b);
+			intent.putExtras(b);
+			startActivityForResult(intent, Constants.INDEX);
+			// openActivity(PrivateLetterActivity.class, b);
 		}
 	};
 	/**
@@ -218,6 +239,18 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 	 */
 
 	public class PrivateNewsListTask extends AsyncTask<Void, Void, ResponseBean<NewsBean>> {
+		private int page;
+		public PrivateNewsListTask() {
+			
+		}
+
+		/**
+		 * @param pageIndex
+		 */
+		public PrivateNewsListTask(int pageIndex) {
+			this.page = pageIndex;
+		}
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -232,7 +265,11 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 		protected ResponseBean<NewsBean> doInBackground(Void... params) {
 			int uid = SharedPrefUtil.getUid(PrivateNewsListActivity.this);
 			try {
-				return new BusinessHelper().getPrivateNews(uid,pageIndex);
+				if(isCliclClear){
+					return new BusinessHelper().getPrivateNews(uid, page);
+				}else{
+					return new BusinessHelper().getPrivateNews(uid, pageIndex);
+				}
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}
@@ -246,17 +283,26 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 				pd.dismiss();
 			}
 			pbFooter.setVisibility(View.GONE);
-			
+
 			if (result.getStatus() != Constants.REQUEST_FAILD) {
 				// 这里获取到十条数据
 				List<NewsBean> tempList = result.getObjList();
 				boolean isLastPage = false;
 				if (tempList.size() > 0) {
-					newsListBean.addAll(tempList);
-					newsAdapter.notifyDataSetChanged(); // 通知更新
-					pageIndex++;
+					if(isCliclClear){
+						newsListBean.clear();
+						newsListBean.addAll(tempList);
+						newsAdapter.notifyDataSetChanged(); // 通知更新
+						pageIndex++;
+					}else{
+						newsListBean.addAll(tempList);
+						newsAdapter.notifyDataSetChanged(); 
+						pageIndex++;
+					}
 				} else {
-                    showShortToast("你没有私信会话列表,快找好友聊天去吧");
+					newsListBean.clear();
+					newsAdapter.notifyDataSetChanged(); 
+					showShortToast("你没有私信会话列表,快找好友聊天去吧");
 					isLastPage = true;
 				}
 				if (isLastPage) {
@@ -273,7 +319,7 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 						tvFooterMore.setText("上拉查看更多");
 					}
 				}
-				if ((pageIndex == 1 || pageIndex == 2) && tempList.size() < Constants.PAGE_SIZE) {
+				if (pageIndex == 1 && tempList.size() == 0) {
 					tvFooterMore.setText("");
 				}
 
@@ -329,9 +375,9 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 
 		private void fillData(View convertView, int position, ViewHolder viewHolder) {
 			NewsBean bean = newsListBean.get(position);
-//			friendUrl = bean.getUserUrl();
-			setImageByUrl(viewHolder.ivUserPhoto,BusinessHelper.PIC_BASE_URL+bean.getUserUrl());
-        
+			// friendUrl = bean.getUserUrl();
+			setImageByUrl(viewHolder.ivUserPhoto, BusinessHelper.PIC_BASE_URL + bean.getUserUrl());
+
 			if (position % 2 == 0) {
 				// convertView.setBackgroundResource(R.drawable.bg_repeat);
 			} else {
@@ -356,10 +402,11 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 				viewHolder.tvContent.setText(contentStr);
 			}
 
-		//	String sendTime = DateUtil.getConversationTime(bean.getSendTime());
+			// String sendTime =
+			// DateUtil.getConversationTime(bean.getSendTime());
 			viewHolder.tvCreateTime.setText(bean.getSendTime());
 			viewHolder.tvNickName.setText(bean.getNickName());
-			viewHolder.tvAge.setText(bean.getAge()+"岁");
+			viewHolder.tvAge.setText(bean.getAge() + "岁");
 			viewHolder.tvContent.setText(bean.getContent());
 		}
 
@@ -445,6 +492,19 @@ public class PrivateNewsListActivity extends BaseActivity implements OnClickList
 
 		}
 
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		if (isCliclClear) {
+			if (NetUtil.checkNet(PrivateNewsListActivity.this)) {
+				pageIndex = 1;
+				new PrivateNewsListTask(pageIndex).execute();
+			} else {
+				showShortToast(R.string.NoSignalException);
+			}
+		}
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.keju.maomao.activity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -9,12 +8,13 @@ import java.util.TimerTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -98,7 +98,8 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 	private Timer letterTimer;
 	private final static int HANDLER_DATA = 11;
 	private boolean isLoaded = false;
-
+    
+	private ImageView ivCity;//城市切换
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -151,6 +152,9 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		tvCity = (TextView) this.findViewById(R.id.tvCity);
 		tvCity.setOnClickListener(this);
 
+		ivCity = (ImageView)this.findViewById(R.id.IvCity);
+		ivCity.setOnClickListener(this);
+		
 		if (isCityActicity) {
 
 		} else {
@@ -261,6 +265,11 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 			intent.setClass(MainActivity.this, CityChangActivity.class);
 			startActivityForResult(intent, Constants.INDEX);
 			break;
+		case R.id.IvCity:
+			Intent intent1 = new Intent();
+			intent1.setClass(MainActivity.this, CityChangActivity.class);
+			startActivityForResult(intent1, Constants.INDEX);
+			break;
 		default:
 			break;
 		}
@@ -354,7 +363,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 
 					} else {
 						showShortToast(result.getString("message"));
-
 					}
 				} catch (JSONException e) {
 					showShortToast("json解析失败");
@@ -396,21 +404,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 							tvNewMessagePoint.setVisibility(View.GONE);
 						} else {
 							tvNewMessagePoint.setVisibility(View.VISIBLE);
-//							if (SharedPrefUtil.getNewLetter(MainActivity.this)
-//									&& SharedPrefUtil.getPlayRing(MainActivity.this)
-//									&& SharedPrefUtil.getVibrate(MainActivity.this)) {
-//								PlayRing();
-//								AndroidUtil.Vibrate(MainActivity.this, 100);
-//							} else if (SharedPrefUtil.getNewLetter(MainActivity.this)
-//									&& SharedPrefUtil.getPlayRing(MainActivity.this)) {
-//								PlayRing();
-//							} else if (SharedPrefUtil.getNewLetter(MainActivity.this)
-//									&& SharedPrefUtil.getVibrate(MainActivity.this)) {
-//								AndroidUtil.Vibrate(MainActivity.this, 100);
-//							} else {
-//
-//							}
-
 						}
 					}
 				} catch (JSONException e) {
@@ -421,7 +414,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		}
 
 	}
-
 	/**
 	 * 播放铃声
 	 * 
@@ -432,28 +424,11 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		if (ringUrl == null) {
 
 		} else {
-			MediaPlayer mMediaPlayer = new MediaPlayer();
-			Uri uri = Uri.parse(ringUrl);
-			try {
-				mMediaPlayer.setDataSource(MainActivity.this, uri);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-			try {
-				mMediaPlayer.prepare();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			mMediaPlayer.start();// 开始播放
+//			Uri uri = Uri.parse(ringUrl);
+			NotificationManager manager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+			Notification notification = new Notification();
+			notification.sound = Uri.parse(ringUrl);
+			manager.notify(1, notification);
 		}
 	}
 
@@ -472,7 +447,6 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 				return null;
 			}
 		}
-
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -507,9 +481,9 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 
 							@Override
 							public void onClick(View v) {
-								// MobclickAgent.onEvent(HomeActivity.this,
-								// " banner_click", bean.getTitle() +
-								// bean.getLink());
+//								 MobclickAgent.onEvent(MainActivity.this,
+//								 " banner_click", bean.getTitle() +
+//								 bean.getLink());
 								Bundle b = new Bundle();
 								b.putString(Constants.EXTRA_DATA, "http://www.tmall.com/");
 								b.putString("name", "百度");
@@ -681,10 +655,10 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 											}
 											tvNewMessagePoint.setVisibility(View.VISIBLE);
 										}
-											Message msg = new Message();
-											msg.what = HANDLER_DATA;
-											msg.obj = result;
-											iLetterHandler.sendMessage(msg);
+//											Message msg = new Message();
+//											msg.what = HANDLER_DATA;
+//											msg.obj = result;
+//											iLetterHandler.sendMessage(msg);
 									}
 								} else {
 									showShortToast("链接服务器失败");
@@ -711,29 +685,33 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		}
 	}
 	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		stopNotifyTimer();
-	}
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//		stopNotifyTimer();
+//	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		stopNotifyTimer();
 	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		startNotifyTask();
+	}
 	/**
 	 * 连续按两次返回键就退出
 	 */
 	private int keyBackClickCount = 0;
-
 	@Override
 	protected void onResume() {
-		super.onResume();
+		super.onRestart();
 		if (SharedPrefUtil.isLogin(this)) {
 			if (NetUtil.checkNet(this)) {
 				new GetUserInfor().execute();
 				new GetNewMessage().execute();
-				startNotifyTask();
 			} else {
 				showShortToast(R.string.NoSignalException);
 			}
@@ -765,5 +743,4 @@ public class MainActivity extends BaseSlidingFragmentActivity implements OnClick
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
 }

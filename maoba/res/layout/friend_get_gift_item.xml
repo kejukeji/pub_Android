@@ -4,6 +4,17 @@
     android:layout_height="match_parent"
     android:gravity="center|top"
     android:orientation="vertical" >
-        <ImageView  android:id="@+id/ivGiftPhoto"   android:layout_width="wrap_content"   android:layout_height="wrap_content"  android:scaleType="centerCrop" />
-       <TextView  android:id="@+id/tvGiftName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="美女"/>
+
+    <ImageView
+        android:id="@+id/ivGiftPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tvGiftName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="美女" />
+
 </LinearLayout>

@@ -36,13 +36,13 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 	private ImageButton ibLeft;
 	private TextView tvTitle;
 	private Button btnRight;
-	private String Signature;
+	private String signature;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.personalized_signature);
-
+         signature = getIntent().getExtras().getString(Constants.EXTRA_DATA);
 		findView();
 		fillData();
 
@@ -54,7 +54,8 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 		tvTitle = (TextView) this.findViewById(R.id.tvTitle);
 
 		edSignature = (EditText) this.findViewById(R.id.edpersonalsignature);
-
+       
+		edSignature.setText(signature);
 	}
 
 	private void fillData() {
@@ -75,13 +76,13 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
-			Signature = edSignature.getText().toString();
-			if (TextUtils.isEmpty(Signature)) {
+			signature = edSignature.getText().toString();
+			if (TextUtils.isEmpty(signature)) {
 				showShortToast("请输入个性签名");
 				return;
 			}
 			Intent signatureIntent = new Intent();
-			signatureIntent.putExtra("SIGNATUREINPUT", Signature);
+			signatureIntent.putExtra("SIGNATUREINPUT", signature);
 			setResult(Activity.RESULT_OK, signatureIntent);
 			String nickname = "";
 			String birthday = "";
@@ -89,7 +90,7 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 			String newPassword = "";
 			
 			if (NetUtil.checkNet(PersonalizedSignatureActivity.this)) {
-				new personInfoAddTask(nickname, birthday, sex, Signature,newPassword).execute();
+				new personInfoAddTask(nickname, birthday, sex, signature,newPassword).execute();
 			}
 		default:
 			break;
@@ -103,11 +104,8 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 	private class personInfoAddTask extends AsyncTask<Void, Void, JSONObject> {
 		private String nickName;
 		private String birthday;
-		private String sex;
 		private String signature;
 		private String newPassword;
-		private String provinceId;
-		private String cityId;
 		private File avatarFile = null;
 
 		/**
@@ -123,7 +121,6 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 
 			this.nickName = nickName;
 			this.birthday = birthday;
-			this.sex = sex;
 			this.signature = signature;
 			this.newPassword = newPassword;
 		}
@@ -136,21 +133,26 @@ public class PersonalizedSignatureActivity extends BaseActivity implements OnCli
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
+			String openId = null;
 			int loginType = SharedPrefUtil.getLoginType(PersonalizedSignatureActivity.this);
+			if (loginType == Constants.LOGIN_QQ) {
+				openId = SharedPrefUtil.getQQOpenid(PersonalizedSignatureActivity.this);
+			} else if (loginType == Constants.LOGIN_SINA) {
+				openId = SharedPrefUtil.getWeiboUid(PersonalizedSignatureActivity.this);
+			} else {
+			}
 			int userId = SharedPrefUtil.getUid(PersonalizedSignatureActivity.this);
-			String openId = SharedPrefUtil.getWeiboUid(PersonalizedSignatureActivity.this);
 			String password = SharedPrefUtil.getPassword(PersonalizedSignatureActivity.this);
-			int sex = 0;
 			if (loginType == 0) {
 				try {
-					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
+					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, "",
 							signature,newPassword,"","","", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, sex,
+					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, "",
 							signature,"","","", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();

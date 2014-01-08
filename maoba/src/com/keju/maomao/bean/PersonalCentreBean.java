@@ -58,8 +58,8 @@ public class PersonalCentreBean implements Serializable {
 			this.integral = obj.getString("integral");
 		}
 		
-		if (obj.has("words")) {
-			this.giftName = obj.getString("words");
+		if (obj.has("gift_name")) {
+			this.giftName = obj.getString("gift_name");
 		}
 		if (obj.has("gift_pic_path")) {
 			this.giftPhotoUrl =BusinessHelper.PIC_BASE_URL + obj.getString("gift_pic_path");

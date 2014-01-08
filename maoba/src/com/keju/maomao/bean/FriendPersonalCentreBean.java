@@ -27,13 +27,16 @@ public class FriendPersonalCentreBean implements Serializable {
 	private String giftphotoUrl;
 	
 	private String integral;//积分
+	
+	private String giftPhoto;
+	private String name;
 
 	public FriendPersonalCentreBean(JSONObject obj) throws JSONException {
 		if (obj.has("id")) {
 			this.giftId = obj.getInt("id");
 		}
-		if (obj.has("words")) {
-			this.giftName = obj.getString("words");
+		if (obj.has("gift_name")) {
+			this.giftName = obj.getString("gift_name");
 		}
 		if (obj.has("gift_pic_path")) {
 			this.giftphotoUrl = BusinessHelper.PIC_BASE_URL + obj.getString("gift_pic_path");
@@ -41,6 +44,29 @@ public class FriendPersonalCentreBean implements Serializable {
 		if (obj.has("cost")) {
 			this.integral = obj.getString("cost");
 		}
+		
+		if (obj.has("pic_path")) {
+			this.giftPhoto = BusinessHelper.PIC_BASE_URL + obj.getString("pic_path");
+		}
+		if (obj.has("name")) {
+			this.name = obj.getString("name");
+		}
+	}
+
+	public String getGiftPhoto() {
+		return giftPhoto;
+	}
+
+	public void setGiftPhoto(String giftPhoto) {
+		this.giftPhoto = giftPhoto;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getIntegral() {

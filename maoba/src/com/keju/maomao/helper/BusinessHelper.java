@@ -32,14 +32,14 @@ public class BusinessHelper {
 	 * 网络访问路径
 	 */
 	//测试服务器
-	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
-	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
+//	public static final String BASE_URL = "http://42.121.108.142:6001/restful/";
+//	public static final String PIC_BASE_URL = "http://42.121.108.142:6001";
 	//本地服务器
 //	public static final String BASE_URL = "http://192.168.0.105:5000/restful/";
 //	public static final String PIC_BASE_URL = "http://192.168.0.105:5000";
 	//生产服务器
-//	public static final String BASE_URL = "http://61.188.37.228:8081/restful/";
-//	public static final String PIC_BASE_URL = "http://61.188.37.228:8081";
+	public static final String BASE_URL = "http://61.188.37.228:8081/restful/";
+	public static final String PIC_BASE_URL = "http://61.188.37.228:8081";
 	HttpClient httpClient = new HttpClient();
 
 	/**
@@ -723,14 +723,16 @@ public class BusinessHelper {
 	 * @return
 	 * @throws SystemException
 	 */
-	public JSONObject addUserInfor(int uid,int loginWay, String passWord, String nickName, String birthday, int sex, 
+	public JSONObject addUserInfor(int uid,int loginWay, String passWord, String nickName, String birthday, String sex, 
 			String signature,String newPassword,String provinceId,String cityId,String countyId,File avatarFile) throws SystemException {
 		List<PostParameter> params = new ArrayList<PostParameter>();
 		params.add(new PostParameter("login_type", loginWay));
 		params.add(new PostParameter("password", passWord));
 		params.add(new PostParameter("nick_name", nickName));
 		params.add(new PostParameter("birthday", birthday));
-		params.add(new PostParameter("sex", sex));
+		if(!sex.equals("")){
+			params.add(new PostParameter("sex", Integer.parseInt(sex)));
+		}
 		params.add(new PostParameter("signature", signature));
 		params.add(new PostParameter("new_password", newPassword));
 		params.add(new PostParameter("province_id", provinceId));
@@ -761,13 +763,15 @@ public class BusinessHelper {
 	 * @return
 	 */
 	public JSONObject thirdAddUserInfor(int userId, int loginType, String openId, String nickName, String birthday,
-			int sex, String signature,String provinceId,String cityId,String countyId,File avatarFile)throws SystemException {
+			String sex, String signature,String provinceId,String cityId,String countyId,File avatarFile)throws SystemException {
 		  List<PostParameter> params = new ArrayList<PostParameter>();
 	  		params.add(new PostParameter("login_type", loginType));
 	  		params.add(new PostParameter("open_id", openId));
 	  		params.add(new PostParameter("nick_name", nickName));
 	  		params.add(new PostParameter("birthday", birthday));
-	  		params.add(new PostParameter("sex", sex));
+	  		if(!sex.equals("")){
+				params.add(new PostParameter("sex", Integer.parseInt(sex)));
+			}
 	  		params.add(new PostParameter("signature", signature));
 	  		params.add(new PostParameter("province_id", provinceId));
 			params.add(new PostParameter("city_id", cityId));
@@ -1130,5 +1134,23 @@ public class BusinessHelper {
 				BASE_URL + "sender/greeting",
 				new PostParameter[] {new PostParameter("sender_id", senderId),
 						new PostParameter("receiver_id", receiverId)}).asJSONObject();
+	}
+
+	/**
+	 * 清除私信
+	 * 
+	 * @param receiverId 当前登录id
+	 * @param senderId 对方id
+	 * @return
+	 */
+	public JSONObject clear(long receiverId,long senderId) throws SystemException {
+
+		return httpClient.get(
+				BASE_URL + "user/clear/message/info",
+				new PostParameter[] { new PostParameter("receiver_id", receiverId),
+						new PostParameter("sender_id", senderId),
+						})
+				.asJSONObject();
+
 	}
 }

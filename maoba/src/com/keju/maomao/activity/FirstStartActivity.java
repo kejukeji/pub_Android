@@ -164,8 +164,6 @@ public class FirstStartActivity extends Activity {
 					startActivity(new Intent(FirstStartActivity.this, LoginActivity.class));
 					
 				}
-			
-				overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 				finish();
 			}
 		});

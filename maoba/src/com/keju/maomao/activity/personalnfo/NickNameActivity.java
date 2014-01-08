@@ -38,12 +38,12 @@ public class NickNameActivity extends BaseActivity implements OnClickListener {
 	private TextView tvTitle;
 	private Button btnRight;
 	private String nickname;
-
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.nick_name);
-
+        nickname = getIntent().getExtras().getString(Constants.EXTRA_DATA);
 		findView();
 		fillData();
 
@@ -55,7 +55,8 @@ public class NickNameActivity extends BaseActivity implements OnClickListener {
 
 		edNickname = (EditText) this.findViewById(R.id.ednickname);
 		ibLeft = (ImageButton) this.findViewById(R.id.ibLeft);
-
+     
+		edNickname.setText(nickname);
 	}
 
 	private void fillData() {
@@ -72,7 +73,6 @@ public class NickNameActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			nickname = edNickname.getText().toString();
@@ -138,21 +138,26 @@ public class NickNameActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		protected JSONObject doInBackground(Void... params) {
+			String openId = null;
 			int loginType = SharedPrefUtil.getLoginType(NickNameActivity.this);
+			if (loginType == Constants.LOGIN_QQ) {
+				openId = SharedPrefUtil.getQQOpenid(NickNameActivity.this);
+			} else if (loginType == Constants.LOGIN_SINA) {
+				openId = SharedPrefUtil.getWeiboUid(NickNameActivity.this);
+			} else {
+			}
 			int userId = SharedPrefUtil.getUid(NickNameActivity.this);
-			String openId = SharedPrefUtil.getWeiboUid(NickNameActivity.this);
 			String password = SharedPrefUtil.getPassword(NickNameActivity.this);
-			int sex = 0;
 			if (loginType == 0) {
 				try {
-					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
+					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, "",
 							signature,newPassword,"","","",avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, sex,
+					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, "",
 							signature,"","","", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();

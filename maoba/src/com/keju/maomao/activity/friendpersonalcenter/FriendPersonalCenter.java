@@ -67,6 +67,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 	private String title[] = { "屏蔽改好友", "举报检举", "取消" };
 
 	private static TipsToast tipsToast;// 自定义toast
+	private TextView tvGiveOneTheEye;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,8 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 
 		viewFriendGift = (LinearLayout) this.findViewById(R.id.viewFriendGift);
 		viewCollectBar = (LinearLayout) this.findViewById(R.id.viewCollectBar);
+		
+		tvGiveOneTheEye = (TextView)this.findViewById(R.id.tvGiveOneTheEye);
 
 		if (NetUtil.checkNet(FriendPersonalCenter.this)) {
 			new GetUserInfor().execute();
@@ -131,7 +134,6 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		switch (v.getId()) {
 		case R.id.btnLeftMenu:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.viewCollectBar:
 			Bundle b = new Bundle();
@@ -161,6 +163,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 			openActivity(SendGiftActivity.class, b4);
 			break;
 		case R.id.viewGiveOneTheEye:
+			tvGiveOneTheEye.setTextColor(getResources().getColor(R.color.give_one_the_eye));
 			if (NetUtil.checkNet(FriendPersonalCenter.this)) {
 				new SendGiveOneTheEyeTask().execute();
 			} else {
@@ -186,13 +189,14 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 	 * 显示好友管理
 	 * */
 	private PopupWindow popupWindow;
+
 	public void showPopupWindow(int x, int y) {
 		LinearLayout layout = (LinearLayout) LayoutInflater.from(FriendPersonalCenter.this).inflate(
 				R.layout.friend_massage_list, null);
 		ListView listView = (ListView) layout.findViewById(R.id.lv_dialog);
 		listView.setAdapter(new ArrayAdapter<String>(FriendPersonalCenter.this, R.layout.friend_massage_item,
 				R.id.tv_text, title));
-		
+
 		popupWindow = new PopupWindow(FriendPersonalCenter.this);
 		popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.click));
 		popupWindow.setWidth(getWindowManager().getDefaultDisplay().getWidth() / 2);
@@ -203,7 +207,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		popupWindow.setContentView(layout);
 		// showAsDropDown会把里面的view作为参照物，所以要那满屏幕parent
 		// popupWindow.showAsDropDown(findViewById(R.id.tv_title), x, 10);
-		popupWindow.showAtLocation(findViewById(R.id.rlCommon), Gravity.LEFT | Gravity.TOP, x+130, y+18);// 需要指定Gravity，默认情况是center.
+		popupWindow.showAtLocation(findViewById(R.id.rlCommon), Gravity.LEFT | Gravity.TOP, x + 130, y + 18);// 需要指定Gravity，默认情况是center.
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -249,13 +253,23 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 						JSONObject user = result.getJSONObject("user");
 						String signaTure = userJson.getString("signature");
 						String birthday = userJson.getString("birthday");
-						int sex = userJson.getInt("sex");
-						NickName = user.getString("nick_name");
-						if (sex == 1) {
-							ivSex.setBackgroundResource(R.drawable.ic_sex_man);
-						} else {
-							ivSex.setBackgroundResource(R.drawable.ic_sex_girl);
+						int sex = 0;
+						Boolean isSex = true;
+						try {
+							sex = userJson.getInt("sex");
+						} catch (Exception e1) {
+							isSex = userJson.getString("sex").equals("null");
 						}
+						if (isSex) {
+
+						} else {
+							if (sex == 1) {
+								ivSex.setBackgroundResource(R.drawable.ic_sex_man);
+							} else {
+								ivSex.setBackgroundResource(R.drawable.ic_sex_girl);
+							}
+						}
+						NickName = user.getString("nick_name");
 						String address = userJson.getString("county");
 						if (signaTure.equals("null")) {
 							tvSignature.setText("主人很懒还未设置哦");
@@ -289,27 +303,32 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 							} catch (Exception e) {
 							}
 						}
-						friendUrl = userJson.getString("pic_path");
-						String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
-						ivUserPhoto.setTag(photoUrl);
-						Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
-								new ImageCallback() {
-									@Override
-									public void imageLoaded(Drawable imageDrawable, String imageUrl) {
-										ImageView image = (ImageView) ivUserPhoto.findViewWithTag(imageUrl);
-										if (image != null) {
-											Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(imageDrawable, 0.5f);
-											if (imageDrawable != null) {
-												image.setImageBitmap(bitmap);
-											} else {
-												image.setImageResource(R.drawable.bg_show11);
+						if (userJson.has("pic_path")) {
+							friendUrl = userJson.getString("pic_path");
+							String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
+							ivUserPhoto.setTag(photoUrl);
+							Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
+									new ImageCallback() {
+										@Override
+										public void imageLoaded(Drawable imageDrawable, String imageUrl) {
+											ImageView image = (ImageView) ivUserPhoto.findViewWithTag(imageUrl);
+											if (image != null) {
+												Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(imageDrawable,
+														0.5f);
+												if (imageDrawable != null) {
+													image.setImageBitmap(bitmap);
+												} else {
+													image.setImageResource(R.drawable.bg_show11);
+												}
 											}
 										}
-									}
-								});
-						if (cacheDrawble != null) {
-							Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(cacheDrawble, 0.5f);
-							ivUserPhoto.setImageBitmap(bitmap);
+									});
+							if (cacheDrawble != null) {
+								Bitmap bitmap = ImageUtil.getRoundCornerBitmapWithPic(cacheDrawble, 0.5f);
+								ivUserPhoto.setImageBitmap(bitmap);
+							} else {
+								ivUserPhoto.setImageResource(R.drawable.bg_show11);
+							}
 						} else {
 							ivUserPhoto.setImageResource(R.drawable.bg_show11);
 						}
@@ -319,7 +338,7 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 
 					}
 				} catch (JSONException e) {
-					ivUserPhoto.setImageResource(R.drawable.bg_show11);
+					showShortToast(R.string.json_exception);
 				}
 			} else {
 				showShortToast(R.string.connect_server_exception);
@@ -482,15 +501,4 @@ public class FriendPersonalCenter extends BaseActivity implements OnClickListene
 		}
 
 	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (NetUtil.checkNet(this)) {
-			new GetUserInfor().execute();
-		} else {
-			showShortToast(R.string.NoSignalException);
-		}
-	}
-
 }

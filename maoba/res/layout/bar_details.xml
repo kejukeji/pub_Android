@@ -278,7 +278,8 @@
                 android:background="@drawable/bg_event"
                 android:gravity="center"
                 android:orientation="horizontal"
-                 android:visibility="gone" >
+                android:visibility="gone"
+                 >
 
                 <LinearLayout
                     android:id="@+id/viewEvent"
@@ -302,13 +303,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                         android:ellipsize="end"
+                        android:lineSpacingExtra="1dp"
+                        android:maxEms="10"
+                        android:singleLine="true"
                         android:text="参加我们把" />
 
                     <TextView
                         android:id="@+id/tvEventEndTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="5dp"
+                         android:ellipsize="end"
+                        android:lineSpacingExtra="1dp"
+                        android:maxEms="10"
                         android:text="2013—4-5" />
                 </LinearLayout>
 

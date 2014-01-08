@@ -47,7 +47,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 	private LinearLayout viewMyNews;
 	private LinearLayout viewMyCollectEvent;
 	private ImageView ivUserPhoto;
-	private TextView tvAge, tvAddress,tvArea, tvNickName, tvSignature;
+	private TextView tvAge, tvAddress, tvArea, tvNickName, tvSignature;
 
 	private Button btnLeftMenu;
 
@@ -58,6 +58,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 	private ImageView ivSex;// 男女
 
 	private LinearLayout viewInvite, viewGreeting, viewGift;
+	private LinearLayout viewIntegral, viewExperiencePrice;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,9 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		viewGreeting = (LinearLayout) this.findViewById(R.id.viewGreeting);
 		viewGift = (LinearLayout) this.findViewById(R.id.viewGift);
 
+		viewIntegral = (LinearLayout) this.findViewById(R.id.viewIntegral);
+		viewExperiencePrice = (LinearLayout) this.findViewById(R.id.viewExperiencePrice);
+
 	}
 
 	private void fillData() {
@@ -111,6 +115,9 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		viewInvite.setOnClickListener(this);
 		viewGreeting.setOnClickListener(this);
 		viewGift.setOnClickListener(this);
+
+		viewIntegral.setOnClickListener(this);
+		viewExperiencePrice.setOnClickListener(this);
 
 		if (NetUtil.checkNet(PersonalCenter.this)) {
 			new GetUserInfor().execute();
@@ -125,7 +132,6 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnLeftMenu:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.viewMyCollectBar:
 			int uid = SharedPrefUtil.getUid(PersonalCenter.this);
@@ -150,6 +156,12 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.viewGift:
 			openActivity(MyGiftActivity.class);
+			break;
+		case R.id.viewIntegral:
+			openActivity(IntegtralActivity.class);
+			break;
+		case R.id.viewExperiencePrice:
+			openActivity(IntegtralActivity.class);
 			break;
 		default:
 			break;
@@ -194,7 +206,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 						String birthday = userJson.getString("birthday");
 						String NickName = user.getString("nick_name");
 						String address = userJson.getString("county");
-						if(!userJson.getString("sex").equals("null")){
+						if (!userJson.getString("sex").equals("null")) {
 							int sex = userJson.getInt("sex");
 							if (sex == 1) {
 								ivSex.setBackgroundResource(R.drawable.ic_sex_man);
@@ -233,7 +245,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 							} catch (Exception e) {
 							}
 						}
-						if(userJson.has("pic_path")){
+						if (userJson.has("pic_path")) {
 							String photoUrl = BusinessHelper.PIC_BASE_URL + userJson.getString("pic_path");
 							ivUserPhoto.setTag(photoUrl);
 							Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(photoUrl,
@@ -257,7 +269,7 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 							} else {
 								ivUserPhoto.setImageResource(R.drawable.bg_show11);
 							}
-						}else{
+						} else {
 							ivUserPhoto.setImageResource(R.drawable.bg_show11);
 						}
 
@@ -331,20 +343,11 @@ public class PersonalCenter extends BaseActivity implements OnClickListener {
 		super.onRestart();
 		if (NetUtil.checkNet(this)) {
 			new GetUserInfor().execute();
+			new GetUserBaseInforTask().execute();
 		} else {
 			showShortToast(R.string.NoSignalException);
 		}
 
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (NetUtil.checkNet(this)) {
-			new GetUserInfor().execute();
-		} else {
-			showShortToast(R.string.NoSignalException);
-		}
 	}
 
 }

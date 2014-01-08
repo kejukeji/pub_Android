@@ -17,7 +17,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/bg_photo_left" />
+            />
 
         <TextView
             android:id="@+id/tvLetter"

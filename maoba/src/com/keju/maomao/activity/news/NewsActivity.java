@@ -77,7 +77,6 @@ public class NewsActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.viewSystemNews:
 			Bundle b = new Bundle();

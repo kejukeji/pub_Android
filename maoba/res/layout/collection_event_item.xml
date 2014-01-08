@@ -9,10 +9,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
+        android:layout_marginTop="5dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp" >
+        android:paddingRight="10dp" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -25,30 +24,69 @@
                 android:id="@+id/ivCollImage"
                 android:layout_width="100dp"
                 android:layout_height="95dp"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp" >
 
-                <TextView
-                    android:id="@+id/tvCollEventName"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="你好好和"
-                    android:textSize="@dimen/BasicTextSize"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="活动标题："
+                         android:textStyle="bold"
+                        android:textSize="@dimen/shadow_width" />
+
+                    <TextView
+                        android:id="@+id/tvCollEventName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lineSpacingExtra="1dp"
+                        android:maxEms="8"
+                        android:singleLine="true"
+                        android:text="你好好和你好好和你好好和"
+                        android:textSize="@dimen/shadow_width"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="活动时间："
+                        android:textSize="@dimen/SmallTextSize" />
+
+                    <TextView
+                        android:id="@+id/tvEventTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textSize="@dimen/SmallTextSize" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal" >
 
                     <TextView

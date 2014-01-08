@@ -14,7 +14,6 @@
 	    android:layout_marginRight="30dp"
 	    android:hint="还可以输入30个字..."
 	    android:gravity="top"
-	    
 	    android:maxLength="30"
 	    android:background="@drawable/bg_signature_input"
 	    android:paddingTop="10dp"

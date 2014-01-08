@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal" >
 
@@ -37,18 +37,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="给你抛了一个媚眼" />
+                android:text="给你送了一份礼物,礼尚往来哦!" />
 
             <TextView
                 android:id="@+id/tvIntegral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#7C7C7C"
                 android:text="积分+20" />
 
             <TextView
                 android:id="@+id/tvSendTiem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                 android:textColor="#7C7C7C"
                 android:text="2013-12-07 15:00" />
         </LinearLayout>
 
@@ -60,19 +62,20 @@
 
             <ImageView
                 android:id="@+id/ivGiftPhoto"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:src="@drawable/ic_gretting" />
+                android:src="@drawable/gift"
+                />
 
             <TextView
                 android:id="@+id/tvGiftName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="新化新化" />
+                 />
         </LinearLayout>
     </LinearLayout>
 

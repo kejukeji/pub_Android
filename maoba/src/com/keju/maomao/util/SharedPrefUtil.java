@@ -435,7 +435,7 @@ public class SharedPrefUtil {
 
 	public static long getUpdateInterval(Context context) {
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-		return sp.getLong(CHECK_UPDATE_TIME_KEY, 5 * 60 * 1000);
+		return sp.getLong(CHECK_UPDATE_TIME_KEY, 5 * 1000);
 	}
 
 	/**

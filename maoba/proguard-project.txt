@@ -29,11 +29,13 @@
 }
 -libraryjars libs/Android_SDK_v1.2.jar
 -libraryjars libs/android-support-v13.jar
--libraryjars libs/baidumapapi.jar
+-libraryjars libs/baidumapapi_v2_1_3.jar
 -libraryjars libs/commons-codec.jar
 -libraryjars libs/commons-httpclient-3.1.jar
 -libraryjars libs/commons-logging-1.1.jar 
 -libraryjars libs/httpmime-4.1.3.jar
+-libraryjars libs/locSDK_3.1.jar
+-libraryjars libs/nineoldandroids.jar
 -libraryjars libs/open_sdk.jar
 -libraryjars libs/umeng_sdk.jar
 -libraryjars libs/weibo_sdk.jar
@@ -42,7 +44,7 @@
 -keep class vi.com.gdi.bgl.android.**{*;}
 -dontwarn com.baidu.mapapi.**
 -dontwarn com.weibo.net.**
--keep class org.apache.commons.** { *;}
+-keep class org.apache.commons.logging.impl.** { *;}
 -keep class org.apache.avalon.framework.logger.** { *;}
 -dontwarn org.apache.avalon.framework.logger.**
 -keep class org.apache.log4j.** { *;}

@@ -302,7 +302,7 @@ public class HttpClient implements java.io.Serializable {
 		// url += "?PCode=" + Constants.PRODCODE;
 		// } else if (url.indexOf("version") == -1) {
 		// url += "&PCode=" + Constants.PRODCODE;
-		// }
+		// } 
 		if (null != params && params.length > 0) {
 			if (url.indexOf("?") == -1) {
 				url += "?" + HttpClient.encodeParameters(params);

@@ -118,6 +118,8 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	private TextView tvNearbyBar;// 附近酒啊
 
 	private int provinceId;
+	
+	private int cityId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +208,6 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			openActivity(SearchActivity.class);
@@ -350,7 +351,8 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				pageIndex = 1;
 				if (NetUtil.checkNet(BarListActivity.this)) {
 					isFilter = true;
-					new GetBarListTask(0).execute();
+				    cityId = 0;
+					new GetBarListTask().execute();
 				} else {
 					showShortToast(R.string.NoSignalException);
 				}
@@ -359,7 +361,8 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				pageIndex = 1;
 				if (NetUtil.checkNet(BarListActivity.this)) {
 					isFilter = true;
-					new GetBarListTask(bean1.getCityId()).execute();
+					cityId =bean1.getCityId();
+					new GetBarListTask().execute();
 				} else {
 					showShortToast(R.string.NoSignalException);
 				}
@@ -427,7 +430,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 	 * 
 	 */
 	public class GetBarListTask extends AsyncTask<Void, Void, ResponseBean<BarBean>> {
-		private int cityId = 0;
+//		private int cityId;
 
 		/**
 		 * @param pageIndex
@@ -435,14 +438,14 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 		 * @param cityid
 		 */
 
-		public GetBarListTask() {
-
-		}
-
-		public GetBarListTask(int cityId) {
-			this.cityId = cityId;
-
-		}
+//		public GetBarListTask() {
+//
+//		}
+//
+//		public GetBarListTask(int cityId) {
+//			this.cityId = cityId;
+//
+//		}
 
 		@Override
 		protected void onPreExecute() {
@@ -515,6 +518,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 					} else {
 						pbFooter.setVisibility(View.GONE);
 						tvFooterMore.setText("上拉查看更多");
+						isComplete = false;
 					}
 				}
 				if (pageIndex == 1 && tempList.size() == 0) {
@@ -526,7 +530,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 				tvFooterMore.setText("");
 			}
 			if (isFilter) {
-				isComplete = false;
+//				isComplete = false;
 			}
 			adapter.notifyDataSetChanged();
 			isLoad = false;
@@ -833,7 +837,7 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public boolean isViewFromObject(View view, Object obj) {
-			// return arg0 == arg1;
+//			 return view == obj;
 			if (view instanceof OutlineContainer) {
 				return ((OutlineContainer) view).getChildAt(0) == obj;
 			} else {
@@ -843,8 +847,8 @@ public class BarListActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public void destroyItem(View container, int position, Object object) {
-			// ((ViewPager) container).removeView(views.get(position));
-			((ViewPager) container).removeView(viewPage.findViewFromObject(position));
+//			 ((ViewPager) container).removeView(views.get(position));
+			((ViewPager) container).removeView(viewPage.findViewFromObject(position)); //目前还不知道为什么加上这句话推荐酒吧就会出问题
 
 		}
 

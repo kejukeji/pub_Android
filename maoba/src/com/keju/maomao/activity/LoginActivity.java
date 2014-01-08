@@ -498,6 +498,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		public BaseUiListener(int logintype) {
 			super();
 			this.logintype = logintype;
+		
 		}
 
 		@Override
@@ -511,6 +512,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				openid = response.getString("openid");
 				String currTime = System.currentTimeMillis() + "";
 				SharedPrefUtil.setQQInfo(LoginActivity.this, access_token, expires_in, openid, currTime);
+				SharedPrefUtil.setLoginType(LoginActivity.this, logintype);
 				new LoginTask(logintype, openid, true).execute();
 			} catch (JSONException e) {
 			}

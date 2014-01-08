@@ -72,7 +72,6 @@ public class ChangingPasswordActivity extends BaseActivity implements OnClickLis
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			passWord = edPassword.getText().toString().trim();
@@ -157,14 +156,14 @@ public class ChangingPasswordActivity extends BaseActivity implements OnClickLis
 			int sex = 0;
 			if (loginType == 0) {
 				try {
-					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, sex,
+					return new BusinessHelper().addUserInfor(userId, loginType, password, nickName, birthday, "",
 							signature, newPassword, "", "", "", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, sex,
+					return new BusinessHelper().thirdAddUserInfor(userId, loginType, openId, nickName, birthday, "",
 							signature, "", "", "", avatarFile);
 				} catch (SystemException e) {
 					e.printStackTrace();

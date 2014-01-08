@@ -119,7 +119,6 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 			isEdit = !isEdit;
@@ -337,6 +336,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 				convertView = getLayoutInflater().inflate(R.layout.collection_event_item, null);
 				holder.tvCollEventName = (TextView) convertView.findViewById(R.id.tvCollEventName);
 				holder.tvCollTime = (TextView) convertView.findViewById(R.id.tvCollTime);
+				holder.tvEventTime = (TextView)convertView.findViewById(R.id.tvEventTime);
 				holder.ivCollImage = (ImageView) convertView.findViewById(R.id.ivCollImage);
 				holder.ivDel = (ImageView) convertView.findViewById(R.id.ivDel);
 				convertView.setTag(holder);
@@ -347,7 +347,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 
 			holder.tvCollEventName.setText(bean.getEventTitle());
 			holder.tvCollTime.setText(bean.getCollectTime());
-
+            holder.tvEventTime.setText(bean.getStartTime());
 			String url = bean.getPhotoUrl();
 			holder.ivCollImage.setTag(url);
 			Drawable cacheDrawble = AsyncImageLoader.getInstance().loadDrawable(url, new ImageCallback() {
@@ -408,7 +408,7 @@ public class CollectionOfEventListActivity extends BaseActivity implements OnCli
 	}
 
 	class ViewHolder {
-		private TextView tvCollEventName, tvCollTime;
+		private TextView tvCollEventName, tvCollTime,tvEventTime;
 		private ImageView ivCollImage, ivDel;
 	}
 

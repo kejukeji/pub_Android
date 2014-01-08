@@ -312,9 +312,9 @@
 
 
                     <TextView
+                        android:id="@+id/tvGiveOneTheEye"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#EE1A78"
                         android:singleLine="true"
                         android:text="眉目传情" />
                 </LinearLayout>

@@ -151,7 +151,6 @@ public class EventDetailActivity extends BaseActivity implements OnClickListener
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 		case R.id.btnRight:
 //			showShortToast("正在执行收藏操作,请稍等...");
@@ -200,7 +199,6 @@ public class EventDetailActivity extends BaseActivity implements OnClickListener
 							btnRight.setText("已收藏");
 							showShortToast("收藏成功");
 							isCollect = true;
-							
 						}
 					} else {
 					}
@@ -230,7 +228,7 @@ public class EventDetailActivity extends BaseActivity implements OnClickListener
 		protected JSONObject doInBackground(Void... params) {
 			int userId = SharedPrefUtil.getUid(EventDetailActivity.this);
 			try {
-				return new BusinessHelper().getEventDetail(1, userId);
+				return new BusinessHelper().getEventDetail(eventId, userId);
 			} catch (SystemException e) {
 				e.printStackTrace();
 			}

@@ -99,7 +99,6 @@ public class ShowBarEnvironmentActivity extends BaseActivity implements OnClickL
 		switch (v.getId()) {
 		case R.id.ibLeft:
 			finish();
-			overridePendingTransition(0, R.anim.roll_down);
 			break;
 
 		default:
